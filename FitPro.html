@@ -7,6 +7,7 @@
 <meta name="theme-color" content="#F5F0E8"/>
 <title>Forma</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{background:#F5F0E8;font-family:'DM Sans',sans-serif;color:#1C1917;overscroll-behavior:none;padding-bottom:80px;}
@@ -46,12 +47,146 @@ select{-webkit-appearance:none;appearance:none;}
 .arc-wrap{position:relative;display:inline-block;}
 .arc-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
 .hidden{display:none!important;}
+.onboard-screen{position:fixed;inset:0;background:#F5F0E8;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow-y:auto;padding:0 0 40px;}
+.avatar-circle{width:88px;height:88px;border-radius:50%;background:#EDEAE0;border:3px solid #C84B31;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;overflow:hidden;flex-shrink:0;}
+.avatar-circle img{width:100%;height:100%;object-fit:cover;}
+.profile-card{background:#FDFAF4;border-radius:20px;padding:20px;margin:0 18px 14px;}
+.profile-stat{text-align:center;}
+.profile-stat-val{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#1C1917;}
+.profile-stat-lbl{font-size:10px;color:#A8A29E;letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+.bio-tag{display:inline-block;padding:5px 12px;border-radius:99px;background:#EDEAE0;font-size:11px;font-weight:600;color:#78716C;margin:3px;}
+.bio-tag.red{background:#F4B8A8;color:#C84B31;}
+.bio-tag.teal{background:#B0D4D6;color:#2A6B6E;}
+.bio-tag.gold{background:#F0D9A0;color:#B5851B;}
+.custom-select{width:100%;background:#EDEAE0;border:1.5px solid rgba(28,25,23,.18);border-radius:12px;padding:13px 40px 13px 14px;color:#1C1917;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2378716C' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:18px;}
+.custom-select:focus{border-color:#C84B31;}
+.select-wrap{position:relative;width:100%;}
+.science-pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px;background:#EDE9FF;color:#6B4EFF;font-size:10px;font-weight:700;letter-spacing:.5px;}
+
 .water-bar{flex:1;height:7px;border-radius:3px;background:#EDEAE0;cursor:pointer;transition:background .2s;}
 .water-bar.fill{background:#60A5FA;}
 </style>
 </head>
 <body>
 <div id="app">
+
+<!-- ONBOARDING -->
+<div id="onboarding" class="onboard-screen">
+  <div style="width:100%;background:linear-gradient(160deg,#1C1917 0%,#3C2820 100%);padding:48px 24px 32px;text-align:center;margin-bottom:-20px;">
+    <div style="font-family:'Playfair Display',serif;font-size:34px;font-weight:900;color:#FDFAF4;letter-spacing:-1px;margin-bottom:8px;">Forma</div>
+    <div style="font-size:13px;color:rgba(255,255,255,.5);letter-spacing:2px;text-transform:uppercase;">Tu cuerpo. Tu ciencia.</div>
+  </div>
+  <div style="width:100%;background:#FDFAF4;border-radius:24px 24px 0 0;padding:32px 24px 0;margin-top:0;">
+    <div id="ob-step-1">
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:8px;">Hola &#x1F44B;</div>
+        <div style="font-size:14px;color:#78716C;line-height:1.6;">Configura tu perfil en 2 minutos para recibir un plan 100% personalizado basado en ciencia.</div>
+      </div>
+      <!-- Avatar -->
+      <div style="display:flex;justify-content:center;margin-bottom:20px;">
+        <div class="avatar-circle" id="ob-avatar" onclick="pickAvatar()">
+          <span id="ob-avatar-emoji">&#x1F464;</span>
+          <img id="ob-avatar-img" src="" style="display:none;width:100%;height:100%;object-fit:cover;"/>
+        </div>
+      </div>
+      <input type="file" id="avatar-input" accept="image/*" style="display:none;" onchange="loadAvatar(event)"/>
+      <div style="text-align:center;font-size:11px;color:#A8A29E;margin-bottom:20px;">Toca para a&#241;adir foto</div>
+
+      <div style="margin-bottom:14px;">
+        <div class="lbl">&#xBF;C&#xF3;mo te llamas?</div>
+        <input class="inp" id="ob-nombre" placeholder="Tu nombre" style="font-size:16px;"/>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px;">
+        <div><div class="lbl">Edad</div><input class="inp" id="ob-edad" type="number" value="28" style="text-align:center;"/></div>
+        <div><div class="lbl" id="ob-lbl-peso">Peso kg</div><input class="inp" id="ob-peso" type="number" value="70" style="text-align:center;"/></div>
+        <div><div class="lbl" id="ob-lbl-altura">Altura cm</div><input class="inp" id="ob-altura" type="number" value="170" style="text-align:center;"/></div>
+      </div>
+
+      <!-- Units -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <div style="font-size:12px;color:#78716C;">Sistema de medidas</div>
+        <div style="display:flex;background:#EDEAE0;border-radius:99px;padding:3px;">
+          <button id="ob-unit-m" onclick="obSetUnits('metric')" style="padding:6px 14px;border-radius:99px;border:none;background:#1C1917;color:white;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">kg/cm</button>
+          <button id="ob-unit-i" onclick="obSetUnits('imperial')" style="padding:6px 14px;border-radius:99px;border:none;background:transparent;color:#78716C;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">lb/ft</button>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <div class="lbl">Sexo biol&#xF3;gico</div>
+        <div class="seg-wrap"><button class="seg-btn active" id="ob-sex-m" onclick="obSetSex('m')">Masculino</button><button class="seg-btn" id="ob-sex-f" onclick="obSetSex('f')">Femenino</button></div>
+      </div>
+
+      <button onclick="obNext(2)" style="width:100%;padding:15px;border-radius:14px;border:none;background:#C84B31;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px;">Continuar &#x2192;</button>
+    </div>
+
+    <div id="ob-step-2" style="display:none;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;">Tu biotipo</div>
+        <div style="font-size:13px;color:#78716C;line-height:1.6;">Seg&#xFA;n Sascha Fitness y la ciencia de los somatotipos, tu biotipo determina tu distribuci&#xF3;n de macros &#xF3;ptima.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px;">
+        <button onclick="obSetBio('ecto')" id="bio-ecto" class="bio-btn" style="padding:16px;border-radius:16px;border:2px solid rgba(28,25,23,.10);background:#FDFAF4;text-align:left;cursor:pointer;font-family:'DM Sans',sans-serif;">
+          <div style="font-weight:700;font-size:14px;color:#1C1917;margin-bottom:4px;">&#x1F4A8; Ectomorfo</div>
+          <div style="font-size:12px;color:#78716C;">Delgado, metabolismo r&#xE1;pido, cuesta ganar peso. Dieta: 55% C / 25% P / 20% G</div>
+        </button>
+        <button onclick="obSetBio('meso')" id="bio-meso" class="bio-btn" style="padding:16px;border-radius:16px;border:2px solid #C84B31;background:#FFF5F3;text-align:left;cursor:pointer;font-family:'DM Sans',sans-serif;">
+          <div style="font-weight:700;font-size:14px;color:#C84B31;margin-bottom:4px;">&#x1F4AA; Mesomorfo</div>
+          <div style="font-size:12px;color:#78716C;">Atl&#xE9;tico, gana m&#xFA;sculo f&#xE1;cil, metabolismo regular. Dieta: 40% C / 30% P / 30% G</div>
+        </button>
+        <button onclick="obSetBio('endo')" id="bio-endo" class="bio-btn" style="padding:16px;border-radius:16px;border:2px solid rgba(28,25,23,.10);background:#FDFAF4;text-align:left;cursor:pointer;font-family:'DM Sans',sans-serif;">
+          <div style="font-weight:700;font-size:14px;color:#1C1917;margin-bottom:4px;">&#x1F4C8; Endomorfo</div>
+          <div style="font-size:12px;color:#78716C;">Acumula grasa f&#xE1;cil, metabolismo lento. Dieta: 25% C / 40% P / 35% G</div>
+        </button>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="obNext(1)" style="flex:1;padding:14px;border-radius:14px;border:1px solid rgba(28,25,23,.18);background:transparent;color:#78716C;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">&#x2190; Atr&#xE1;s</button>
+        <button onclick="obNext(3)" style="flex:2;padding:14px;border-radius:14px;border:none;background:#C84B31;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">Continuar &#x2192;</button>
+      </div>
+    </div>
+
+    <div id="ob-step-3" style="display:none;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;">Tu objetivo</div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="lbl">Nivel de actividad</div>
+        <div class="select-wrap">
+          <select class="custom-select" id="ob-act-sel" onchange="obSetAct(this.value)">
+            <option value="sed">&#x1F6CB; Sedentario — Trabajo de oficina, poco o nada de ejercicio</option>
+            <option value="light">&#x1F6B6; Ligero — Ejercicio ligero 1-3 dias/semana</option>
+            <option value="mod" selected>&#x1F3CB; Moderado — Ejercicio moderado 3-5 dias/semana</option>
+            <option value="active">&#x1F3C3; Activo — Ejercicio intenso 6-7 dias/semana</option>
+            <option value="vactive">&#x26A1; Muy activo — Entrenamiento 2x/dia o trabajo fisico intenso</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div class="lbl">Objetivo principal</div>
+        <div class="select-wrap">
+          <select class="custom-select" id="ob-goal-sel" onchange="obSetGoal(this.value)">
+            <option value="lose">&#x1F525; Perder grasa — Deficit calorico controlado</option>
+            <option value="keep" selected>&#x2696; Mantener peso — Equilibrio calorico</option>
+            <option value="gain">&#x1F4AA; Ganar musculo — Superavit calorico moderado</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:16px;">
+        <div class="lbl">Restricciones alimentarias</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;" id="ob-rest-chips">
+          <button class="btn-chip" onclick="toggleObRest(this,'Vegetariano')">Vegetariano</button>
+          <button class="btn-chip" onclick="toggleObRest(this,'Vegano')">Vegano</button>
+          <button class="btn-chip" onclick="toggleObRest(this,'Sin gluten')">Sin gluten</button>
+          <button class="btn-chip" onclick="toggleObRest(this,'Sin lactosa')">Sin lactosa</button>
+          <button class="btn-chip" onclick="toggleObRest(this,'Sin mariscos')">Sin mariscos</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;padding-bottom:20px;">
+        <button onclick="obNext(2)" style="flex:1;padding:14px;border-radius:14px;border:1px solid rgba(28,25,23,.18);background:transparent;color:#78716C;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;">&#x2190; Atr&#xE1;s</button>
+        <button onclick="finishOnboarding()" style="flex:2;padding:14px;border-radius:14px;border:none;background:#1C1917;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">&#x2728; Crear mi plan</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- HEADER -->
 <div id="header" style="background:#FDFAF4;border-bottom:1px solid rgba(28,25,23,.10);position:sticky;top:0;z-index:50;">
@@ -72,66 +207,122 @@ select{-webkit-appearance:none;appearance:none;}
 </div>
 
 <!-- PAGES -->
-<div id="page-perfil" class="page" style="padding:20px 18px;">
-  <div id="tdee-cards" class="hidden" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
-    <div class="card" style="text-align:center;">
-      <div id="tdee-val" style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#C84B31;">—</div>
-      <div style="font-size:10px;color:#A8A29E;margin-top:3px;letter-spacing:1px;text-transform:uppercase;">TDEE</div>
+<div id="page-perfil" class="page" style="padding:0 0 20px;">
+  <!-- Profile Header -->
+  <div style="background:linear-gradient(160deg,#1C1917 0%,#3C2820 100%);padding:28px 20px 48px;text-align:center;position:relative;">
+    <div id="profile-avatar-wrap" style="width:90px;height:90px;border-radius:50%;background:#EDEAE0;border:3px solid #C84B31;margin:0 auto 12px;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:38px;" onclick="pickAvatar()">
+      <span id="profile-avatar-emoji">&#x1F464;</span>
+      <img id="profile-avatar-img" src="" style="display:none;width:100%;height:100%;object-fit:cover;"/>
     </div>
-    <div class="card" style="text-align:center;">
-      <div id="meta-val" style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#2A6B6E;">—</div>
-      <div style="font-size:10px;color:#A8A29E;margin-top:3px;letter-spacing:1px;text-transform:uppercase;">Meta kcal</div>
+    <div id="profile-name" style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:white;margin-bottom:4px;">Tu nombre</div>
+    <div id="profile-bio-tags" style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin-top:8px;"></div>
+  </div>
+
+  <!-- Stats bar -->
+  <div style="background:#FDFAF4;border-radius:20px;margin:-24px 16px 0;padding:16px;box-shadow:0 4px 20px rgba(0,0,0,.08);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;margin-bottom:16px;">
+    <div class="profile-stat" style="border-right:1px solid rgba(28,25,23,.08);">
+      <div class="profile-stat-val" id="ps-tdee" style="font-size:18px;">—</div>
+      <div class="profile-stat-lbl">TDEE</div>
+    </div>
+    <div class="profile-stat" style="border-right:1px solid rgba(28,25,23,.08);">
+      <div class="profile-stat-val" id="ps-meta" style="font-size:18px;color:#C84B31;">—</div>
+      <div class="profile-stat-lbl">Meta</div>
+    </div>
+    <div class="profile-stat" style="border-right:1px solid rgba(28,25,23,.08);">
+      <div class="profile-stat-val" id="ps-prot" style="font-size:18px;color:#2A6B6E;">—</div>
+      <div class="profile-stat-lbl">Prot/d&#xED;a</div>
+    </div>
+    <div class="profile-stat">
+      <div class="profile-stat-val" id="ps-bio" style="font-size:14px;">—</div>
+      <div class="profile-stat-lbl">Biotipo</div>
     </div>
   </div>
-  <div style="display:flex;flex-direction:column;gap:15px;">
-    <div><div class="lbl">Nombre</div><input class="inp" id="p-nombre" placeholder="&#xBF;C&#xF3;mo te llamas?" oninput="updateHeader()"/></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-      <div><div class="lbl">Edad</div><input class="inp" id="p-edad" type="number" value="28" style="text-align:center;"/></div>
-      <div><div class="lbl">Peso kg</div><input class="inp" id="p-peso" type="number" value="70" style="text-align:center;"/></div>
-      <div><div class="lbl">Altura cm</div><input class="inp" id="p-altura" type="number" value="170" style="text-align:center;"/></div>
+
+  <!-- Science method card -->
+  <div style="margin:0 16px 14px;background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:18px;padding:16px;border-left:4px solid #6B4EFF;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <span class="science-pill">&#x1F9EC; CIENCIA</span>
+      <span style="font-size:12px;font-weight:700;color:#6B4EFF;">M&#xE9;todo de c&#xE1;lculo</span>
     </div>
-    <div>
-      <div class="lbl">Sexo biol&#xF3;gico</div>
-      <div class="seg-wrap">
-        <button class="seg-btn active" id="sex-m" onclick="setSex('m')">Masculino</button>
-        <button class="seg-btn" id="sex-f" onclick="setSex('f')">Femenino</button>
-      </div>
-    </div>
-    <div>
-      <div class="lbl">Actividad</div>
-      <div style="display:flex;flex-wrap:wrap;gap:7px;" id="act-chips">
-        <button class="btn-chip" onclick="setAct('sed')">Sedentario</button>
-        <button class="btn-chip" onclick="setAct('light')">Ligero</button>
-        <button class="btn-chip on" onclick="setAct('mod')">Moderado</button>
-        <button class="btn-chip" onclick="setAct('active')">Activo</button>
-        <button class="btn-chip" onclick="setAct('vactive')">Muy activo</button>
-      </div>
-    </div>
-    <div>
-      <div class="lbl">Objetivo</div>
+    <div id="science-explanation" style="font-size:12px;color:#78716C;line-height:1.7;"></div>
+  </div>
+
+  <!-- Macros breakdown -->
+  <div style="margin:0 16px 14px;background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:18px;padding:16px;">
+    <div style="font-weight:700;font-size:14px;margin-bottom:12px;">Distribuci&#xF3;n de macros</div>
+    <div id="macro-breakdown" style="display:flex;flex-direction:column;gap:10px;"></div>
+  </div>
+
+  <!-- Edit button -->
+  <div style="margin:0 16px 14px;">
+    <button onclick="showEditProfile()" style="width:100%;padding:13px;border-radius:14px;border:1.5px solid rgba(28,25,23,.18);background:transparent;color:#1C1917;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">&#x270E; Editar perfil</button>
+  </div>
+
+  <!-- Edit Panel (hidden by default) -->
+  <div id="edit-panel" style="display:none;margin:0 16px;background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:18px;padding:18px;">
+    <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:16px;">Editar perfil</div>
+    <div style="display:flex;flex-direction:column;gap:13px;">
+      <div><div class="lbl">Nombre</div><input class="inp" id="p-nombre" placeholder="Tu nombre" oninput="updateHeader()"/></div>
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
-        <button onclick="setGoal('lose')" id="g-lose" style="padding:14px 8px;border-radius:14px;border:2px solid rgba(28,25,23,.10);background:#FDFAF4;color:#78716C;cursor:pointer;font-size:12px;font-weight:700;text-align:center;">
-          <div style="font-size:18px;margin-bottom:4px;">&#x1F53B;</div>Perder
-        </button>
-        <button onclick="setGoal('keep')" id="g-keep" style="padding:14px 8px;border-radius:14px;border:2px solid #C84B31;background:#C84B31;color:#FDFAF4;cursor:pointer;font-size:12px;font-weight:700;text-align:center;">
-          <div style="font-size:18px;margin-bottom:4px;">&#x2501;</div>Mantener
-        </button>
-        <button onclick="setGoal('gain')" id="g-gain" style="padding:14px 8px;border-radius:14px;border:2px solid rgba(28,25,23,.10);background:#FDFAF4;color:#78716C;cursor:pointer;font-size:12px;font-weight:700;text-align:center;">
-          <div style="font-size:18px;margin-bottom:4px;">&#x25B2;</div>M&#xFA;sculo
-        </button>
+        <div><div class="lbl">Edad</div><input class="inp" id="p-edad" type="number" value="28" style="text-align:center;"/></div>
+        <div><div class="lbl" id="lbl-peso">Peso kg</div><input class="inp" id="p-peso" type="number" value="70" style="text-align:center;"/></div>
+        <div><div class="lbl" id="lbl-altura">Altura cm</div><input class="inp" id="p-altura" type="number" value="170" style="text-align:center;"/></div>
       </div>
-    </div>
-    <div>
-      <div class="lbl">Restricciones</div>
-      <div style="display:flex;flex-wrap:wrap;gap:7px;" id="rest-chips">
-        <button class="btn-chip" onclick="toggleRest(this,'Vegetariano')">Vegetariano</button>
-        <button class="btn-chip" onclick="toggleRest(this,'Vegano')">Vegano</button>
-        <button class="btn-chip" onclick="toggleRest(this,'Sin gluten')">Sin gluten</button>
-        <button class="btn-chip" onclick="toggleRest(this,'Sin lactosa')">Sin lactosa</button>
-        <button class="btn-chip" onclick="toggleRest(this,'Sin mariscos')">Sin mariscos</button>
+      <div>
+        <div class="lbl">Medidas</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="font-size:12px;color:#78716C;" id="units-note">kg y cm</div>
+          <div style="display:flex;background:#EDEAE0;border-radius:99px;padding:3px;">
+            <button id="unit-metric" onclick="setUnits('metric')" style="padding:6px 14px;border-radius:99px;border:none;background:#1C1917;color:white;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">kg/cm</button>
+            <button id="unit-imperial" onclick="setUnits('imperial')" style="padding:6px 14px;border-radius:99px;border:none;background:transparent;color:#78716C;font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">lb/ft</button>
+          </div>
+        </div>
       </div>
+      <div><div class="lbl">Sexo</div><div class="seg-wrap"><button class="seg-btn active" id="sex-m" onclick="setSex('m')">Masculino</button><button class="seg-btn" id="sex-f" onclick="setSex('f')">Femenino</button></div></div>
+      <div>
+        <div class="lbl">Nivel de actividad</div>
+        <div class="select-wrap">
+          <select class="custom-select" id="act-sel" onchange="setAct(this.value)">
+            <option value="sed">&#x1F6CB; Sedentario</option>
+            <option value="light">&#x1F6B6; Ligero — 1-3 dias/semana</option>
+            <option value="mod" selected>&#x1F3CB; Moderado — 3-5 dias/semana</option>
+            <option value="active">&#x1F3C3; Activo — 6-7 dias/semana</option>
+            <option value="vactive">&#x26A1; Muy activo — 2x/dia</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="lbl">Biotipo corporal</div>
+        <div class="select-wrap">
+          <select class="custom-select" id="bio-sel" onchange="setBio(this.value)">
+            <option value="ecto">&#x1F4A8; Ectomorfo — 55%C / 25%P / 20%G</option>
+            <option value="meso" selected>&#x1F4AA; Mesomorfo — 40%C / 30%P / 30%G</option>
+            <option value="endo">&#x1F4C8; Endomorfo — 25%C / 40%P / 35%G</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="lbl">Objetivo principal</div>
+        <div class="select-wrap">
+          <select class="custom-select" id="goal-sel" onchange="setGoal(this.value)">
+            <option value="lose">&#x1F525; Perder grasa</option>
+            <option value="keep" selected>&#x2696; Mantener peso</option>
+            <option value="gain">&#x1F4AA; Ganar musculo</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="lbl">Restricciones</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px;" id="rest-chips">
+          <button class="btn-chip" onclick="toggleRest(this,'Vegetariano')">Vegetariano</button>
+          <button class="btn-chip" onclick="toggleRest(this,'Vegano')">Vegano</button>
+          <button class="btn-chip" onclick="toggleRest(this,'Sin gluten')">Sin gluten</button>
+          <button class="btn-chip" onclick="toggleRest(this,'Sin lactosa')">Sin lactosa</button>
+          <button class="btn-chip" onclick="toggleRest(this,'Sin mariscos')">Sin mariscos</button>
+        </div>
+      </div>
+      <button class="btn-main" onclick="saveProfile()">Guardar cambios</button>
     </div>
-    <button class="btn-main" onclick="saveProfile()">Guardar perfil</button>
   </div>
 </div>
 
@@ -222,7 +413,13 @@ select{-webkit-appearance:none;appearance:none;}
         <div id="food-modal-title" style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;"></div>
         <button onclick="closeFoodModal()" style="background:none;border:none;font-size:22px;color:#A8A29E;cursor:pointer;">&#xD7;</button>
       </div>
-      <input class="inp" id="food-search" placeholder="Buscar alimento&#x2026;" oninput="searchFood()" style="margin-bottom:12px;"/>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input class="inp" id="food-search" placeholder="Buscar con IA o nombre..." oninput="searchFood()" style="flex:1;margin-bottom:0;"/>
+        <button onclick="openScanModal()" title="Escanear código de barras" style="width:46px;height:46px;border-radius:12px;border:1.5px solid #2A6B6E;background:#B0D4D6;color:#2A6B6E;font-size:20px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;">&#x1F4F7;</button>
+      </div>
+      <button id="ai-search-btn" onclick="searchFoodWithAI()" style="width:100%;padding:11px;border-radius:12px;border:none;background:linear-gradient(135deg,#C84B31,#E8705A);color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <span>&#x2728;</span> Buscar con IA
+      </button>
       <div id="food-selected" class="hidden"></div>
       <div id="food-results"></div>
     </div>
@@ -280,6 +477,52 @@ select{-webkit-appearance:none;appearance:none;}
   </div>
 </div>
 
+
+<!-- Barcode Scanner Modal -->
+<div id="scan-modal" class="modal-overlay hidden">
+  <div style="position:absolute;inset:0;" onclick="closeScanModal()"></div>
+  <div class="modal-sheet" style="height:92vh;display:flex;flex-direction:column;">
+    <div class="modal-handle"><div></div></div>
+    <div style="padding:12px 16px 8px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Escanear producto</div>
+      <button onclick="closeScanModal()" style="background:none;border:none;font-size:22px;color:#A8A29E;cursor:pointer;">&#x2715;</button>
+    </div>
+    <div style="padding:0 16px 8px;font-size:12px;color:#78716C;">Apunta la c&#225;mara al c&#243;digo de barras del producto</div>
+    <div style="position:relative;flex:1;background:#000;overflow:hidden;margin:0 16px;border-radius:16px;">
+      <div id="scanner-viewport" style="width:100%;height:100%;"></div>
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+        <div style="width:75%;height:120px;border:3px solid #C84B31;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,0.45);position:relative;">
+          <div style="position:absolute;top:-2px;left:-2px;width:24px;height:24px;border-top:4px solid #C84B31;border-left:4px solid #C84B31;border-radius:4px 0 0 0;"></div>
+          <div style="position:absolute;top:-2px;right:-2px;width:24px;height:24px;border-top:4px solid #C84B31;border-right:4px solid #C84B31;border-radius:0 4px 0 0;"></div>
+          <div style="position:absolute;bottom:-2px;left:-2px;width:24px;height:24px;border-bottom:4px solid #C84B31;border-left:4px solid #C84B31;border-radius:0 0 0 4px;"></div>
+          <div style="position:absolute;bottom:-2px;right:-2px;width:24px;height:24px;border-bottom:4px solid #C84B31;border-right:4px solid #C84B31;border-radius:0 0 4px 0;"></div>
+        </div>
+      </div>
+      <div id="scan-status" style="position:absolute;bottom:12px;left:0;right:0;text-align:center;color:white;font-size:12px;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.8);">Buscando c&#243;digo...</div>
+    </div>
+    <div id="scan-result" style="display:none;padding:14px 16px 20px;">
+      <div id="scan-result-content"></div>
+    </div>
+    <div style="padding:10px 16px 20px;">
+      <button onclick="closeScanModal()" style="width:100%;padding:13px;border-radius:12px;border:1px solid rgba(28,25,23,.18);background:transparent;color:#78716C;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI Food Search Result Modal -->
+<div id="ai-food-modal" class="modal-overlay hidden">
+  <div style="position:absolute;inset:0;" onclick="closeAiFoodModal()"></div>
+  <div class="modal-sheet">
+    <div class="modal-handle"><div></div></div>
+    <div style="padding:14px 16px 32px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;">Resultado IA</div>
+        <button onclick="closeAiFoodModal()" style="background:none;border:none;font-size:22px;color:#A8A29E;cursor:pointer;">&#x2715;</button>
+      </div>
+      <div id="ai-food-content"></div>
+    </div>
+  </div>
+</div>
 </div><!-- #app -->
 
 <script>
@@ -287,6 +530,13 @@ select{-webkit-appearance:none;appearance:none;}
 // DATA
 // ============================================================
 var STATE = {
+  units: 'metric',
+  bio: 'meso',       // ecto | meso | endo
+  obSex: 'm',
+  obAct: 'mod',
+  obGoal: 'keep',
+  obRestrictions: [],
+  avatarUrl: '',
   sex:'m', act:'mod', goal:'keep', restrictions:[],
   profileSaved: false,
   water: 4,
@@ -301,6 +551,39 @@ var STATE = {
   workoutView: 'hoy',
   aiPlan: null,
 };
+
+// ============================================================
+// UNIT CONVERSION
+// ============================================================
+function toDisplay(kg) {
+  if (STATE.units === 'imperial') return Math.round(kg * 2.2046 * 10) / 10;
+  return kg;
+}
+function toKg(val) {
+  if (STATE.units === 'imperial') return Math.round(val / 2.2046 * 10) / 10;
+  return val;
+}
+function toDisplayH(cm) {
+  if (STATE.units === 'imperial') {
+    var totalIn = cm / 2.54;
+    var ft = Math.floor(totalIn / 12);
+    var inch = Math.round(totalIn % 12);
+    return ft + "'" + inch + '"';
+  }
+  return cm;
+}
+function toRawH(val) {
+  // val is string like 5'10" or number cm
+  if (STATE.units === 'imperial') {
+    var str = String(val);
+    var parts = str.match(/(\d+)'(\d+)/);
+    if (parts) return Math.round((parseInt(parts[1])*12 + parseInt(parts[2])) * 2.54);
+    return Math.round(parseFloat(val) * 2.54) || 170;
+  }
+  return parseFloat(val) || 170;
+}
+function weightUnit() { return STATE.units === 'imperial' ? 'lb' : 'kg'; }
+function heightUnit() { return STATE.units === 'imperial' ? 'ft/in' : 'cm'; }
 
 var FOODS = [
   {id:1,n:'Pechuga de pollo',s:'100g',cal:165,p:31,c:0,f:3.6,fi:0},
@@ -377,19 +660,68 @@ var DEVICES = [
 // ============================================================
 // HELPERS
 // ============================================================
+// Mifflin-St Jeor (1990) - more accurate than Harris-Benedict for modern lifestyles
+function calcBMR(pesoKg, alturaCm, edad, sex) {
+  if (sex === 'm') return 10*pesoKg + 6.25*alturaCm - 5*edad + 5;
+  return 10*pesoKg + 6.25*alturaCm - 5*edad - 161;
+}
 function calcTDEE(p,h,a,sex,act){
-  var bmr = sex==='m' ? 10*p+6.25*h-5*a+5 : 10*p+6.25*h-5*a-161;
-  var f = {sed:1.2,light:1.375,mod:1.55,active:1.725,vactive:1.9};
+  var bmr = calcBMR(p,h,a,sex);
+  var f = {sed:1.2, light:1.375, mod:1.55, active:1.725, vactive:1.9};
   return Math.round(bmr*(f[act]||1.55));
 }
-function calcMeta(t,g){ return g==='lose'?t-500:g==='gain'?t+300:t; }
+// Sascha Fitness method: by activity level x goal (lb-based multiply)
+function calcSaschaCalories(pesoKg, act, goal) {
+  var pesoLb = pesoKg * 2.2046;
+  var mult;
+  if (act === 'sed' || act === 'light') {
+    mult = goal==='lose' ? 10 : goal==='gain' ? 14 : 12;
+  } else if (act === 'mod') {
+    mult = goal==='lose' ? 12 : goal==='gain' ? 16 : 14;
+  } else {
+    mult = goal==='lose' ? 14 : goal==='gain' ? 20 : 16;
+  }
+  return Math.round(pesoLb * mult);
+}
+// Average both methods for best result
+function calcMeta(tdee, goal, pesoKg, act) {
+  var sascha = calcSaschaCalories(pesoKg, act||STATE.act, goal);
+  return Math.round((tdee + sascha) / 2);
+}
+// Protein per kg based on Sascha + ISSN science
+function calcProteinG(pesoKg, goal) {
+  // ISSN: 1.6-2.2g/kg for muscle gain, 1.2-1.6g/kg maintenance, 1.8-2.4g/kg cut
+  // Sascha: sed=0.8, mantener/perder=1.5, ganar=1g/lb=2.2g/kg
+  var perKg;
+  if (goal === 'gain')  perKg = 2.0;  // ~1g/lb as Sascha recommends
+  else if (goal === 'lose') perKg = 1.8; // higher protein to preserve muscle
+  else perKg = 1.5;
+  return Math.round(pesoKg * perKg);
+}
+// Macro % by biotype (Sascha Fitness method)
+function getMacroRatios(bio, goal) {
+  var ratios = {
+    ecto: {c:0.55, p:0.25, f:0.20},
+    meso: {c:0.40, p:0.30, f:0.30},
+    endo: {c:0.25, p:0.40, f:0.35},
+  };
+  var r = ratios[bio] || ratios.meso;
+  // Adjust for cutting: reduce carbs, increase protein
+  if (goal === 'lose') {
+    r = {c: Math.max(r.c - 0.08, 0.15), p: Math.min(r.p + 0.05, 0.45), f: r.f + 0.03};
+  }
+  return r;
+}
 function orm(w,r){ return r===1?w:Math.round(w/(1.0278-0.0278*r)); }
 function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
 function getMeta(){
-  var p=parseFloat(document.getElementById('p-peso').value)||70;
-  var h=parseFloat(document.getElementById('p-altura').value)||170;
-  var a=parseFloat(document.getElementById('p-edad').value)||28;
-  return calcMeta(calcTDEE(p,h,a,STATE.sex,STATE.act),STATE.goal);
+  var pRaw=parseFloat(document.getElementById('p-peso').value)||STATE.pesoKg||70;
+  var hRaw=parseFloat(document.getElementById('p-altura').value)||STATE.alturaCm||170;
+  var p = STATE.units==='imperial' ? Math.round(pRaw/2.2046*10)/10 : pRaw;
+  var h = STATE.units==='imperial' ? Math.round(hRaw*30.48) : hRaw;
+  var a=parseFloat(document.getElementById('p-edad').value)||STATE.edad||28;
+  var tdee=calcTDEE(p,h,a,STATE.sex,STATE.act);
+  return calcMeta(tdee,STATE.goal,p,STATE.act);
 }
 function el(id){ return document.getElementById(id); }
 function show(id){ var e=el(id); if(e){e.classList.remove('hidden');} }
@@ -421,41 +753,284 @@ function setSex(s){
 }
 function setAct(a){
   STATE.act=a;
-  el('act-chips').querySelectorAll('.btn-chip').forEach(function(b){
-    b.classList.remove('on');
-    if(b.getAttribute('onclick').includes("'"+a+"'")) b.classList.add('on');
-  });
+  var sel=document.getElementById('act-sel');
+  if(sel) sel.value=a;
 }
 function setGoal(g){
   STATE.goal=g;
-  ['lose','keep','gain'].forEach(function(x){
-    var b=el('g-'+x);
-    if(x===g){b.style.border='2px solid #C84B31';b.style.background='#C84B31';b.style.color='#FDFAF4';}
-    else{b.style.border='2px solid rgba(28,25,23,.10)';b.style.background='#FDFAF4';b.style.color='#78716C';}
-  });
+  var sel=document.getElementById('goal-sel');
+  if(sel) sel.value=g;
 }
 function toggleRest(btn,r){
   var idx=STATE.restrictions.indexOf(r);
   if(idx>=0){STATE.restrictions.splice(idx,1);btn.classList.remove('on');}
   else{STATE.restrictions.push(r);btn.classList.add('on');}
 }
+// ============================================================
+// ONBOARDING
+// ============================================================
+var OB = {sex:'m', act:'mod', goal:'keep', bio:'meso', restrictions:[]};
+
+function obSetSex(s) {
+  OB.sex = s;
+  var m=document.getElementById('ob-sex-m'), f=document.getElementById('ob-sex-f');
+  if(!m||!f) return;
+  m.classList.toggle('active', s==='m'); f.classList.toggle('active', s==='f');
+}
+function obSetAct(a) {
+  OB.act = a;
+  var sel = document.getElementById('ob-act-sel');
+  if(sel) sel.value = a;
+}
+function obSetGoal(g) {
+  OB.goal = g;
+  var sel = document.getElementById('ob-goal-sel');
+  if(sel) sel.value = g;
+}
+function obSetBio(bio) {
+  OB.bio = bio;
+  var hints = {
+    ecto: '&#x1F4A8; <b>Ectomorfo:</b> delgado/a, metabolismo rapido, le cuesta ganar peso. Necesitas mas carbohidratos para tener energia y ganar masa. Macros: 55% carbos / 25% proteina / 20% grasa.',
+    meso: '&#x1F4AA; <b>Mesomorfo:</b> estructura atletica, gana musculo con facilidad, metabolismo regular. El biotipo mas versatil. Macros: 40% carbos / 30% proteina / 30% grasa.',
+    endo: '&#x1F4C8; <b>Endomorfo:</b> acumula grasa con facilidad, metabolismo mas lento. Debes moderar carbos y priorizarlos antes/despues de entrenar. Macros: 25% carbos / 40% proteina / 35% grasa.'
+  };
+  var hint = document.getElementById('bio-hint');
+  if(hint) hint.innerHTML = hints[bio]||'';
+  var sel = document.getElementById('ob-bio-sel');
+  if(sel) sel.value = bio;
+}
+function obSetUnits(u) {
+  STATE.units = u;
+  var m=document.getElementById('ob-unit-m'),i=document.getElementById('ob-unit-i');
+  if(!m||!i) return;
+  if(u==='metric'){
+    m.style.background='#1C1917';m.style.color='white';
+    i.style.background='transparent';i.style.color='#78716C';
+    document.getElementById('ob-lbl-peso').textContent='Peso kg';
+    document.getElementById('ob-lbl-altura').textContent='Altura cm';
+  } else {
+    i.style.background='#1C1917';i.style.color='white';
+    m.style.background='transparent';m.style.color='#78716C';
+    document.getElementById('ob-lbl-peso').textContent='Peso lb';
+    document.getElementById('ob-lbl-altura').textContent='Altura ft';
+    // convert
+    var pw=parseFloat(document.getElementById('ob-peso').value)||70;
+    var ph=parseFloat(document.getElementById('ob-altura').value)||170;
+    if(pw<150) document.getElementById('ob-peso').value=Math.round(pw*2.2046*10)/10;
+    if(ph>10)  document.getElementById('ob-altura').value=parseFloat((ph/30.48).toFixed(2));
+  }
+}
+function toggleObRest(btn,r){
+  var idx=OB.restrictions.indexOf(r);
+  if(idx>=0){OB.restrictions.splice(idx,1);btn.classList.remove('on');}
+  else{OB.restrictions.push(r);btn.classList.add('on');}
+}
+function obNext(step) {
+  document.getElementById('ob-step-1').style.display = step===1?'block':'none';
+  document.getElementById('ob-step-2').style.display = step===2?'block':'none';
+  document.getElementById('ob-step-3').style.display = step===3?'block':'none';
+}
+function pickAvatar() {
+  document.getElementById('avatar-input') && document.getElementById('avatar-input').click();
+}
+function loadAvatar(event) {
+  var file = event.target.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    STATE.avatarUrl = e.target.result;
+    updateAllAvatars();
+  };
+  reader.readAsDataURL(file);
+}
+function updateAllAvatars() {
+  var url = STATE.avatarUrl;
+  ['ob-avatar-img','profile-avatar-img'].forEach(function(id){
+    var img = document.getElementById(id); if(!img) return;
+    if(url){img.src=url;img.style.display='block';}
+    else img.style.display='none';
+  });
+  ['ob-avatar-emoji','profile-avatar-emoji'].forEach(function(id){
+    var el2=document.getElementById(id); if(!el2) return;
+    el2.style.display = url?'none':'inline';
+  });
+}
+function finishOnboarding() {
+  var nombre = document.getElementById('ob-nombre').value.trim() || 'Usuario';
+  var pesoRaw = parseFloat(document.getElementById('ob-peso').value)||70;
+  var alturaRaw = parseFloat(document.getElementById('ob-altura').value)||170;
+  var pesoKg = STATE.units==='imperial' ? Math.round(pesoRaw/2.2046*10)/10 : pesoRaw;
+  var alturaCm = STATE.units==='imperial' ? Math.round(alturaRaw*30.48) : alturaRaw;
+  var edad = parseFloat(document.getElementById('ob-edad').value)||28;
+
+  // Copy to main state
+  STATE.sex = OB.sex; STATE.act = OB.act; STATE.goal = OB.goal;
+  STATE.bio = OB.bio; STATE.restrictions = OB.restrictions.slice();
+  STATE.pesoKg = pesoKg; STATE.alturaCm = alturaCm; STATE.edad = edad;
+  STATE.nombre = nombre; STATE.profileSaved = true;
+
+  // Sync to edit fields
+  document.getElementById('p-nombre').value = nombre;
+  document.getElementById('p-peso').value = STATE.units==='imperial'?pesoRaw:pesoKg;
+  document.getElementById('p-altura').value = STATE.units==='imperial'?alturaRaw:alturaCm;
+  document.getElementById('p-edad').value = edad;
+
+  // Hide onboarding
+  document.getElementById('onboarding').style.display = 'none'; saveToStorage();
+  setTab('perfil');
+  renderProfileCard();
+  updateHeader();
+}
+
+function showEditProfile() {
+  var ep = document.getElementById('edit-panel');
+  ep.style.display = ep.style.display==='none'?'block':'none';
+}
+
+function renderProfileCard() {
+  if(!STATE.profileSaved) return;
+  var p=STATE.pesoKg||70, h=STATE.alturaCm||170, a=STATE.edad||28;
+  var tdee=calcTDEE(p,h,a,STATE.sex,STATE.act);
+  var meta=calcMeta(tdee,STATE.goal,p,STATE.act);
+  var ratios=getMacroRatios(STATE.bio,STATE.goal);
+  var protG=calcProteinG(p,STATE.goal);
+  var carbG=Math.round((meta*ratios.c)/4);
+  var fatG=Math.round((meta*ratios.f)/9);
+  // use protein grams approach for accuracy
+  var protGfinal=Math.round((meta*ratios.p)/4);
+
+  // Update stat bar
+  document.getElementById('ps-tdee').textContent=tdee+' kcal';
+  document.getElementById('ps-meta').textContent=meta+' kcal';
+  document.getElementById('ps-prot').textContent=protGfinal+'g';
+  var bioNames={ecto:'Ecto',meso:'Meso',endo:'Endo'};
+  document.getElementById('ps-bio').textContent=bioNames[STATE.bio]||'—';
+
+  // Name
+  document.getElementById('profile-name').textContent=STATE.nombre||'Tu nombre';
+
+  // Bio tags
+  var goalTags={lose:'&#x1F525; Perder grasa',keep:'&#x2696; Mantener',gain:'&#x1F4AA; Ganar m\u00fasculo'};
+  var actTags={sed:'Sedentario',light:'Ligero',mod:'Moderado',active:'Activo',vactive:'Muy activo'};
+  var bioTags={ecto:'Ectomorfo',meso:'Mesomorfo',endo:'Endomorfo'};
+  var tags=document.getElementById('profile-bio-tags');
+  tags.innerHTML=[
+    '<span class="bio-tag red">'+goalTags[STATE.goal]+'</span>',
+    '<span class="bio-tag teal">'+actTags[STATE.act]+'</span>',
+    '<span class="bio-tag gold">'+bioTags[STATE.bio]+'</span>',
+  ].join('');
+  if(STATE.restrictions.length) {
+    STATE.restrictions.forEach(function(r){tags.innerHTML+='<span class="bio-tag">'+r+'</span>';});
+  }
+
+  // Avatar
+  updateAllAvatars();
+
+  // Science explanation
+  var scienceTxt =
+    '<b>F\u00f3rmula:</b> Mifflin-St Jeor (1990) \u2014 m\u00e1s precisa que Harris-Benedict para estilos de vida modernos.<br>'+
+    '<b>TMB</b> = '+(STATE.sex==='m'?'10×peso + 6.25×altura - 5×edad + 5':'10×peso + 6.25×altura - 5×edad - 161')+'<br>'+
+    '<b>TDEE</b> = TMB × '+({sed:1.2,light:1.375,mod:1.55,active:1.725,vactive:1.9}[STATE.act]||1.55)+' (factor actividad)<br>'+
+    '<b>Meta calórica</b> = promedio Mifflin + m\u00e9todo Sascha Fitness (peso en lb × multiplicador por actividad y objetivo)<br>'+
+    '<b>Macros por biotipo</b> (Sascha Fitness): '+Math.round(ratios.c*100)+'% C / '+Math.round(ratios.p*100)+'% P / '+Math.round(ratios.f*100)+'% G<br>'+
+    '<b>Proteína</b>: '+calcProteinG(p,STATE.goal)+'g/día ('+
+    (STATE.goal==='gain'?'2.0g/kg \u2014 ISSN para hipertrofia':STATE.goal==='lose'?'1.8g/kg \u2014 preservar músculo en déficit':'1.5g/kg \u2014 mantenimiento')+')';
+  document.getElementById('science-explanation').innerHTML=scienceTxt;
+
+  // Macro breakdown bars
+  var macroDiv=document.getElementById('macro-breakdown');
+  macroDiv.innerHTML=[
+    {n:'Prote\u00edna',g:protGfinal,pct:Math.round(ratios.p*100),col:'#C84B31',kcal:protGfinal*4},
+    {n:'Carbohidratos',g:carbG,pct:Math.round(ratios.c*100),col:'#2A6B6E',kcal:carbG*4},
+    {n:'Grasas',g:fatG,pct:Math.round(ratios.f*100),col:'#B5851B',kcal:fatG*9},
+  ].map(function(m){
+    return '<div>'+
+      '<div style="display:flex;justify-content:space-between;margin-bottom:4px;">'+
+      '<span style="font-size:13px;font-weight:600;">'+m.n+'</span>'+
+      '<span style="font-size:12px;color:#78716C;">'+m.g+'g \u00b7 '+m.pct+'% \u00b7 '+m.kcal+'kcal</span>'+
+      '</div>'+
+      '<div style="height:8px;background:#EDEAE0;border-radius:4px;overflow:hidden;">'+
+      '<div style="width:'+m.pct+'%;height:100%;background:'+m.col+';border-radius:4px;transition:width .6s;"></div></div></div>';
+  }).join('');
+}
+
+// ============================================================
+// UNITS
+// ============================================================
+function setUnits(u) {
+  STATE.units = u;
+  // Toggle button styles
+  var metric = el('unit-metric');
+  var imperial = el('unit-imperial');
+  if (!metric || !imperial) return;
+  if (u === 'metric') {
+    metric.style.background = '#1C1917'; metric.style.color = '#FDFAF4';
+    imperial.style.background = 'transparent'; imperial.style.color = '#78716C';
+    el('lbl-peso').textContent = 'Peso kg';
+    el('lbl-altura').textContent = 'Altura cm';
+    el('units-note').textContent = 'Usando kilogramos y cent\u00edmetros';
+    // Convert current values back to metric if they were imperial
+    var pesoVal = parseFloat(el('p-peso').value)||0;
+    var altVal = parseFloat(el('p-altura').value)||0;
+    if (pesoVal > 150) { // likely lb
+      el('p-peso').value = Math.round(pesoVal/2.2046*10)/10;
+    }
+    if (altVal < 10) { // likely ft decimal
+      el('p-altura').value = Math.round(altVal*30.48);
+    }
+    el('p-peso').placeholder = 'ej. 70';
+    el('p-altura').placeholder = 'ej. 170';
+  } else {
+    metric.style.background = 'transparent'; metric.style.color = '#78716C';
+    imperial.style.background = '#1C1917'; imperial.style.color = '#FDFAF4';
+    el('lbl-peso').textContent = 'Peso lb';
+    el('lbl-altura').textContent = 'Altura ft';
+    el('units-note').textContent = 'Usando libras y pies/pulgadas';
+    // Convert current values to imperial
+    var pesoKg = parseFloat(el('p-peso').value)||70;
+    var cmVal = parseFloat(el('p-altura').value)||170;
+    if (pesoKg < 150) { // likely still kg
+      el('p-peso').value = Math.round(pesoKg*2.2046*10)/10;
+    }
+    if (cmVal > 10) { // likely cm
+      var totalIn = cmVal/2.54;
+      var ft = Math.floor(totalIn/12);
+      var inch = Math.round(totalIn%12);
+      el('p-altura').value = parseFloat((ft + inch/12).toFixed(2));
+      el('p-altura').placeholder = "ej. 5.83 (5'10\")";
+    }
+    el('p-peso').placeholder = 'ej. 154';
+  }
+}
+
+function setBio(bio) {
+  STATE.bio = bio;
+  var sel=document.getElementById('bio-sel');
+  if(sel) sel.value=bio;
+}
+
 function updateHeader(){
   var n=el('p-nombre').value;
   el('header-sub').textContent=n?'Hola, '+n:'Tu salud, tu ritmo';
 }
 function saveProfile(){
   STATE.profileSaved=true;
-  var t=calcTDEE(
-    parseFloat(el('p-peso').value)||70,
-    parseFloat(el('p-altura').value)||170,
-    parseFloat(el('p-edad').value)||28,
-    STATE.sex,STATE.act
-  );
-  var m=calcMeta(t,STATE.goal);
-  el('tdee-val').textContent=t;
-  el('meta-val').textContent=m;
-  show('tdee-cards');
-  el('tdee-cards').style.display='grid';
+  var pesoRaw = parseFloat(el('p-peso').value)||70;
+  var alturaRaw = parseFloat(el('p-altura').value)||170;
+  var pesoKg = STATE.units==='imperial' ? Math.round(pesoRaw/2.2046*10)/10 : pesoRaw;
+  var alturaCm = STATE.units==='imperial' ? Math.round(alturaRaw*30.48) : alturaRaw;
+  var edad = parseFloat(el('p-edad').value)||28;
+  STATE.pesoKg = pesoKg; STATE.alturaCm = alturaCm; STATE.edad = edad;
+  STATE.nombre = el('p-nombre').value.trim() || STATE.nombre;
+  var t=calcTDEE(pesoKg, alturaCm, edad, STATE.sex, STATE.act);
+  var m=calcMeta(t,STATE.goal,STATE.pesoKg,STATE.act);
+  renderProfileCard();
+  document.getElementById('edit-panel').style.display='none';
+  // show toast
+  var toast=document.createElement('div');
+  toast.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1C1917;color:white;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:300;font-family:\'DM Sans\',sans-serif;';
+  toast.textContent='\u2713 Perfil guardado';
+  document.body.appendChild(toast);
+  setTimeout(function(){toast.remove();},2500);
 }
 
 // ============================================================
@@ -676,7 +1251,7 @@ function renderWorkoutHoy(){
       '<div style="font-size:11px;color:#A8A29E;">'+ex.m+(best.w?' \u00b7 1RM ~'+orm(best.w,best.r)+'kg':'')+'</div></div>'+
       '<button onclick="removeExFromSession('+si+')" style="background:none;border:none;color:#A8A29E;cursor:pointer;font-size:18px;padding:0;">\u00d7</button></div>';
     var tblH=!isC?'<div style="display:grid;grid-template-columns:28px 1fr 1fr 1fr 36px;gap:4px;padding:6px 12px;background:#EDEAE0;">'+
-      ['#','KG','REPS','1RM',''].map(function(h){return '<div style="font-size:10px;font-weight:700;color:#A8A29E;text-align:center;letter-spacing:.5px;">'+h+'</div>';}).join('')+'</div>':'';
+      ['#',STATE.units==="imperial"?'LB':'KG','REPS','1RM',''].map(function(h){return '<div style="font-size:10px;font-weight:700;color:#A8A29E;text-align:center;letter-spacing:.5px;">'+h+'</div>';}).join('')+'</div>':'';
     card.innerHTML=hdr+tblH;
     s.sets.forEach(function(st,ti){
       var row=document.createElement('div');
@@ -708,7 +1283,7 @@ function renderWorkoutHoy(){
         row.appendChild(rInp);
         var rmCell=document.createElement('div');
         rmCell.style.cssText='font-size:12px;font-weight:700;color:'+(st.done?'#2A6B6E':'#A8A29E')+';text-align:center;';
-        rmCell.textContent=(st.w&&st.r)?orm(st.w,st.r):'\u2014';
+        rmCell.textContent=(st.w&&st.r)?orm(st.w,st.r)+(STATE.units==="imperial"?' lb':' kg'):'\u2014';
         row.appendChild(rmCell);
       }
       var cb=document.createElement('button');
@@ -927,6 +1502,56 @@ function renderDevices(){
     d.appendChild(card);
   });
   updateWearableBtn();
+
+  // Add import section at bottom
+  var importDiv = document.createElement('div');
+  importDiv.style.cssText = 'margin-top:20px;background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:18px;padding:18px;';
+  importDiv.innerHTML =
+    '<div style="font-family:\'Playfair Display\',serif;font-size:17px;font-weight:700;margin-bottom:4px;">Importar mis datos reales</div>'+
+    '<div style="font-size:12px;color:#78716C;margin-bottom:16px;line-height:1.6;">Exporta tus datos desde Samsung Health o Fitbit y c\u00e1rgalos aqu\u00ed para ver tu informaci\u00f3n real.</div>'+
+
+    '<div style="margin-bottom:14px;padding:14px;background:#E8ECFF;border-radius:14px;border-left:4px solid #1428A0;">'+
+    '<div style="font-weight:700;font-size:13px;color:#1428A0;margin-bottom:6px;">\uD83D\uDCF1 Samsung Health</div>'+
+    '<div style="font-size:11px;color:#1428A0;margin-bottom:10px;line-height:1.6;">'+
+    '1. Abre Samsung Health<br>'+
+    '2. Perfil \u2192 \u22EE Men\u00fa \u2192 Configuraci\u00f3n<br>'+
+    '3. "Descargar datos personales"<br>'+
+    '4. Descarga y sube el archivo <b>step_daily_trend.csv</b> o <b>com.samsung.health.step_daily_trend.csv</b>'+
+    '</div>'+
+    '<label style="display:block;width:100%;padding:11px;border-radius:10px;border:none;background:#1428A0;color:white;font-size:12px;font-weight:700;cursor:pointer;text-align:center;font-family:\'DM Sans\',sans-serif;">'+
+    '\uD83D\uDCC2 Subir archivo Samsung Health'+
+    '<input type="file" accept=".csv,.json,.zip" onchange="importSamsung(event)" style="display:none;"/>'+
+    '</label></div>'+
+
+    '<div style="margin-bottom:14px;padding:14px;background:#E0F7F8;border-radius:14px;border-left:4px solid #00B0B9;">'+
+    '<div style="font-weight:700;font-size:13px;color:#00B0B9;margin-bottom:6px;">\uD83D\uDFE6 Fitbit</div>'+
+    '<div style="font-size:11px;color:#007A80;margin-bottom:10px;line-height:1.6;">'+
+    '1. Ve a <b>fitbit.com</b> en el navegador<br>'+
+    '2. Icono de perfil \u2192 Configuraci\u00f3n<br>'+
+    '3. "Exportar datos" \u2192 "Solicitar mis datos"<br>'+
+    '4. Descarga y sube el archivo <b>activities-heart.json</b> o <b>profile.csv</b>'+
+    '</div>'+
+    '<label style="display:block;width:100%;padding:11px;border-radius:10px;border:none;background:#00B0B9;color:white;font-size:12px;font-weight:700;cursor:pointer;text-align:center;font-family:\'DM Sans\',sans-serif;">'+
+    '\uD83D\uDCC2 Subir archivo Fitbit'+
+    '<input type="file" accept=".csv,.json" onchange="importFitbit(event)" style="display:none;"/>'+
+    '</label></div>'+
+
+    '<div style="padding:14px;background:#EDE9FF;border-radius:14px;border-left:4px solid #6B4EFF;">'+
+    '<div style="font-weight:700;font-size:13px;color:#6B4EFF;margin-bottom:6px;">\uD83D\uDC8D Oura Ring</div>'+
+    '<div style="font-size:11px;color:#5030CC;margin-bottom:10px;line-height:1.6;">'+
+    '1. Ve a <b>cloud.ouraring.com</b><br>'+
+    '2. Account \u2192 Data Export<br>'+
+    '3. Descarga y sube <b>sleep.json</b> o <b>activity.json</b>'+
+    '</div>'+
+    '<label style="display:block;width:100%;padding:11px;border-radius:10px;border:none;background:#6B4EFF;color:white;font-size:12px;font-weight:700;cursor:pointer;text-align:center;font-family:\'DM Sans\',sans-serif;">'+
+    '\uD83D\uDCC2 Subir archivo Oura'+
+    '<input type="file" accept=".csv,.json" onchange="importOura(event)" style="display:none;"/>'+
+    '</label></div>'+
+
+    '<div id="import-result" style="display:none;margin-top:14px;padding:14px;background:#D8F3DC;border:1px solid #2D6A4F;border-radius:14px;">'+
+    '<div style="font-weight:700;font-size:13px;color:#2D6A4F;margin-bottom:8px;">\u2705 Datos importados correctamente</div>'+
+    '<div id="import-summary" style="font-size:12px;color:#1B4332;line-height:1.8;"></div></div>';
+  d.appendChild(importDiv);
 }
 
 function toggleDevice(id){
@@ -989,6 +1614,11 @@ function renderPlan(){
 }
 
 async function generatePlan(){
+  // Check if we have a profile
+  if(!STATE.profileSaved){
+    alert('Primero completa y guarda tu perfil.');
+    return;
+  }
   var btn=el('gen-btn');
   btn.textContent='Generando\u2026';btn.disabled=true;
   el('plan-content').innerHTML='<div style="text-align:center;padding:40px 0;"><div style="font-family:\'Playfair Display\',serif;font-size:38px;opacity:.3;">&#x25CE;</div><div style="font-size:13px;color:#A8A29E;margin-top:10px;">Analizando perfil y wearables&#x2026;</div></div>';
@@ -1027,7 +1657,7 @@ async function generatePlan(){
     STATE.aiPlan=plan;
     renderPlanContent(plan);
   }catch(e){
-    el('plan-content').innerHTML='<div style="padding:14px;background:#F4B8A8;border-radius:14px;color:#9A3520;text-align:center;font-size:13px;font-weight:600;">Error generando el plan. Int\u00e9ntalo de nuevo.</div>';
+    el('plan-content').innerHTML='<div style="padding:14px;background:#F4B8A8;border-radius:14px;color:#9A3520;text-align:center;font-size:13px;font-weight:600;"><div style="font-size:11px;color:#9A3520;margin-top:4px;" id="plan-err-detail"></div></div>';
   }
   btn.textContent='Generar plan semanal con IA';btn.disabled=false;
 }
@@ -1074,12 +1704,576 @@ function renderPlanContent(plan){
 }
 
 // ============================================================
+// IMPORT REAL DATA
+// ============================================================
+
+function importSamsung(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var content = e.target.result;
+    var result = {};
+
+    try {
+      // Try CSV format (step_daily_trend)
+      if (file.name.indexOf('.csv') >= 0) {
+        var lines = content.split('\n').filter(function(l){return l.trim();});
+        var headers = lines[0].split(',').map(function(h){return h.trim().replace(/"/g,'');});
+        var rows = [];
+        for (var i=1;i<lines.length;i++) {
+          var cols = lines[i].split(',');
+          var row = {};
+          headers.forEach(function(h,j){row[h]=cols[j]?cols[j].trim().replace(/"/g,''):'';});
+          rows.push(row);
+        }
+
+        // Find step columns
+        var stepCol = headers.find(function(h){return h.toLowerCase().indexOf('count')>=0||h.toLowerCase().indexOf('step')>=0;});
+        var dateCol = headers.find(function(h){return h.toLowerCase().indexOf('date')>=0||h.toLowerCase().indexOf('start')>=0||h.toLowerCase().indexOf('time')>=0;});
+        var calCol  = headers.find(function(h){return h.toLowerCase().indexOf('calorie')>=0||h.toLowerCase().indexOf('cal')>=0;});
+
+        if (rows.length > 0) {
+          var latestRow = rows[rows.length-1];
+          var steps = stepCol ? parseInt(latestRow[stepCol])||0 : 0;
+          var cals  = calCol  ? parseInt(latestRow[calCol])||0  : 0;
+
+          // Calculate 7-day average
+          var last7 = rows.slice(-7);
+          var avgSteps = Math.round(last7.reduce(function(s,r){return s+(parseInt(r[stepCol])||0);},0)/last7.length);
+
+          result = {
+            pasos: steps || avgSteps,
+            avgPasos: avgSteps,
+            calQ: cals,
+            diasImportados: rows.length,
+            ultimaFecha: dateCol ? latestRow[dateCol] : 'desconocida',
+            fuente: 'Samsung Health',
+            color: '#1428A0'
+          };
+        }
+      }
+
+      // Try JSON format
+      if (file.name.indexOf('.json') >= 0) {
+        var data = JSON.parse(content);
+        if (Array.isArray(data)) {
+          var last = data[data.length-1];
+          result = {
+            pasos: last.distance||last.steps||last.count||0,
+            calQ: last.calorie||last.calories||0,
+            diasImportados: data.length,
+            fuente: 'Samsung Health',
+            color: '#1428A0'
+          };
+        }
+      }
+
+      if (result.pasos || result.calQ) {
+        // Update Samsung device data
+        var dev = DEVICES.find(function(d){return d.id==='samsung';});
+        if (dev) {
+          if (result.pasos) dev.data.pasos = result.pasos;
+          if (result.calQ)  dev.data.cal   = result.calQ;
+        }
+        STATE.connectedDevices['samsung'] = true;
+        showImportResult(result);
+        renderDevices();
+      } else {
+        showImportError('No se encontraron datos de pasos. Intenta con otro archivo del export.');
+      }
+    } catch(err) {
+      showImportError('Error leyendo el archivo: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function importFitbit(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var content = e.target.result;
+    var result = {};
+
+    try {
+      if (file.name.indexOf('.json') >= 0) {
+        var data = JSON.parse(content);
+
+        // activities-heart.json
+        if (Array.isArray(data) && data[0] && data[0]['activities-heart']) {
+          var hearts = data[0]['activities-heart'];
+          var last = hearts[hearts.length-1];
+          result = {
+            frecCardiaca: last && last.value && last.value.restingHeartRate ? last.value.restingHeartRate : 0,
+            diasImportados: hearts.length,
+            fuente: 'Fitbit',
+            color: '#00B0B9'
+          };
+        }
+        // activities.json or steps
+        else if (Array.isArray(data) && data[0] && data[0].steps !== undefined) {
+          var last2 = data[data.length-1];
+          result = {
+            pasos: parseInt(last2.steps)||0,
+            calQ: parseInt(last2.calories)||0,
+            diasImportados: data.length,
+            fuente: 'Fitbit',
+            color: '#00B0B9'
+          };
+        }
+        // Direct object with summary
+        else if (data.summary) {
+          result = {
+            pasos: data.summary.steps||0,
+            calQ:  data.summary.caloriesOut||0,
+            activeMin: data.summary.fairlyActiveMinutes||0,
+            fuente: 'Fitbit',
+            color: '#00B0B9'
+          };
+        }
+      }
+
+      if (file.name.indexOf('.csv') >= 0) {
+        var lines = content.split('\n').filter(function(l){return l.trim();});
+        var headers = lines[0].split(',').map(function(h){return h.trim().replace(/"/g,'');});
+        var latestLine = lines[lines.length-1].split(',');
+        var row = {};
+        headers.forEach(function(h,j){row[h]=latestLine[j]?latestLine[j].trim().replace(/"/g,''):'';});
+
+        result = {
+          pasos: parseInt(row['Steps']||row['steps']||row['Pasos'])||0,
+          calQ:  parseInt(row['Calories Burned']||row['Calories']||row['calories'])||0,
+          fuente: 'Fitbit',
+          color: '#00B0B9',
+          diasImportados: lines.length - 1
+        };
+      }
+
+      if (result.pasos || result.frecCardiaca || result.calQ) {
+        var dev = DEVICES.find(function(d){return d.id==='fitbit';});
+        if (dev) {
+          if (result.pasos) dev.data.pasos = result.pasos;
+          if (result.calQ)  dev.data.cal   = result.calQ;
+          if (result.frecCardiaca) dev.data.fc = result.frecCardiaca;
+          if (result.activeMin)    dev.data.active = result.activeMin;
+        }
+        STATE.connectedDevices['fitbit'] = true;
+        showImportResult(result);
+        renderDevices();
+      } else {
+        showImportError('No se encontraron datos. Intenta con activities.json o el CSV de pasos.');
+      }
+    } catch(err) {
+      showImportError('Error leyendo el archivo: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function importOura(event) {
+  var file = event.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var content = e.target.result;
+    var result = {};
+    try {
+      var data = JSON.parse(content);
+
+      // sleep.json
+      if (data.sleep && Array.isArray(data.sleep)) {
+        var last = data.sleep[data.sleep.length-1];
+        var totalSleep = last.total ? Math.floor(last.total/3600)+'h '+Math.floor((last.total%3600)/60)+'m' : '—';
+        result = {
+          sueño: totalSleep,
+          sleepScore: last.score||0,
+          deepSleep: last.deep ? Math.floor(last.deep/60)+'m' : '—',
+          remSleep: last.rem ? Math.floor(last.rem/60)+'m' : '—',
+          hrv: last.average_hrv||0,
+          rhr: last.lowest_heart_rate||0,
+          diasImportados: data.sleep.length,
+          fuente: 'Oura Ring',
+          color: '#6B4EFF'
+        };
+      }
+      // activity.json
+      else if (data.activity && Array.isArray(data.activity)) {
+        var last2 = data.activity[data.activity.length-1];
+        result = {
+          pasos: last2.steps||0,
+          calQ: last2.cal_active||0,
+          actScore: last2.score||0,
+          diasImportados: data.activity.length,
+          fuente: 'Oura Ring',
+          color: '#6B4EFF'
+        };
+      }
+      // readiness.json
+      else if (data.readiness && Array.isArray(data.readiness)) {
+        var last3 = data.readiness[data.readiness.length-1];
+        result = {
+          readiness: last3.score||0,
+          hrv: last3.average_hrv||0,
+          diasImportados: data.readiness.length,
+          fuente: 'Oura Ring',
+          color: '#6B4EFF'
+        };
+      }
+
+      if (Object.keys(result).length > 2) {
+        var dev = DEVICES.find(function(d){return d.id==='oura';});
+        if (dev) {
+          if (result.sueño)     dev.data.sleep    = result.sueño;
+          if (result.sleepScore)dev.data.sleepS   = result.sleepScore;
+          if (result.hrv)       dev.data.hrv      = result.hrv;
+          if (result.rhr)       dev.data.rhr      = result.rhr;
+          if (result.pasos)     dev.data.pasos    = result.pasos;
+          if (result.readiness) dev.data.ready    = result.readiness;
+        }
+        STATE.connectedDevices['oura'] = true;
+        showImportResult(result);
+        renderDevices();
+      } else {
+        showImportError('Formato no reconocido. Prueba con sleep.json, activity.json o readiness.json de Oura.');
+      }
+    } catch(err) {
+      showImportError('Error leyendo el archivo: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function showImportResult(result) {
+  var div = document.getElementById('import-result');
+  var summary = document.getElementById('import-summary');
+  if (!div || !summary) return;
+
+  var lines = [];
+  lines.push('<b style="color:'+result.color+';">'+result.fuente+'</b> importado correctamente');
+  if (result.diasImportados) lines.push('\uD83D\uDCC5 '+result.diasImportados+' d\u00edas de datos');
+  if (result.pasos)     lines.push('\uD83D\uDC63 Pasos hoy: <b>'+result.pasos.toLocaleString()+'</b>');
+  if (result.avgPasos)  lines.push('\uD83D\uDCC8 Media 7 d\u00edas: <b>'+result.avgPasos.toLocaleString()+' pasos</b>');
+  if (result.calQ)      lines.push('\uD83D\uDD25 Calor\u00edas: <b>'+result.calQ+' kcal</b>');
+  if (result.frecCardiaca) lines.push('\u2764\uFE0F FC reposo: <b>'+result.frecCardiaca+' bpm</b>');
+  if (result.sueño)     lines.push('\uD83D\uDE34 Sue\u00f1o: <b>'+result.sueño+'</b>');
+  if (result.sleepScore)lines.push('\u2B50 Sleep Score: <b>'+result.sleepScore+'/100</b>');
+  if (result.hrv)       lines.push('\uD83E\uDEC0 HRV: <b>'+result.hrv+' ms</b>');
+  if (result.readiness) lines.push('\u26A1 Readiness: <b>'+result.readiness+'/100</b>');
+  if (result.ultimaFecha) lines.push('\uD83D\uDDD3 \u00daltima fecha: '+result.ultimaFecha);
+
+  summary.innerHTML = lines.join('<br>');
+  div.style.display = 'block';
+  div.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function showImportError(msg) {
+  var div = document.getElementById('import-result');
+  var summary = document.getElementById('import-summary');
+  if (!div || !summary) return;
+  div.style.background = '#FFE5E5';
+  div.style.borderColor = '#C84B31';
+  div.querySelector('div').style.color = '#C84B31';
+  div.querySelector('div').textContent = '\u274C Error al importar';
+  summary.innerHTML = msg;
+  div.style.display = 'block';
+}
+
+// ============================================================
+// BARCODE SCANNER
+// ============================================================
+var scanActive = false;
+var scanMeal = null;
+
+function openScanModal() {
+  scanMeal = STATE.foodModalMeal;
+  document.getElementById('scan-result').style.display = 'none';
+  document.getElementById('scan-status').textContent = 'Buscando c\u00f3digo...';
+  show('scan-modal');
+  setTimeout(startScanner, 400);
+}
+
+function closeScanModal() {
+  stopScanner();
+  hide('scan-modal');
+}
+
+function startScanner() {
+  if (scanActive) return;
+  var viewport = document.getElementById('scanner-viewport');
+  if (!viewport) return;
+
+  if (typeof Quagga === 'undefined') {
+    document.getElementById('scan-status').textContent = 'C\u00e1mara no disponible';
+    // Fallback: manual barcode entry
+    document.getElementById('scan-result').style.display = 'block';
+    document.getElementById('scan-result-content').innerHTML =
+      '<div style="font-size:13px;color:#78716C;margin-bottom:10px;">Introduce el c\u00f3digo manualmente:</div>'+
+      '<input id="manual-barcode" class="inp" placeholder="Ej: 8410188012456" style="margin-bottom:10px;"/>'+
+      '<button onclick="lookupBarcode(document.getElementById(\'manual-barcode\').value)" style="width:100%;padding:12px;border-radius:12px;border:none;background:#1C1917;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">Buscar producto</button>';
+    return;
+  }
+
+  Quagga.init({
+    inputStream: {
+      name: 'Live',
+      type: 'LiveStream',
+      target: viewport,
+      constraints: { facingMode: 'environment', width: {ideal:1280}, height: {ideal:720} }
+    },
+    decoder: {
+      readers: ['ean_reader','ean_8_reader','upc_reader','upc_e_reader','code_128_reader','code_39_reader']
+    },
+    locate: true
+  }, function(err) {
+    if (err) {
+      document.getElementById('scan-status').textContent = 'Error c\u00e1mara: ' + err.message;
+      return;
+    }
+    scanActive = true;
+    Quagga.start();
+  });
+
+  Quagga.onDetected(function(result) {
+    var code = result.codeResult.code;
+    if (code) {
+      stopScanner();
+      document.getElementById('scan-status').textContent = '\u2705 C\u00f3digo: ' + code;
+      lookupBarcode(code);
+    }
+  });
+}
+
+function stopScanner() {
+  if (scanActive && typeof Quagga !== 'undefined') {
+    try { Quagga.stop(); } catch(e) {}
+  }
+  scanActive = false;
+}
+
+function lookupBarcode(barcode) {
+  if (!barcode || barcode.length < 4) return;
+  document.getElementById('scan-status').textContent = 'Buscando ' + barcode + '...';
+  document.getElementById('scan-result').style.display = 'block';
+  document.getElementById('scan-result-content').innerHTML =
+    '<div style="text-align:center;padding:16px 0;color:#78716C;font-size:13px;">&#x1F50D; Consultando base de datos...</div>';
+
+  // Use Open Food Facts API (free, no key needed)
+  fetch('https://world.openfoodfacts.org/api/v0/product/' + barcode + '.json')
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if (data.status === 1 && data.product) {
+        var p = data.product;
+        var n100 = p.nutriments || {};
+        var name = p.product_name || p.product_name_es || 'Producto';
+        var brand = p.brands || '';
+        var serving = p.serving_size || '100g';
+        var cal = Math.round(n100['energy-kcal_100g'] || n100['energy-kcal'] || (n100['energy_100g']||0)/4.184 || 0);
+        var prot = Math.round((n100['proteins_100g']||0)*10)/10;
+        var carb = Math.round((n100['carbohydrates_100g']||0)*10)/10;
+        var fat  = Math.round((n100['fat_100g']||0)*10)/10;
+        var fiber= Math.round((n100['fiber_100g']||0)*10)/10;
+        var img  = p.image_front_small_url || p.image_url || '';
+
+        var food = {id: Date.now(), n: name, s: serving, cal: cal, p: prot, c: carb, f: fat, fi: fiber, brand: brand};
+        showScannedFood(food, img, barcode);
+      } else {
+        // Fallback to AI lookup
+        lookupBarcodeWithAI(barcode);
+      }
+    })
+    .catch(function(){
+      lookupBarcodeWithAI(barcode);
+    });
+}
+
+function lookupBarcodeWithAI(barcode) {
+  document.getElementById('scan-result-content').innerHTML =
+    '<div style="text-align:center;padding:16px 0;color:#78716C;font-size:13px;">&#x2728; Consultando IA...</div>';
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 300,
+      messages: [{role:'user', content:
+        'El c\u00f3digo de barras es: ' + barcode + '. ' +
+        'Intenta identificar el producto y devuelve SOLO este JSON (sin texto extra): ' +
+        '{"nombre":"x","marca":"x","porcion":"100g","calorias":0,"proteinas":0,"carbos":0,"grasas":0,"fibra":0}. ' +
+        'Si no lo conoces igualmente devuelve el JSON con valores 0 y nombre "Producto desconocido".'
+      }]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var txt = (data.content||[]).map(function(b){return b.text||'';}).join('');
+    var start = txt.indexOf('{'); var end = txt.lastIndexOf('}');
+    var obj = JSON.parse(start>=0&&end>start ? txt.slice(start,end+1) : txt);
+    var food = {id:Date.now(), n:obj.nombre||'Producto', s:obj.porcion||'100g',
+      cal:obj.calorias||0, p:obj.proteinas||0, c:obj.carbos||0, f:obj.grasas||0, fi:obj.fibra||0, brand:obj.marca||''};
+    showScannedFood(food, '', barcode);
+  })
+  .catch(function(){
+    document.getElementById('scan-result-content').innerHTML =
+      '<div style="color:#C84B31;font-size:13px;text-align:center;padding:12px;">No se encontr\u00f3 el producto. Intenta a\u00f1adirlo manualmente.</div>';
+  });
+}
+
+function showScannedFood(food, img, barcode) {
+  var meal = scanMeal || STATE.foodModalMeal;
+  var html =
+    '<div style="background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:16px;padding:14px;border-left:4px solid #C84B31;">'+
+    (img ? '<img src="'+img+'" style="width:60px;height:60px;object-fit:contain;border-radius:8px;float:right;margin-left:10px;" onerror="this.style.display=\'none\'" />' : '')+
+    '<div style="font-weight:700;font-size:15px;margin-bottom:2px;">'+food.n+'</div>'+
+    (food.brand?'<div style="font-size:11px;color:#A8A29E;margin-bottom:8px;">'+food.brand+'</div>':'')+
+    '<div style="font-size:11px;color:#78716C;margin-bottom:10px;">Porci\u00f3n: '+food.s+(barcode?' \u00b7 EAN: '+barcode:'')+'</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:12px;clear:both;">'+
+    [['Kcal',food.cal,'#C84B31'],['Prot',food.p+'g','#2A6B6E'],['Carb',food.c+'g','#B5851B'],['Grasa',food.f+'g','#6B7280']].map(function(x){
+      return '<div style="text-align:center;padding:7px 4px;background:#EDEAE0;border-radius:10px;">'+
+        '<div style="font-family:\'Playfair Display\',serif;font-size:15px;font-weight:700;color:'+x[2]+';">'+x[1]+'</div>'+
+        '<div style="font-size:9px;color:#A8A29E;">'+x[0]+'</div></div>';
+    }).join('')+
+    '</div>'+
+    (meal?'<button onclick="addScannedFood()" style="width:100%;padding:12px;border-radius:12px;border:none;background:#1C1917;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">A\u00f1adir a '+meal+'</button>':'<div style="font-size:12px;color:#A8A29E;text-align:center;">Abre desde el men\u00fa de nutrici\u00f3n para a\u00f1adir</div>')+
+    '</div>';
+  document.getElementById('scan-result-content').innerHTML = html;
+  document.getElementById('scan-result').style.display = 'block';
+  STATE._scannedFood = food;
+}
+
+function addScannedFood() {
+  var food = STATE._scannedFood;
+  var meal = scanMeal || STATE.foodModalMeal;
+  if (!food || !meal) return;
+  STATE.diary[meal].push({...food, qty:1, id:Date.now()});
+  closeScanModal();
+  if (document.getElementById('food-modal').classList.contains('hidden') === false) {
+    closeFoodModal();
+  }
+  renderMeals(); updateNutritionTotals();
+  setTab('nutricion');
+}
+
+// ============================================================
+// AI FOOD SEARCH
+// ============================================================
+function searchFoodWithAI() {
+  var q = document.getElementById('food-search').value.trim();
+  if (!q) {
+    alert('Escribe lo que buscas, por ejemplo: "pollo a la plancha 200g" o "porcion de pizza margherita"');
+    return;
+  }
+
+  var btn = document.getElementById('ai-search-btn');
+  btn.innerHTML = '<span>&#x23F3;</span> Buscando...';
+  btn.disabled = true;
+
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 600,
+      messages: [{role:'user', content:
+        'Eres un experto en nutrici\u00f3n. El usuario busca: "' + q + '". ' +
+        'Devuelve SOLO un JSON v\u00e1lido con esta estructura (sin texto extra): ' +
+        '{"resultados":[{"nombre":"x","porcion":"x","calorias":0,"proteinas":0,"carbos":0,"grasas":0,"fibra":0,"nota":"consejo nutricional breve"}]}. ' +
+        'Da entre 1 y 4 opciones relevantes con valores nutricionales precisos por la porcion indicada. ' +
+        'Si menciona una cantidad espec\u00edfica (ej: 200g de pollo), calcula para esa cantidad.'
+      }]
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var txt = (data.content||[]).map(function(b){return b.text||'';}).join('');
+    var start = txt.indexOf('{'); var end = txt.lastIndexOf('}');
+    var obj = JSON.parse(start>=0&&end>start ? txt.slice(start,end+1) : txt);
+    showAIFoodResults(obj.resultados||[], q);
+  })
+  .catch(function(e){
+    btn.innerHTML = '<span>&#x2728;</span> Buscar con IA';
+    btn.disabled = false;
+    alert('Error al conectar con IA. Comprueba tu conexi\u00f3n.');
+  })
+  .finally(function(){
+    btn.innerHTML = '<span>&#x2728;</span> Buscar con IA';
+    btn.disabled = false;
+  });
+}
+
+function showAIFoodResults(results, query) {
+  var d = document.getElementById('food-results');
+  if (!results || results.length === 0) {
+    d.innerHTML = '<div style="text-align:center;color:#A8A29E;font-size:13px;padding:20px 0;">No se encontraron resultados para "'+query+'"</div>';
+    return;
+  }
+  d.innerHTML = '<div style="font-size:11px;font-weight:700;letter-spacing:1px;color:#A8A29E;text-transform:uppercase;margin-bottom:8px;">&#x2728; Resultados IA para "'+query+'"</div>';
+  results.forEach(function(item) {
+    var food = {id:Date.now()+Math.random(), n:item.nombre, s:item.porcion||'100g',
+      cal:item.calorias||0, p:item.proteinas||0, c:item.carbos||0, f:item.grasas||0, fi:item.fibra||0};
+    var btn2 = document.createElement('button');
+    btn2.style.cssText = 'width:100%;text-align:left;padding:12px 14px;background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:14px;margin-bottom:8px;cursor:pointer;font-family:\'DM Sans\',sans-serif;';
+    btn2.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">'+
+      '<div style="font-size:13px;font-weight:700;color:#1C1917;flex:1;padding-right:8px;">'+item.nombre+'</div>'+
+      '<div style="text-align:right;flex-shrink:0;"><div style="font-family:\'Playfair Display\',serif;font-size:16px;font-weight:700;color:#C84B31;">'+item.calorias+'</div><div style="font-size:9px;color:#A8A29E;">kcal</div></div></div>'+
+      '<div style="font-size:11px;color:#78716C;margin-bottom:6px;">'+item.porcion+(item.nota?' \u00b7 '+item.nota:'')+'</div>'+
+      '<div style="display:flex;gap:10px;">'+
+      [['P',item.proteinas+'g','#2A6B6E'],['C',item.carbos+'g','#B5851B'],['G',item.grasas+'g','#6B7280'],['Fib',(item.fibra||0)+'g','#9CA3AF']].map(function(x){
+        return '<span style="font-size:11px;font-weight:700;color:'+x[2]+';">'+x[0]+' '+x[1]+'</span>';
+      }).join('')+'</div>';
+    btn2.onclick = (function(f){return function(){selectFood(f);};})(food);
+    d.appendChild(btn2);
+  });
+}
+
+function closeAiFoodModal() { hide('ai-food-modal'); }
+
+// ============================================================
 // INIT
 // ============================================================
 window.onload = function(){
+  // Check if already onboarded (localStorage)
+  try {
+    var saved = localStorage.getItem('forma_profile');
+    if (saved) {
+      var p = JSON.parse(saved);
+      Object.assign(STATE, p);
+      document.getElementById('onboarding').style.display = 'none';
+      // Restore form fields
+      if(document.getElementById('p-nombre')) document.getElementById('p-nombre').value = STATE.nombre||'';
+      if(document.getElementById('p-peso')) document.getElementById('p-peso').value = STATE.pesoKg||70;
+      if(document.getElementById('p-altura')) document.getElementById('p-altura').value = STATE.alturaCm||170;
+      if(document.getElementById('p-edad')) document.getElementById('p-edad').value = STATE.edad||28;
+      setSex(STATE.sex||'m');
+      setAct(STATE.act||'mod');
+      setGoal(STATE.goal||'keep');
+      setBio(STATE.bio||'meso');
+      // Sync selects
+      var asel=document.getElementById('act-sel');if(asel)asel.value=STATE.act||'mod';
+      var gsel=document.getElementById('goal-sel');if(gsel)gsel.value=STATE.goal||'keep';
+      var bsel=document.getElementById('bio-sel');if(bsel)bsel.value=STATE.bio||'meso';
+      renderProfileCard();
+      updateHeader();
+    }
+  } catch(e) {}
   renderWater();
   renderMeals();
 };
+
+// Save profile to localStorage
+function saveToStorage() {
+  try {
+    localStorage.setItem('forma_profile', JSON.stringify({
+      nombre:STATE.nombre, sex:STATE.sex, act:STATE.act, goal:STATE.goal,
+      bio:STATE.bio, pesoKg:STATE.pesoKg, alturaCm:STATE.alturaCm, edad:STATE.edad,
+      units:STATE.units, restrictions:STATE.restrictions, avatarUrl:STATE.avatarUrl,
+      profileSaved:true
+    }));
+  } catch(e){}
+}
 </script>
 </body>
 </html>
