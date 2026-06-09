@@ -42,7 +42,7 @@ select{-webkit-appearance:none;appearance:none;}
 .device-card{background:#FDFAF4;border:1.5px solid rgba(28,25,23,.10);border-radius:18px;overflow:hidden;margin-bottom:10px;transition:border .2s;}
 .progress-bar{height:3px;background:#EDEAE0;border-radius:2px;}
 .progress-fill{height:100%;border-radius:2px;transition:width .5s;}
-@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}} @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 .pulse{animation:pulse 2s infinite;}
 .arc-wrap{position:relative;display:inline-block;}
 .arc-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
@@ -150,25 +150,21 @@ select{-webkit-appearance:none;appearance:none;}
       </div>
       <div style="margin-bottom:14px;">
         <div class="lbl">Nivel de actividad</div>
-        <div class="select-wrap">
-          <select class="custom-select" id="ob-act-sel" onchange="obSetAct(this.value)">
-            <option value="sed">&#x1F6CB; Sedentario — Trabajo de oficina, poco o nada de ejercicio</option>
-            <option value="light">&#x1F6B6; Ligero — Ejercicio ligero 1-3 dias/semana</option>
-            <option value="mod" selected>&#x1F3CB; Moderado — Ejercicio moderado 3-5 dias/semana</option>
-            <option value="active">&#x1F3C3; Activo — Ejercicio intenso 6-7 dias/semana</option>
-            <option value="vactive">&#x26A1; Muy activo — Entrenamiento 2x/dia o trabajo fisico intenso</option>
-          </select>
-        </div>
+        <select class="custom-select" id="ob-act-sel" onchange="obSetAct(this.value)" style="width:100%;background:#EDEAE0;border:1.5px solid rgba(28,25,23,.18);border-radius:12px;padding:13px 40px 13px 14px;color:#1C1917;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2378716C%22 stroke-width=%222.5%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 14px center;background-size:18px;">
+          <option value="sed">Sedentario — Sin ejercicio, trabajo de oficina</option>
+          <option value="light">Ligero — 1-3 dias/semana</option>
+          <option value="mod" selected>Moderado — 3-5 dias/semana</option>
+          <option value="active">Activo — 6-7 dias/semana</option>
+          <option value="vactive">Muy activo — 2x/dia o trabajo fisico</option>
+        </select>
       </div>
       <div style="margin-bottom:14px;">
         <div class="lbl">Objetivo principal</div>
-        <div class="select-wrap">
-          <select class="custom-select" id="ob-goal-sel" onchange="obSetGoal(this.value)">
-            <option value="lose">&#x1F525; Perder grasa — Deficit calorico controlado</option>
-            <option value="keep" selected>&#x2696; Mantener peso — Equilibrio calorico</option>
-            <option value="gain">&#x1F4AA; Ganar musculo — Superavit calorico moderado</option>
-          </select>
-        </div>
+        <select class="custom-select" id="ob-goal-sel" onchange="obSetGoal(this.value)" style="width:100%;background:#EDEAE0;border:1.5px solid rgba(28,25,23,.18);border-radius:12px;padding:13px 40px 13px 14px;color:#1C1917;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;-webkit-appearance:none;appearance:none;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2378716C%22 stroke-width=%222.5%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 14px center;background-size:18px;">
+          <option value="lose">Perder grasa — Deficit calorico controlado</option>
+          <option value="keep" selected>Mantener peso — Equilibrio calorico</option>
+          <option value="gain">Ganar musculo — Superavit calorico moderado</option>
+        </select>
       </div>
       <div style="margin-bottom:16px;">
         <div class="lbl">Restricciones alimentarias</div>
@@ -1331,36 +1327,246 @@ function endSession(){STATE.session=[];STATE.activeRoutine=null;renderWorkoutHoy
 function removeExFromSession(si){STATE.session.splice(si,1);renderWorkoutHoy();}
 function startFromRoutine(r){
   STATE.activeRoutine=r;
+  var defSets=r.defaultSets||3;
+  var defReps=r.defaultReps||10;
   STATE.session=r.exs.map(function(id){
     var ex=EXERCISES.find(function(e){return e.id===id;});
-    return{id:id,sets:ex.t==='c'?[{min:20,done:false}]:[{w:20,r:10,done:false},{w:20,r:10,done:false},{w:20,r:10,done:false}]};
-  });
+    if(!ex) return null;
+    if(ex.t==='c') return{id:id,sets:[{min:20,done:false}]};
+    var sets=[];
+    for(var i=0;i<defSets;i++) sets.push({w:20,r:defReps,done:false});
+    return{id:id,sets:sets};
+  }).filter(Boolean);
   renderWorkoutHoy();
 }
 
 function renderRoutines(){
   var d=el('wv-rutinas');d.innerHTML='';
+
+  // Existing routines
   ROUTINES.forEach(function(r){
     var card=document.createElement('div');
     card.style.cssText='background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:18px;padding:16px;margin-bottom:12px;';
-    var hdr='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">'+
-      '<div><div style="font-family:\'Playfair Display\',serif;font-size:17px;font-weight:700;">'+r.name+'</div>'+
-      '<div style="font-size:12px;color:#78716C;margin-top:2px;">'+r.days+'</div></div>'+
-      '<button onclick="startFromRoutine2('+r.id+')" style="padding:8px 16px;border-radius:99px;border:none;background:#2A6B6E;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">Iniciar</button></div>';
-    var exRows=r.exs.map(function(id){
+
+    var exList=r.exs.map(function(id){
       var ex=EXERCISES.find(function(e){return e.id===id;});
       return ex?'<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;background:#EDEAE0;border-radius:10px;margin-bottom:4px;">'+
-        '<span style="font-size:15px;">'+ex.e+'</span><span style="flex:1;font-size:13px;font-weight:600;">'+ex.name+'</span><span style="font-size:11px;color:#A8A29E;">'+ex.m+'</span></div>':'';
+        '<span style="font-size:15px;">'+ex.e+'</span>'+
+        '<span style="flex:1;font-size:13px;font-weight:600;">'+ex.name+'</span>'+
+        '<span style="font-size:11px;color:#A8A29E;">'+ex.m+'</span>'+
+        '</div>':'';
     }).join('');
-    card.innerHTML=hdr+exRows;
+
+    card.innerHTML=
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">'+
+      '<div><div style="font-family:\'Playfair Display\',serif;font-size:17px;font-weight:700;">'+r.name+'</div>'+
+      '<div style="font-size:12px;color:#78716C;margin-top:2px;">'+r.days+'</div></div>'+
+      '<div style="display:flex;gap:8px;">'+
+      '<button onclick="startFromRoutine2('+r.id+')" style="padding:8px 16px;border-radius:99px;border:none;background:#2A6B6E;color:white;font-size:12px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">&#x25B6; Iniciar</button>'+
+      '<button onclick="deleteRoutine('+r.id+')" style="padding:8px 12px;border-radius:99px;border:1px solid rgba(200,75,49,.3);background:transparent;color:#C84B31;font-size:12px;cursor:pointer;">&#x1F5D1;</button>'+
+      '</div></div>'+exList;
     d.appendChild(card);
+  });
+
+  // ── NEW ROUTINE BUILDER ──────────────────────────────────
+  var builderDiv = document.createElement('div');
+  builderDiv.id = 'routine-builder';
+
+  // Toggle button
+  var toggleBtn = document.createElement('button');
+  toggleBtn.id = 'toggle-builder-btn';
+  toggleBtn.style.cssText='width:100%;padding:14px;border-radius:14px;border:2px dashed rgba(28,25,23,.18);background:transparent;color:#78716C;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;margin-bottom:12px;';
+  toggleBtn.textContent='+ Crear nueva rutina';
+  toggleBtn.onclick=function(){ toggleRoutineBuilder(); };
+  d.appendChild(toggleBtn);
+
+  // Builder form
+  var form = document.createElement('div');
+  form.id='builder-form';
+  form.style.cssText='display:none;background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:18px;padding:18px;margin-bottom:16px;';
+  form.innerHTML=
+    '<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;margin-bottom:16px;">Nueva rutina</div>'+
+
+    // Name
+    '<div style="margin-bottom:12px;">'+
+    '<div class="lbl">Nombre de la rutina</div>'+
+    '<input class="inp" id="new-r-name" placeholder="Ej: Push A, Full Body, Cardio..." style="margin-bottom:0;"/>'+
+    '</div>'+
+
+    // Days
+    '<div style="margin-bottom:12px;">'+
+    '<div class="lbl">Dias de entrenamiento</div>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:6px;" id="new-r-days">'+
+    ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(function(d){
+      return '<button onclick="toggleDay(this,\''+d+'\')" style="padding:8px 14px;border-radius:99px;border:1.5px solid rgba(28,25,23,.18);background:transparent;color:#78716C;font-size:12px;font-weight:600;cursor:pointer;font-family:\'DM Sans\',sans-serif;">'+d+'</button>';
+    }).join('')+
+    '</div></div>'+
+
+    // Exercise picker
+    '<div style="margin-bottom:12px;">'+
+    '<div class="lbl">Ejercicios</div>'+
+    '<input id="new-r-ex-search" class="inp" placeholder="Buscar ejercicio..." oninput="filterNewRoutineEx()" style="margin-bottom:8px;"/>'+
+    '<select class="custom-select" id="new-r-muscle-filter" onchange="filterNewRoutineEx()" style="margin-bottom:10px;width:100%;background:#EDEAE0;border:1.5px solid rgba(28,25,23,.18);border-radius:12px;padding:11px 40px 11px 14px;color:#1C1917;font-size:13px;font-family:\'DM Sans\',sans-serif;outline:none;-webkit-appearance:none;appearance:none;background-image:url(\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%2378716C%22 stroke-width=%222.5%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E\');background-repeat:no-repeat;background-position:right 12px center;">'+
+    '<option value="">Todos los musculos</option>'+
+    ['Pecho','Espalda','Hombros','Bíceps','Tríceps','Piernas','Glúteos','Core','Cardio'].map(function(m){return '<option value="'+m+'">'+m+'</option>';}).join('')+
+    '</select>'+
+    '<div id="new-r-ex-list" style="max-height:220px;overflow-y:auto;border:1px solid rgba(28,25,23,.08);border-radius:12px;"></div>'+
+    '</div>'+
+
+    // Selected exercises
+    '<div style="margin-bottom:14px;">'+
+    '<div class="lbl">Ejercicios seleccionados</div>'+
+    '<div id="new-r-selected" style="min-height:44px;background:#EDEAE0;border-radius:12px;padding:8px;font-size:12px;color:#A8A29E;">'+
+    'Toca ejercicios arriba para añadirlos'+
+    '</div></div>'+
+
+    // Sets/reps config
+    '<div style="margin-bottom:16px;">'+
+    '<div class="lbl">Series y repeticiones por defecto</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'+
+    '<div><div style="font-size:11px;color:#A8A29E;margin-bottom:4px;">Series</div>'+
+    '<input type="number" id="new-r-sets" value="3" min="1" max="10" class="inp" style="text-align:center;padding:10px;"/></div>'+
+    '<div><div style="font-size:11px;color:#A8A29E;margin-bottom:4px;">Repeticiones</div>'+
+    '<input type="number" id="new-r-reps" value="10" min="1" max="50" class="inp" style="text-align:center;padding:10px;"/></div>'+
+    '</div></div>'+
+
+    // Action buttons
+    '<div style="display:flex;gap:10px;">'+
+    '<button onclick="cancelBuilder()" style="flex:1;padding:13px;border-radius:12px;border:1px solid rgba(28,25,23,.18);background:transparent;color:#78716C;font-size:13px;cursor:pointer;font-family:\'DM Sans\',sans-serif;">Cancelar</button>'+
+    '<button onclick="saveNewRoutine()" style="flex:2;padding:13px;border-radius:12px;border:none;background:#1C1917;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">&#x2713; Guardar rutina</button>'+
+    '</div>';
+
+  d.appendChild(form);
+  filterNewRoutineEx(); // populate exercise list
+}
+
+// ─── ROUTINE BUILDER HELPERS ──────────────────────────────────
+var NEW_ROUTINE_EXS = []; // selected exercise ids
+var NEW_ROUTINE_DAYS = [];
+
+function toggleRoutineBuilder(){
+  var form=document.getElementById('builder-form');
+  var btn=document.getElementById('toggle-builder-btn');
+  if(!form) return;
+  NEW_ROUTINE_EXS=[];
+  NEW_ROUTINE_DAYS=[];
+  if(form.style.display==='none'){
+    form.style.display='block';
+    btn.textContent='- Cancelar';
+    filterNewRoutineEx();
+  } else {
+    form.style.display='none';
+    btn.textContent='+ Crear nueva rutina';
+  }
+}
+
+function cancelBuilder(){
+  var form=document.getElementById('builder-form');
+  var btn=document.getElementById('toggle-builder-btn');
+  if(form) form.style.display='none';
+  if(btn) btn.textContent='+ Crear nueva rutina';
+  NEW_ROUTINE_EXS=[];NEW_ROUTINE_DAYS=[];
+}
+
+function toggleDay(btn, day){
+  var idx=NEW_ROUTINE_DAYS.indexOf(day);
+  if(idx>=0){
+    NEW_ROUTINE_DAYS.splice(idx,1);
+    btn.style.background='transparent';btn.style.color='#78716C';btn.style.borderColor='rgba(28,25,23,.18)';
+  } else {
+    NEW_ROUTINE_DAYS.push(day);
+    btn.style.background='#2A6B6E';btn.style.color='white';btn.style.borderColor='#2A6B6E';
+  }
+}
+
+function filterNewRoutineEx(){
+  var q=(document.getElementById('new-r-ex-search')||{}).value||'';
+  var m=(document.getElementById('new-r-muscle-filter')||{}).value||'';
+  var list=document.getElementById('new-r-ex-list');
+  if(!list) return;
+  q=q.toLowerCase();
+  var filtered=EXERCISES.filter(function(e){
+    return(!q||e.name.toLowerCase().indexOf(q)>=0)&&(!m||e.m===m);
+  });
+  list.innerHTML='';
+  filtered.forEach(function(e){
+    var inSel=NEW_ROUTINE_EXS.indexOf(e.id)>=0;
+    var row=document.createElement('button');
+    row.style.cssText='width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;background:'+(inSel?'rgba(42,107,110,0.1)':'transparent')+';border:none;border-bottom:1px solid rgba(28,25,23,.06);cursor:pointer;font-family:\'DM Sans\',sans-serif;text-align:left;';
+    row.innerHTML='<span style="font-size:17px;">'+e.e+'</span>'+
+      '<div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#1C1917;">'+e.name+'</div>'+
+      '<div style="font-size:10px;color:#A8A29E;">'+e.m+'</div></div>'+
+      (inSel?'<span style="color:#2A6B6E;font-size:16px;font-weight:700;">&#x2713;</span>':'<span style="color:#A8A29E;font-size:18px;">+</span>');
+    row.onclick=(function(ex){return function(){
+      var idx2=NEW_ROUTINE_EXS.indexOf(ex.id);
+      if(idx2>=0) NEW_ROUTINE_EXS.splice(idx2,1);
+      else NEW_ROUTINE_EXS.push(ex.id);
+      filterNewRoutineEx();
+      updateSelectedList();
+    };})(e);
+    list.appendChild(row);
   });
 }
 
-function startFromRoutine2(rid){
-  var r=ROUTINES.find(function(x){return x.id===rid;});
-  if(r){startFromRoutine(r);setWorkoutView('hoy');}
+function updateSelectedList(){
+  var sel=document.getElementById('new-r-selected');
+  if(!sel) return;
+  if(NEW_ROUTINE_EXS.length===0){
+    sel.innerHTML='<span style="color:#A8A29E;font-size:12px;">Toca ejercicios arriba para añadirlos</span>';
+    return;
+  }
+  sel.innerHTML=NEW_ROUTINE_EXS.map(function(id,i){
+    var ex=EXERCISES.find(function(e){return e.id===id;});
+    return ex?'<div style="display:flex;align-items:center;gap:8px;padding:5px 8px;background:white;border-radius:8px;margin-bottom:4px;">'+
+      '<span style="font-size:14px;">'+ex.e+'</span>'+
+      '<span style="flex:1;font-size:12px;font-weight:600;">'+ex.name+'</span>'+
+      '<button onclick="removeFromNewRoutine(\''+id+'\')" style="background:none;border:none;color:#C84B31;cursor:pointer;font-size:14px;padding:0;">&#x00D7;</button>'+
+      '</div>':'';
+  }).join('');
 }
+
+function removeFromNewRoutine(id){
+  var idx=NEW_ROUTINE_EXS.indexOf(id);
+  if(idx>=0) NEW_ROUTINE_EXS.splice(idx,1);
+  filterNewRoutineEx();updateSelectedList();
+}
+
+function saveNewRoutine(){
+  var name=(document.getElementById('new-r-name')||{}).value||'';
+  if(!name.trim()){
+    alert('Dale un nombre a tu rutina'); return;
+  }
+  if(NEW_ROUTINE_EXS.length===0){
+    alert('Añade al menos un ejercicio'); return;
+  }
+  var days=NEW_ROUTINE_DAYS.length?NEW_ROUTINE_DAYS.join('·'):'Sin dia asignado';
+  var sets=parseInt((document.getElementById('new-r-sets')||{}).value)||3;
+  var reps=parseInt((document.getElementById('new-r-reps')||{}).value)||10;
+  ROUTINES.push({
+    id: Date.now(),
+    name: name.trim(),
+    days: days,
+    exs: NEW_ROUTINE_EXS.slice(),
+    defaultSets: sets,
+    defaultReps: reps
+  });
+  cancelBuilder();
+  renderRoutines();
+  // show toast
+  var toast=document.createElement('div');
+  toast.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2A6B6E;color:white;padding:10px 20px;border-radius:99px;font-size:13px;font-weight:600;z-index:300;font-family:\'DM Sans\',sans-serif;white-space:nowrap;';
+  toast.textContent='✓ Rutina "'+name.trim()+'" creada';
+  document.body.appendChild(toast);
+  setTimeout(function(){toast.remove();},2500);
+}
+
+function deleteRoutine(id){
+  if(!confirm('Eliminar esta rutina?')) return;
+  var idx=ROUTINES.findIndex(function(r){return r.id===id;});
+  if(idx>=0) ROUTINES.splice(idx,1);
+  renderRoutines();
+}
+
 
 function renderProgress(){
   var d=el('wv-progreso');d.innerHTML='';
@@ -1621,7 +1827,8 @@ async function generatePlan(){
   }
   var btn=el('gen-btn');
   btn.textContent='Generando\u2026';btn.disabled=true;
-  el('plan-content').innerHTML='<div style="text-align:center;padding:40px 0;"><div style="font-family:\'Playfair Display\',serif;font-size:38px;opacity:.3;">&#x25CE;</div><div style="font-size:13px;color:#A8A29E;margin-top:10px;">Analizando perfil y wearables&#x2026;</div></div>';
+  var pc=document.getElementById('plan-content');
+  if(pc) pc.innerHTML='<div style="text-align:center;padding:40px 0;"><div style="font-family:\'Playfair Display\',serif;font-size:38px;opacity:.3;animation:spin 2s linear infinite;display:inline-block;">&#x25CE;</div><div style="font-size:13px;color:#A8A29E;margin-top:10px;">Generando tu plan personalizado...</div></div>';
   var meta=getMeta();
   var nombre=el('p-nombre').value||'Usuario';
   var edad=el('p-edad').value||28;
@@ -1646,7 +1853,7 @@ async function generatePlan(){
     'Perfil: '+nombre+', '+edad+'a, '+peso+'kg, '+altura+'cm, '+sexo+', objetivo: '+goalTxt+', meta: '+meta+' kcal. '+rest+' Wearables: '+devs+'.';
 
   try{
-    var res=await fetch('https://api.anthropic.com/v1/messages',{
+    var res=await fetch('https://corsproxy.io/?https%3A%2F%2Fapi.anthropic.com%2Fv1%2Fmessages',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
     });
@@ -1659,7 +1866,8 @@ async function generatePlan(){
   }catch(e){
     el('plan-content').innerHTML='<div style="padding:14px;background:#F4B8A8;border-radius:14px;color:#9A3520;text-align:center;font-size:13px;font-weight:600;"><div style="font-size:11px;color:#9A3520;margin-top:4px;" id="plan-err-detail"></div></div>';
   }
-  btn.textContent='Generar plan semanal con IA';btn.disabled=false;
+  var btn2=document.getElementById('gen-btn');
+  if(btn2){btn2.textContent='Generar plan semanal con IA';btn2.disabled=false;}
 }
 
 function renderPlanContent(plan){
@@ -2092,7 +2300,7 @@ function lookupBarcodeWithAI(barcode) {
   document.getElementById('scan-result-content').innerHTML =
     '<div style="text-align:center;padding:16px 0;color:#78716C;font-size:13px;">&#x2728; Consultando IA...</div>';
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  fetch('https://corsproxy.io/?https%3A%2F%2Fapi.anthropic.com%2Fv1%2Fmessages', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
@@ -2170,7 +2378,7 @@ function searchFoodWithAI() {
   btn.innerHTML = '<span>&#x23F3;</span> Buscando...';
   btn.disabled = true;
 
-  fetch('https://api.anthropic.com/v1/messages', {
+  fetch('https://corsproxy.io/?https%3A%2F%2Fapi.anthropic.com%2Fv1%2Fmessages', {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({
@@ -2195,7 +2403,8 @@ function searchFoodWithAI() {
   .catch(function(e){
     btn.innerHTML = '<span>&#x2728;</span> Buscar con IA';
     btn.disabled = false;
-    alert('Error al conectar con IA. Comprueba tu conexi\u00f3n.');
+    var d=document.getElementById('food-results');
+    if(d) d.innerHTML='<div style="padding:12px;background:#FFF5F3;border-radius:12px;color:#C84B31;font-size:12px;text-align:center;">No se pudo conectar con la IA. Usa la b\u00fasqueda normal.</div>';
   })
   .finally(function(){
     btn.innerHTML = '<span>&#x2728;</span> Buscar con IA';
