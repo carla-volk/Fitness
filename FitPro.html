@@ -711,12 +711,11 @@ function getMacroRatios(bio, goal) {
 function orm(w,r){ return r===1?w:Math.round(w/(1.0278-0.0278*r)); }
 function fmtTime(s){ return Math.floor(s/60)+':'+(s%60<10?'0':'')+s%60; }
 function getMeta(){
-  var pRaw=parseFloat(document.getElementById('p-peso').value)||STATE.pesoKg||70;
-  var hRaw=parseFloat(document.getElementById('p-altura').value)||STATE.alturaCm||170;
-  var p = STATE.units==='imperial' ? Math.round(pRaw/2.2046*10)/10 : pRaw;
-  var h = STATE.units==='imperial' ? Math.round(hRaw*30.48) : hRaw;
-  var a=parseFloat(document.getElementById('p-edad').value)||STATE.edad||28;
-  var tdee=calcTDEE(p,h,a,STATE.sex,STATE.act);
+  // Always use stored metric STATE - never read DOM for calculations
+  var p = STATE.pesoKg || 70;
+  var h = STATE.alturaCm || 170;
+  var a = STATE.edad || 28;
+  var tdee = calcTDEE(p,h,a,STATE.sex,STATE.act);
   return calcMeta(tdee,STATE.goal,p,STATE.act);
 }
 function el(id){ return document.getElementById(id); }
@@ -1820,598 +1819,38 @@ function renderPlan(){
 }
 
 async function generatePlan(){
-  // Check if we have a profile
-  if(!STATE.profileSaved){
-    alert('Primero completa y guarda tu perfil.');
-    return;
-  }
-  var btn=el('gen-btn');
-  btn.textContent='Generando\u2026';btn.disabled=true;
-  var pc=document.getElementById('plan-content');
-  if(pc) pc.innerHTML='<div style="text-align:center;padding:40px 0;"><div style="font-family:\'Playfair Display\',serif;font-size:38px;opacity:.3;animation:spin 2s linear infinite;display:inline-block;">&#x25CE;</div><div style="font-size:13px;color:#A8A29E;margin-top:10px;">Generando tu plan personalizado...</div></div>';
-  var meta=getMeta();
-  var nombre=el('p-nombre').value||'Usuario';
-  var edad=el('p-edad').value||28;
-  var peso=el('p-peso').value||70;
-  var altura=el('p-altura').value||170;
-  var sexo=STATE.sex==='m'?'masculino':'femenino';
-  var goalTxt=STATE.goal==='lose'?'perder peso':STATE.goal==='gain'?'ganar musculo':'mantener peso';
-  var devs=DEVICES.filter(function(d){return STATE.connectedDevices[d.id];}).map(function(d){return d.name;}).join(', ')||'ninguno';
-  var rest=STATE.restrictions.length?'Restricciones: '+STATE.restrictions.join(', ')+'.':' ';
-  var prompt='Eres nutricionista y entrenador personal. Devuelve SOLO JSON valido, sin texto extra, solo el JSON: ' +
-    '{"resumen":"2 oraciones",' +
-    '"menu_semanal":{' +
-    '"lunes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},' +
-    '"martes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},' +
-    '"miercoles":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},' +
-    '"jueves":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},' +
-    '"viernes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},' +
-    '"sabado":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},' +
-    '"domingo":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0}},' +
-    '"plan_ejercicios":[{"dia":"x","tipo":"x","ejercicios":["x"],"duracion_min":0,"notas":"x"}],' +
-    '"consejos":["x","x","x"]} ' +
-    'Perfil: '+nombre+', '+edad+'a, '+peso+'kg, '+altura+'cm, '+sexo+', objetivo: '+goalTxt+', meta: '+meta+' kcal. '+rest+' Wearables: '+devs+'.';
+  if(!STATE.profileSaved){alert('Completa tu perfil primero.');return;}
+  var btn=document.getElementById('gen-btn');
+  if(btn){btn.textContent='Generando...';btn.disabled=true;}
+  var po=document.getElementById('plan-content');
+  if(po) po.innerHTML='<div style="text-align:center;padding:40px 0;color:#A8A29E;font-size:13px;">Generando tu plan...</div>';
 
-  try{
-    var res=await fetch('https://corsproxy.io/?https%3A%2F%2Fapi.anthropic.com%2Fv1%2Fmessages',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
-    });
-    var data=await res.json();
-    var txt=(data.content||[]).map(function(b){return b.text||'';}).join('');
-    var match=txt.match(/{[\s\S]*}/);
-    var plan=JSON.parse(match?match[0]:txt);
+  var meta=getMeta();
+  var ratios=getMacroRatios(STATE.bio,STATE.goal);
+  var devs=DEVICES.filter(function(d){return STATE.connectedDevices[d.id];}).map(function(d){return d.name;}).join(', ')||'ninguno';
+  var goalTxt=STATE.goal==='lose'?'perder grasa':STATE.goal==='gain'?'ganar musculo':'mantener peso';
+  var prompt='Eres nutricionista y entrenador. Devuelve SOLO JSON valido sin texto extra. '+
+    'Formato: {"resumen":"2 oraciones","menu_semanal":{"lunes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"martes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"miercoles":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"jueves":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"viernes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"sabado":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"domingo":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0}},"plan_ejercicios":[{"dia":"x","tipo":"x","ejercicios":["x"],"duracion_min":0,"notas":"x"}],"consejos":["x","x","x"]}. '+
+    'Perfil: '+(STATE.nombre||'Usuario')+', '+STATE.edad+'a, '+STATE.pesoKg+'kg, '+STATE.alturaCm+'cm, '+(STATE.sex==='m'?'masculino':'femenino')+
+    ', biotipo: '+(STATE.bio||'meso')+', actividad: '+STATE.act+', objetivo: '+goalTxt+
+    ', meta: '+meta+' kcal ('+Math.round(ratios.c*100)+'%C/'+Math.round(ratios.p*100)+'%P/'+Math.round(ratios.f*100)+'%G).'+
+    (STATE.restrictions&&STATE.restrictions.length?' Restricciones: '+STATE.restrictions.join(', ')+'.':' ')+
+    ' Wearables: '+devs+'.';
+
+  callAI(prompt)
+  .then(function(txt){
+    var plan=parseAIJson(txt);
+    if(!plan||!plan.menu_semanal) throw new Error('JSON invalido recibido');
     STATE.aiPlan=plan;
     renderPlanContent(plan);
-  }catch(e){
-    el('plan-content').innerHTML='<div style="padding:14px;background:#F4B8A8;border-radius:14px;color:#9A3520;text-align:center;font-size:13px;font-weight:600;"><div style="font-size:11px;color:#9A3520;margin-top:4px;" id="plan-err-detail"></div></div>';
-  }
-  var btn2=document.getElementById('gen-btn');
-  if(btn2){btn2.textContent='Generar plan semanal con IA';btn2.disabled=false;}
-}
-
-function renderPlanContent(plan){
-  var DIAS_ES=['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
-  var DIAS_F=['Lunes','Martes','Mi\u00e9rcoles','Jueves','Viernes','S\u00e1bado','Domingo'];
-  var d=el('plan-content');
-  var html='<div style="background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:16px;padding:16px;margin-bottom:16px;border-left:4px solid #C84B31;">'+
-    '<div class="lbl">Resumen</div><p style="font-size:13px;color:#78716C;line-height:1.7;margin:0;">'+plan.resumen+'</p></div>';
-  html+='<div style="font-family:\'Playfair Display\',serif;font-size:19px;font-weight:700;margin-bottom:12px;">Men\u00fa semanal</div>';
-  DIAS_ES.forEach(function(day,di){
-    var m=plan.menu_semanal&&plan.menu_semanal[day];
-    if(!m) return;
-    html+='<details style="margin-bottom:7px;border:1px solid rgba(28,25,23,.10);border-radius:14px;overflow:hidden;background:#FDFAF4;">'+
-      '<summary style="padding:13px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none;font-family:\'DM Sans\',sans-serif;">'+
-      '<span style="font-weight:700;font-size:14px;">'+DIAS_F[di]+'</span>'+
-      '<span style="font-size:12px;color:#C84B31;font-weight:600;">~'+m.calorias_aprox+' kcal</span></summary>'+
-      '<div style="padding:0 14px 12px;border-top:1px solid rgba(28,25,23,.10);">'+
-      ['desayuno','almuerzo','cena','snack'].filter(function(meal){return m[meal];}).map(function(meal){
-        return'<div style="display:flex;gap:10px;margin-top:10px;align-items:flex-start;">'+
-          '<div style="width:3px;background:#F4B8A8;border-radius:2px;flex-shrink:0;align-self:stretch;min-height:28px;"></div>'+
-          '<div><div style="font-size:9px;font-weight:700;color:#C84B31;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">'+meal+'</div>'+
-          '<div style="font-size:13px;color:#78716C;line-height:1.5;">'+m[meal]+'</div></div></div>';
-      }).join('')+'</div></details>';
-  });
-  if(plan.plan_ejercicios){
-    html+='<div style="font-family:\'Playfair Display\',serif;font-size:19px;font-weight:700;margin:16px 0 12px;">Plan de entreno</div>';
-    plan.plan_ejercicios.forEach(function(p){
-      html+='<div style="background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:14px;padding:14px;margin-bottom:8px;border-left:4px solid #2A6B6E;">'+
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">'+
-        '<span style="font-weight:700;font-size:14px;">'+p.dia+'</span>'+
-        '<span style="font-size:11px;background:#B0D4D6;color:#2A6B6E;padding:3px 10px;border-radius:99px;font-weight:700;">'+p.tipo+' \u00b7 '+p.duracion_min+'min</span></div>'+
-        (p.ejercicios||[]).map(function(e){return'<div style="font-size:12px;color:#78716C;padding:3px 0;border-bottom:1px dashed rgba(28,25,23,.10);">'+e+'</div>';}).join('')+
-        (p.notas?'<div style="margin-top:7px;font-size:12px;color:#2A6B6E;font-style:italic;">\uD83D\uDCA1 '+p.notas+'</div>':'')+'</div>';
-    });
-  }
-  if(plan.consejos){
-    html+='<div style="background:#F0D9A0;border:1px solid #B5851B;border-radius:16px;padding:16px;margin-top:4px;">'+
-      '<div class="lbl">Consejos</div>'+
-      plan.consejos.map(function(c,i){return'<div style="display:flex;gap:10px;margin-bottom:7px;font-size:13px;color:#1C1917;line-height:1.5;"><span style="color:#B5851B;font-weight:700;flex-shrink:0;">0'+(i+1)+'</span>'+c+'</div>';}).join('')+'</div>';
-  }
-  d.innerHTML=html;
-}
-
-// ============================================================
-// IMPORT REAL DATA
-// ============================================================
-
-function importSamsung(event) {
-  var file = event.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var content = e.target.result;
-    var result = {};
-
-    try {
-      // Try CSV format (step_daily_trend)
-      if (file.name.indexOf('.csv') >= 0) {
-        var lines = content.split('\n').filter(function(l){return l.trim();});
-        var headers = lines[0].split(',').map(function(h){return h.trim().replace(/"/g,'');});
-        var rows = [];
-        for (var i=1;i<lines.length;i++) {
-          var cols = lines[i].split(',');
-          var row = {};
-          headers.forEach(function(h,j){row[h]=cols[j]?cols[j].trim().replace(/"/g,''):'';});
-          rows.push(row);
-        }
-
-        // Find step columns
-        var stepCol = headers.find(function(h){return h.toLowerCase().indexOf('count')>=0||h.toLowerCase().indexOf('step')>=0;});
-        var dateCol = headers.find(function(h){return h.toLowerCase().indexOf('date')>=0||h.toLowerCase().indexOf('start')>=0||h.toLowerCase().indexOf('time')>=0;});
-        var calCol  = headers.find(function(h){return h.toLowerCase().indexOf('calorie')>=0||h.toLowerCase().indexOf('cal')>=0;});
-
-        if (rows.length > 0) {
-          var latestRow = rows[rows.length-1];
-          var steps = stepCol ? parseInt(latestRow[stepCol])||0 : 0;
-          var cals  = calCol  ? parseInt(latestRow[calCol])||0  : 0;
-
-          // Calculate 7-day average
-          var last7 = rows.slice(-7);
-          var avgSteps = Math.round(last7.reduce(function(s,r){return s+(parseInt(r[stepCol])||0);},0)/last7.length);
-
-          result = {
-            pasos: steps || avgSteps,
-            avgPasos: avgSteps,
-            calQ: cals,
-            diasImportados: rows.length,
-            ultimaFecha: dateCol ? latestRow[dateCol] : 'desconocida',
-            fuente: 'Samsung Health',
-            color: '#1428A0'
-          };
-        }
-      }
-
-      // Try JSON format
-      if (file.name.indexOf('.json') >= 0) {
-        var data = JSON.parse(content);
-        if (Array.isArray(data)) {
-          var last = data[data.length-1];
-          result = {
-            pasos: last.distance||last.steps||last.count||0,
-            calQ: last.calorie||last.calories||0,
-            diasImportados: data.length,
-            fuente: 'Samsung Health',
-            color: '#1428A0'
-          };
-        }
-      }
-
-      if (result.pasos || result.calQ) {
-        // Update Samsung device data
-        var dev = DEVICES.find(function(d){return d.id==='samsung';});
-        if (dev) {
-          if (result.pasos) dev.data.pasos = result.pasos;
-          if (result.calQ)  dev.data.cal   = result.calQ;
-        }
-        STATE.connectedDevices['samsung'] = true;
-        showImportResult(result);
-        renderDevices();
-      } else {
-        showImportError('No se encontraron datos de pasos. Intenta con otro archivo del export.');
-      }
-    } catch(err) {
-      showImportError('Error leyendo el archivo: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-function importFitbit(event) {
-  var file = event.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var content = e.target.result;
-    var result = {};
-
-    try {
-      if (file.name.indexOf('.json') >= 0) {
-        var data = JSON.parse(content);
-
-        // activities-heart.json
-        if (Array.isArray(data) && data[0] && data[0]['activities-heart']) {
-          var hearts = data[0]['activities-heart'];
-          var last = hearts[hearts.length-1];
-          result = {
-            frecCardiaca: last && last.value && last.value.restingHeartRate ? last.value.restingHeartRate : 0,
-            diasImportados: hearts.length,
-            fuente: 'Fitbit',
-            color: '#00B0B9'
-          };
-        }
-        // activities.json or steps
-        else if (Array.isArray(data) && data[0] && data[0].steps !== undefined) {
-          var last2 = data[data.length-1];
-          result = {
-            pasos: parseInt(last2.steps)||0,
-            calQ: parseInt(last2.calories)||0,
-            diasImportados: data.length,
-            fuente: 'Fitbit',
-            color: '#00B0B9'
-          };
-        }
-        // Direct object with summary
-        else if (data.summary) {
-          result = {
-            pasos: data.summary.steps||0,
-            calQ:  data.summary.caloriesOut||0,
-            activeMin: data.summary.fairlyActiveMinutes||0,
-            fuente: 'Fitbit',
-            color: '#00B0B9'
-          };
-        }
-      }
-
-      if (file.name.indexOf('.csv') >= 0) {
-        var lines = content.split('\n').filter(function(l){return l.trim();});
-        var headers = lines[0].split(',').map(function(h){return h.trim().replace(/"/g,'');});
-        var latestLine = lines[lines.length-1].split(',');
-        var row = {};
-        headers.forEach(function(h,j){row[h]=latestLine[j]?latestLine[j].trim().replace(/"/g,''):'';});
-
-        result = {
-          pasos: parseInt(row['Steps']||row['steps']||row['Pasos'])||0,
-          calQ:  parseInt(row['Calories Burned']||row['Calories']||row['calories'])||0,
-          fuente: 'Fitbit',
-          color: '#00B0B9',
-          diasImportados: lines.length - 1
-        };
-      }
-
-      if (result.pasos || result.frecCardiaca || result.calQ) {
-        var dev = DEVICES.find(function(d){return d.id==='fitbit';});
-        if (dev) {
-          if (result.pasos) dev.data.pasos = result.pasos;
-          if (result.calQ)  dev.data.cal   = result.calQ;
-          if (result.frecCardiaca) dev.data.fc = result.frecCardiaca;
-          if (result.activeMin)    dev.data.active = result.activeMin;
-        }
-        STATE.connectedDevices['fitbit'] = true;
-        showImportResult(result);
-        renderDevices();
-      } else {
-        showImportError('No se encontraron datos. Intenta con activities.json o el CSV de pasos.');
-      }
-    } catch(err) {
-      showImportError('Error leyendo el archivo: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-function importOura(event) {
-  var file = event.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var content = e.target.result;
-    var result = {};
-    try {
-      var data = JSON.parse(content);
-
-      // sleep.json
-      if (data.sleep && Array.isArray(data.sleep)) {
-        var last = data.sleep[data.sleep.length-1];
-        var totalSleep = last.total ? Math.floor(last.total/3600)+'h '+Math.floor((last.total%3600)/60)+'m' : '—';
-        result = {
-          sueño: totalSleep,
-          sleepScore: last.score||0,
-          deepSleep: last.deep ? Math.floor(last.deep/60)+'m' : '—',
-          remSleep: last.rem ? Math.floor(last.rem/60)+'m' : '—',
-          hrv: last.average_hrv||0,
-          rhr: last.lowest_heart_rate||0,
-          diasImportados: data.sleep.length,
-          fuente: 'Oura Ring',
-          color: '#6B4EFF'
-        };
-      }
-      // activity.json
-      else if (data.activity && Array.isArray(data.activity)) {
-        var last2 = data.activity[data.activity.length-1];
-        result = {
-          pasos: last2.steps||0,
-          calQ: last2.cal_active||0,
-          actScore: last2.score||0,
-          diasImportados: data.activity.length,
-          fuente: 'Oura Ring',
-          color: '#6B4EFF'
-        };
-      }
-      // readiness.json
-      else if (data.readiness && Array.isArray(data.readiness)) {
-        var last3 = data.readiness[data.readiness.length-1];
-        result = {
-          readiness: last3.score||0,
-          hrv: last3.average_hrv||0,
-          diasImportados: data.readiness.length,
-          fuente: 'Oura Ring',
-          color: '#6B4EFF'
-        };
-      }
-
-      if (Object.keys(result).length > 2) {
-        var dev = DEVICES.find(function(d){return d.id==='oura';});
-        if (dev) {
-          if (result.sueño)     dev.data.sleep    = result.sueño;
-          if (result.sleepScore)dev.data.sleepS   = result.sleepScore;
-          if (result.hrv)       dev.data.hrv      = result.hrv;
-          if (result.rhr)       dev.data.rhr      = result.rhr;
-          if (result.pasos)     dev.data.pasos    = result.pasos;
-          if (result.readiness) dev.data.ready    = result.readiness;
-        }
-        STATE.connectedDevices['oura'] = true;
-        showImportResult(result);
-        renderDevices();
-      } else {
-        showImportError('Formato no reconocido. Prueba con sleep.json, activity.json o readiness.json de Oura.');
-      }
-    } catch(err) {
-      showImportError('Error leyendo el archivo: ' + err.message);
-    }
-  };
-  reader.readAsText(file);
-}
-
-function showImportResult(result) {
-  var div = document.getElementById('import-result');
-  var summary = document.getElementById('import-summary');
-  if (!div || !summary) return;
-
-  var lines = [];
-  lines.push('<b style="color:'+result.color+';">'+result.fuente+'</b> importado correctamente');
-  if (result.diasImportados) lines.push('\uD83D\uDCC5 '+result.diasImportados+' d\u00edas de datos');
-  if (result.pasos)     lines.push('\uD83D\uDC63 Pasos hoy: <b>'+result.pasos.toLocaleString()+'</b>');
-  if (result.avgPasos)  lines.push('\uD83D\uDCC8 Media 7 d\u00edas: <b>'+result.avgPasos.toLocaleString()+' pasos</b>');
-  if (result.calQ)      lines.push('\uD83D\uDD25 Calor\u00edas: <b>'+result.calQ+' kcal</b>');
-  if (result.frecCardiaca) lines.push('\u2764\uFE0F FC reposo: <b>'+result.frecCardiaca+' bpm</b>');
-  if (result.sueño)     lines.push('\uD83D\uDE34 Sue\u00f1o: <b>'+result.sueño+'</b>');
-  if (result.sleepScore)lines.push('\u2B50 Sleep Score: <b>'+result.sleepScore+'/100</b>');
-  if (result.hrv)       lines.push('\uD83E\uDEC0 HRV: <b>'+result.hrv+' ms</b>');
-  if (result.readiness) lines.push('\u26A1 Readiness: <b>'+result.readiness+'/100</b>');
-  if (result.ultimaFecha) lines.push('\uD83D\uDDD3 \u00daltima fecha: '+result.ultimaFecha);
-
-  summary.innerHTML = lines.join('<br>');
-  div.style.display = 'block';
-  div.scrollIntoView({behavior:'smooth', block:'nearest'});
-}
-
-function showImportError(msg) {
-  var div = document.getElementById('import-result');
-  var summary = document.getElementById('import-summary');
-  if (!div || !summary) return;
-  div.style.background = '#FFE5E5';
-  div.style.borderColor = '#C84B31';
-  div.querySelector('div').style.color = '#C84B31';
-  div.querySelector('div').textContent = '\u274C Error al importar';
-  summary.innerHTML = msg;
-  div.style.display = 'block';
-}
-
-// ============================================================
-// BARCODE SCANNER
-// ============================================================
-var scanActive = false;
-var scanMeal = null;
-
-function openScanModal() {
-  scanMeal = STATE.foodModalMeal;
-  document.getElementById('scan-result').style.display = 'none';
-  document.getElementById('scan-status').textContent = 'Buscando c\u00f3digo...';
-  show('scan-modal');
-  setTimeout(startScanner, 400);
-}
-
-function closeScanModal() {
-  stopScanner();
-  hide('scan-modal');
-}
-
-function startScanner() {
-  if (scanActive) return;
-  var viewport = document.getElementById('scanner-viewport');
-  if (!viewport) return;
-
-  if (typeof Quagga === 'undefined') {
-    document.getElementById('scan-status').textContent = 'C\u00e1mara no disponible';
-    // Fallback: manual barcode entry
-    document.getElementById('scan-result').style.display = 'block';
-    document.getElementById('scan-result-content').innerHTML =
-      '<div style="font-size:13px;color:#78716C;margin-bottom:10px;">Introduce el c\u00f3digo manualmente:</div>'+
-      '<input id="manual-barcode" class="inp" placeholder="Ej: 8410188012456" style="margin-bottom:10px;"/>'+
-      '<button onclick="lookupBarcode(document.getElementById(\'manual-barcode\').value)" style="width:100%;padding:12px;border-radius:12px;border:none;background:#1C1917;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">Buscar producto</button>';
-    return;
-  }
-
-  Quagga.init({
-    inputStream: {
-      name: 'Live',
-      type: 'LiveStream',
-      target: viewport,
-      constraints: { facingMode: 'environment', width: {ideal:1280}, height: {ideal:720} }
-    },
-    decoder: {
-      readers: ['ean_reader','ean_8_reader','upc_reader','upc_e_reader','code_128_reader','code_39_reader']
-    },
-    locate: true
-  }, function(err) {
-    if (err) {
-      document.getElementById('scan-status').textContent = 'Error c\u00e1mara: ' + err.message;
-      return;
-    }
-    scanActive = true;
-    Quagga.start();
-  });
-
-  Quagga.onDetected(function(result) {
-    var code = result.codeResult.code;
-    if (code) {
-      stopScanner();
-      document.getElementById('scan-status').textContent = '\u2705 C\u00f3digo: ' + code;
-      lookupBarcode(code);
-    }
-  });
-}
-
-function stopScanner() {
-  if (scanActive && typeof Quagga !== 'undefined') {
-    try { Quagga.stop(); } catch(e) {}
-  }
-  scanActive = false;
-}
-
-function lookupBarcode(barcode) {
-  if (!barcode || barcode.length < 4) return;
-  document.getElementById('scan-status').textContent = 'Buscando ' + barcode + '...';
-  document.getElementById('scan-result').style.display = 'block';
-  document.getElementById('scan-result-content').innerHTML =
-    '<div style="text-align:center;padding:16px 0;color:#78716C;font-size:13px;">&#x1F50D; Consultando base de datos...</div>';
-
-  // Use Open Food Facts API (free, no key needed)
-  fetch('https://world.openfoodfacts.org/api/v0/product/' + barcode + '.json')
-    .then(function(r){return r.json();})
-    .then(function(data){
-      if (data.status === 1 && data.product) {
-        var p = data.product;
-        var n100 = p.nutriments || {};
-        var name = p.product_name || p.product_name_es || 'Producto';
-        var brand = p.brands || '';
-        var serving = p.serving_size || '100g';
-        var cal = Math.round(n100['energy-kcal_100g'] || n100['energy-kcal'] || (n100['energy_100g']||0)/4.184 || 0);
-        var prot = Math.round((n100['proteins_100g']||0)*10)/10;
-        var carb = Math.round((n100['carbohydrates_100g']||0)*10)/10;
-        var fat  = Math.round((n100['fat_100g']||0)*10)/10;
-        var fiber= Math.round((n100['fiber_100g']||0)*10)/10;
-        var img  = p.image_front_small_url || p.image_url || '';
-
-        var food = {id: Date.now(), n: name, s: serving, cal: cal, p: prot, c: carb, f: fat, fi: fiber, brand: brand};
-        showScannedFood(food, img, barcode);
-      } else {
-        // Fallback to AI lookup
-        lookupBarcodeWithAI(barcode);
-      }
-    })
-    .catch(function(){
-      lookupBarcodeWithAI(barcode);
-    });
-}
-
-function lookupBarcodeWithAI(barcode) {
-  document.getElementById('scan-result-content').innerHTML =
-    '<div style="text-align:center;padding:16px 0;color:#78716C;font-size:13px;">&#x2728; Consultando IA...</div>';
-
-  fetch('https://corsproxy.io/?https%3A%2F%2Fapi.anthropic.com%2Fv1%2Fmessages', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 300,
-      messages: [{role:'user', content:
-        'El c\u00f3digo de barras es: ' + barcode + '. ' +
-        'Intenta identificar el producto y devuelve SOLO este JSON (sin texto extra): ' +
-        '{"nombre":"x","marca":"x","porcion":"100g","calorias":0,"proteinas":0,"carbos":0,"grasas":0,"fibra":0}. ' +
-        'Si no lo conoces igualmente devuelve el JSON con valores 0 y nombre "Producto desconocido".'
-      }]
-    })
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    var txt = (data.content||[]).map(function(b){return b.text||'';}).join('');
-    var start = txt.indexOf('{'); var end = txt.lastIndexOf('}');
-    var obj = JSON.parse(start>=0&&end>start ? txt.slice(start,end+1) : txt);
-    var food = {id:Date.now(), n:obj.nombre||'Producto', s:obj.porcion||'100g',
-      cal:obj.calorias||0, p:obj.proteinas||0, c:obj.carbos||0, f:obj.grasas||0, fi:obj.fibra||0, brand:obj.marca||''};
-    showScannedFood(food, '', barcode);
-  })
-  .catch(function(){
-    document.getElementById('scan-result-content').innerHTML =
-      '<div style="color:#C84B31;font-size:13px;text-align:center;padding:12px;">No se encontr\u00f3 el producto. Intenta a\u00f1adirlo manualmente.</div>';
-  });
-}
-
-function showScannedFood(food, img, barcode) {
-  var meal = scanMeal || STATE.foodModalMeal;
-  var html =
-    '<div style="background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:16px;padding:14px;border-left:4px solid #C84B31;">'+
-    (img ? '<img src="'+img+'" style="width:60px;height:60px;object-fit:contain;border-radius:8px;float:right;margin-left:10px;" onerror="this.style.display=\'none\'" />' : '')+
-    '<div style="font-weight:700;font-size:15px;margin-bottom:2px;">'+food.n+'</div>'+
-    (food.brand?'<div style="font-size:11px;color:#A8A29E;margin-bottom:8px;">'+food.brand+'</div>':'')+
-    '<div style="font-size:11px;color:#78716C;margin-bottom:10px;">Porci\u00f3n: '+food.s+(barcode?' \u00b7 EAN: '+barcode:'')+'</div>'+
-    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:12px;clear:both;">'+
-    [['Kcal',food.cal,'#C84B31'],['Prot',food.p+'g','#2A6B6E'],['Carb',food.c+'g','#B5851B'],['Grasa',food.f+'g','#6B7280']].map(function(x){
-      return '<div style="text-align:center;padding:7px 4px;background:#EDEAE0;border-radius:10px;">'+
-        '<div style="font-family:\'Playfair Display\',serif;font-size:15px;font-weight:700;color:'+x[2]+';">'+x[1]+'</div>'+
-        '<div style="font-size:9px;color:#A8A29E;">'+x[0]+'</div></div>';
-    }).join('')+
-    '</div>'+
-    (meal?'<button onclick="addScannedFood()" style="width:100%;padding:12px;border-radius:12px;border:none;background:#1C1917;color:white;font-size:13px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif;">A\u00f1adir a '+meal+'</button>':'<div style="font-size:12px;color:#A8A29E;text-align:center;">Abre desde el men\u00fa de nutrici\u00f3n para a\u00f1adir</div>')+
-    '</div>';
-  document.getElementById('scan-result-content').innerHTML = html;
-  document.getElementById('scan-result').style.display = 'block';
-  STATE._scannedFood = food;
-}
-
-function addScannedFood() {
-  var food = STATE._scannedFood;
-  var meal = scanMeal || STATE.foodModalMeal;
-  if (!food || !meal) return;
-  STATE.diary[meal].push({...food, qty:1, id:Date.now()});
-  closeScanModal();
-  if (document.getElementById('food-modal').classList.contains('hidden') === false) {
-    closeFoodModal();
-  }
-  renderMeals(); updateNutritionTotals();
-  setTab('nutricion');
-}
-
-// ============================================================
-// AI FOOD SEARCH
-// ============================================================
-function searchFoodWithAI() {
-  var q = document.getElementById('food-search').value.trim();
-  if (!q) {
-    alert('Escribe lo que buscas, por ejemplo: "pollo a la plancha 200g" o "porcion de pizza margherita"');
-    return;
-  }
-
-  var btn = document.getElementById('ai-search-btn');
-  btn.innerHTML = '<span>&#x23F3;</span> Buscando...';
-  btn.disabled = true;
-
-  fetch('https://corsproxy.io/?https%3A%2F%2Fapi.anthropic.com%2Fv1%2Fmessages', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 600,
-      messages: [{role:'user', content:
-        'Eres un experto en nutrici\u00f3n. El usuario busca: "' + q + '". ' +
-        'Devuelve SOLO un JSON v\u00e1lido con esta estructura (sin texto extra): ' +
-        '{"resultados":[{"nombre":"x","porcion":"x","calorias":0,"proteinas":0,"carbos":0,"grasas":0,"fibra":0,"nota":"consejo nutricional breve"}]}. ' +
-        'Da entre 1 y 4 opciones relevantes con valores nutricionales precisos por la porcion indicada. ' +
-        'Si menciona una cantidad espec\u00edfica (ej: 200g de pollo), calcula para esa cantidad.'
-      }]
-    })
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    var txt = (data.content||[]).map(function(b){return b.text||'';}).join('');
-    var start = txt.indexOf('{'); var end = txt.lastIndexOf('}');
-    var obj = JSON.parse(start>=0&&end>start ? txt.slice(start,end+1) : txt);
-    showAIFoodResults(obj.resultados||[], q);
   })
   .catch(function(e){
-    btn.innerHTML = '<span>&#x2728;</span> Buscar con IA';
-    btn.disabled = false;
-    var d=document.getElementById('food-results');
-    if(d) d.innerHTML='<div style="padding:12px;background:#FFF5F3;border-radius:12px;color:#C84B31;font-size:12px;text-align:center;">No se pudo conectar con la IA. Usa la b\u00fasqueda normal.</div>';
+    if(po) po.innerHTML='<div style="padding:14px;background:#FFF5F3;border:1px solid rgba(200,75,49,.2);border-radius:14px;"><b style="color:#C84B31;">Error:</b> <span style="font-size:12px;color:#78716C;">'+e.message+'</span></div>';
   })
   .finally(function(){
-    btn.innerHTML = '<span>&#x2728;</span> Buscar con IA';
-    btn.disabled = false;
+    if(btn){btn.textContent='Generar plan semanal con IA';btn.disabled=false;}
   });
 }
-
 function showAIFoodResults(results, query) {
   var d = document.getElementById('food-results');
   if (!results || results.length === 0) {
@@ -2443,6 +1882,33 @@ function closeAiFoodModal() { hide('ai-food-modal'); }
 // ============================================================
 // INIT
 // ============================================================
+
+// ── MULTI-PROXY AI HELPER ───────────────────────────────────
+var AI_PROXIES=[
+  'https://corsproxy.io/?',
+  'https://api.allorigins.win/raw?url=',
+  'https://thingproxy.freeboard.io/fetch/'
+];
+function callAI(prompt){
+  var url='https://api.anthropic.com/v1/messages';
+  var body=JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]});
+  function tryP(i){
+    if(i>=AI_PROXIES.length) return Promise.reject(new Error('Proxy fallido. Intenta de nuevo.'));
+    return fetch(AI_PROXIES[i]+encodeURIComponent(url),{method:'POST',headers:{'Content-Type':'application/json'},body:body})
+      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+      .then(function(d){
+        var txt=(d.content||[]).map(function(b){return b.text||'';}).join('');
+        if(!txt)throw new Error('Respuesta vacia');return txt;
+      })
+      .catch(function(e){console.warn('Proxy '+i+' fallo:',e.message);return tryP(i+1);});
+  }
+  return tryP(0);
+}
+function parseAIJson(txt){
+  try{var s=txt.indexOf('{'),e=txt.lastIndexOf('}');return s>=0&&e>s?JSON.parse(txt.slice(s,e+1)):JSON.parse(txt);}
+  catch(e){return null;}
+}
+// ───────────────────────────────────────────────────────────
 window.onload = function(){
   // Check if already onboarded (localStorage)
   try {
