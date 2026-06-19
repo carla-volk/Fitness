@@ -458,21 +458,50 @@ function getProtG(){
 }
 
 // ═══ AI PROXY HELPER ════════════════════════════════════════
-var AI_PROXIES=['https://corsproxy.io/?','https://api.allorigins.win/raw?url=','https://thingproxy.freeboard.io/fetch/'];
+// ── API KEY MANAGEMENT ──────────────────────────────────────
+function getApiKey(){
+  return localStorage.getItem('forma_apikey')||'';
+}
+function saveApiKey(k){
+  localStorage.setItem('forma_apikey',k.trim());
+}
+
+// ── AI CALL - direct with personal key ───────────────────────
 function callAI(prompt){
+  var apiKey=getApiKey();
   var url='https://api.anthropic.com/v1/messages';
   var body=JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]});
-  function tryP(i){
-    if(i>=AI_PROXIES.length) return Promise.reject(new Error('Proxy fallido. Intenta de nuevo.'));
-    return fetch(AI_PROXIES[i]+encodeURIComponent(url),{method:'POST',headers:{'Content-Type':'application/json'},body:body})
-      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+
+  // If user has their own key, call directly via proxy with auth
+  if(apiKey){
+    // Use corsproxy to forward with auth header
+    return fetch('https://corsproxy.io/?'+encodeURIComponent(url),{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+      body:body
+    })
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(d){
+      var txt=(d.content||[]).map(function(b){return b.text||'';}).join('');
+      if(!txt)throw new Error('Respuesta vacia');return txt;
+    })
+    .catch(function(){
+      // Fallback: try allorigins
+      return fetch('https://api.allorigins.win/raw?url='+encodeURIComponent(url),{
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},
+        body:body
+      })
+      .then(function(r){return r.json();})
       .then(function(d){
         var txt=(d.content||[]).map(function(b){return b.text||'';}).join('');
         if(!txt)throw new Error('Vacio');return txt;
-      })
-      .catch(function(e){console.warn('Proxy '+i+':',e.message);return tryP(i+1);});
+      });
+    });
   }
-  return tryP(0);
+
+  // No key: show setup prompt
+  return Promise.reject(new Error('API_KEY_NEEDED'));
 }
 function parseJ(txt){
   try{var s=txt.indexOf('{'),e=txt.lastIndexOf('}');return s>=0&&e>s?JSON.parse(txt.slice(s,e+1)):JSON.parse(txt);}
@@ -803,7 +832,11 @@ function aiFood(){
       d.appendChild(b);
     });
   })
-  .catch(function(){btn.innerHTML='\u2728 Buscar con IA';btn.disabled=false;d.innerHTML='<div style="padding:12px;background:#FFF5F3;border-radius:12px;color:#C84B31;font-size:12px;text-align:center;">Error IA. Usa busqueda normal.</div>';});
+  .catch(function(e){
+    btn.innerHTML='\u2728 Buscar con IA';btn.disabled=false;
+    var msg=e.message==='API_KEY_NEEDED'?'Configura tu API key en "Mi Plan" para usar busqueda IA':'Error IA. Usa busqueda normal.';
+    d.innerHTML='<div style="padding:12px;background:#FFF5F3;border-radius:12px;color:#C84B31;font-size:12px;text-align:center;">'+msg+'</div>';
+  });
 }
 
 // ═══ SCANNER ════════════════════════════════════════════════
@@ -1228,11 +1261,50 @@ function renderPlan(){
   var m=getMacros();
   var goalTxt={lose:'perder grasa',keep:'mantener peso',gain:'ganar musculo'}[S.goal]||S.goal;
   var nConn=Object.values(S.devices).filter(Boolean).length;
+  var hasKey=!!getApiKey();
   d.innerHTML='<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:700;margin-bottom:4px;">Plan a medida</div>'+
-    '<div style="font-size:13px;color:#78716C;margin-bottom:18px;line-height:1.6;">'+m.meta+' kcal/dia \u00b7 '+goalTxt+(nConn?' \u00b7 '+nConn+' wearable'+(nConn>1?'s':''):'')+'</div>'+
-    '<button id="gen-btn" onclick="genPlan()" style="width:100%;padding:15px;border-radius:14px;border:none;background:#1C1917;color:white;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:20px;">Generar plan semanal con IA</button>'+
+    '<div style="font-size:13px;color:#78716C;margin-bottom:16px;line-height:1.6;">'+m.meta+' kcal/dia \u00b7 '+goalTxt+(nConn?' \u00b7 '+nConn+' wearable'+(nConn>1?'s':''):'')+'</div>'+
+
+    // API Key section
+    '<div style="background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:16px;padding:16px;margin-bottom:16px;">'+
+    '<div style="font-weight:700;font-size:14px;margin-bottom:4px;">&#x1F511; Tu API Key de Anthropic</div>'+
+    '<div style="font-size:12px;color:#78716C;margin-bottom:10px;line-height:1.6;">Necesitas una clave personal para generar planes con IA. Es gratuita en <b>console.anthropic.com</b></div>'+
+    (hasKey?
+      '<div style="display:flex;align-items:center;gap:10px;"><div style="flex:1;padding:10px 12px;background:#D8F3DC;border-radius:10px;font-size:12px;color:#2D6A4F;font-weight:600;">&#x2705; API Key configurada</div>'+
+      '<button onclick="clearKey()" style="padding:8px 12px;border-radius:99px;border:1px solid rgba(200,75,49,.3);background:transparent;color:#C84B31;font-size:12px;cursor:pointer;">Borrar</button></div>'
+      :
+      '<div style="display:flex;gap:8px;"><input id="api-key-inp" type="password" placeholder="sk-ant-api03-..." style="flex:1;background:#EDEAE0;border:1.5px solid rgba(28,25,23,.18);border-radius:12px;padding:11px 14px;color:#1C1917;font-size:13px;outline:none;" onkeydown="if(event.key===\'Enter\')saveKey()"/>'+
+      '<button onclick="saveKey()" style="padding:11px 18px;border-radius:12px;border:none;background:#1C1917;color:white;font-size:13px;font-weight:700;cursor:pointer;">Guardar</button></div>'+
+      '<div style="font-size:11px;color:#A8A29E;margin-top:6px;">Tu clave se guarda solo en este dispositivo, nunca en servidores</div>'
+    )+
+    '</div>'+
+
+    (hasKey?'<button id="gen-btn" onclick="genPlan()" style="width:100%;padding:15px;border-radius:14px;border:none;background:#1C1917;color:white;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:20px;">&#x2728; Generar plan semanal</button>':'<button disabled style="width:100%;padding:15px;border-radius:14px;border:none;background:#EDEAE0;color:#A8A29E;font-size:14px;font-weight:700;cursor:not-allowed;margin-bottom:20px;">Configura tu API key primero</button>')+
+
+    '<div style="background:#F0D9A0;border:1px solid #B5851B;border-radius:14px;padding:14px;margin-bottom:16px;">'+
+    '<div style="font-weight:700;font-size:12px;color:#B5851B;margin-bottom:6px;">&#x1F4D6; Como obtener tu API key GRATIS</div>'+
+    '<div style="font-size:12px;color:#78716C;line-height:1.8;">'+
+    '1. Ve a <b>console.anthropic.com</b><br>'+
+    '2. Crea una cuenta gratuita<br>'+
+    '3. Ve a "API Keys" y crea una nueva<br>'+
+    '4. Pega la clave aqui arriba<br>'+
+    '&#x26A0;&#xFE0F; Anthropic da credito gratuito para empezar</div></div>'+
+
     '<div id="plan-out"></div>';
   if(S.aiPlan&&!S.aiPlan.err)renderPlanContent(S.aiPlan);
+}
+function saveKey(){
+  var inp=$('api-key-inp');if(!inp)return;
+  var k=inp.value.trim();
+  if(!k.startsWith('sk-')){alert('La clave debe empezar por sk-ant-...');return;}
+  saveApiKey(k);
+  toast('API Key guardada','#2A6B6E');
+  renderPlan();
+}
+function clearKey(){
+  if(!confirm('Borrar la API key guardada?'))return;
+  localStorage.removeItem('forma_apikey');
+  renderPlan();
 }
 
 function genPlan(){
@@ -1258,7 +1330,11 @@ function genPlan(){
     S.aiPlan=plan;renderPlanContent(plan);
   })
   .catch(function(e){
-    if(po)po.innerHTML='<div style="padding:14px;background:#FFF5F3;border:1px solid rgba(200,75,49,.2);border-radius:14px;"><b style="color:#C84B31;">Error:</b> <span style="font-size:12px;color:#78716C;">'+e.message+'</span></div>';
+    if(e.message==='API_KEY_NEEDED'){
+      if(po)po.innerHTML='<div style="padding:14px;background:#FFF5F3;border:1px solid rgba(200,75,49,.2);border-radius:14px;"><b style="color:#C84B31;">Configura tu API key</b><br><span style="font-size:12px;color:#78716C;">Introduce tu clave de Anthropic en el campo de arriba para generar planes.</span></div>';
+    } else {
+      if(po)po.innerHTML='<div style="padding:14px;background:#FFF5F3;border:1px solid rgba(200,75,49,.2);border-radius:14px;"><b style="color:#C84B31;">Error:</b> <span style="font-size:12px;color:#78716C;">'+e.message+'. Verifica tu API key o intenta de nuevo.</span></div>';
+    }
   })
   .finally(function(){btn.innerHTML='Generar plan semanal con IA';btn.disabled=false;});
 }
