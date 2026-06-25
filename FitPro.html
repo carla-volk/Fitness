@@ -650,10 +650,9 @@ function toggleEdit(){
     buildWeightSelect('ed-w', 'metric', S.pesoKg||70);
     buildHeightSelect('ed-h', 'metric', S.alturaCm||170);
     $('ed-bio').value=S.bio;$('ed-act').value=S.act;$('ed-goal').value=S.goal;
-    $('ed-lbl-w').textContent='Peso (kg)';
     var sb=document.querySelectorAll('#ed-sex-seg .seg-btn');
     sb[0]&&sb[0].classList.toggle('on',S.sex==='m');sb[1]&&sb[1].classList.toggle('on',S.sex==='f');
-    ep.classList.remove('hidden');
+    ep.classList.remove('hidden');setTimeout(function(){ep.scrollIntoView({behavior:'smooth',block:'nearest'});},100);
   }else ep.classList.add('hidden');
 }
 function edSex(s){S.sex=s;var b=document.querySelectorAll('#ed-sex-seg .seg-btn');b[0]&&b[0].classList.toggle('on',s==='m');b[1]&&b[1].classList.toggle('on',s==='f');}
