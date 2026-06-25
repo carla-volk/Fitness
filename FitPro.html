@@ -20,8 +20,7 @@ select{-webkit-appearance:none;appearance:none;}
 .inp:focus{border-color:#C84B31;}
 .sel{width:100%;background:#EDEAE0;border:1.5px solid rgba(28,25,23,.18);border-radius:12px;padding:13px 40px 13px 14px;color:#1C1917;font-size:15px;outline:none;cursor:pointer;display:block;
 background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%231C1917' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-background-repeat:no-repeat;background-position:right 14px center;background-size:20px;
--webkit-appearance:none;appearance:none;}
+background-repeat:no-repeat;background-position:right 14px center;background-size:20px;}
 .sel:focus{border-color:#C84B31;border-width:2px;}
 .btn{width:100%;padding:15px;border-radius:14px;border:none;font-size:14px;font-weight:700;cursor:pointer;}
 .btn-dark{background:#1C1917;color:#FDFAF4;}
@@ -52,7 +51,6 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
 .rest-btn.on{background:#C84B31;color:white;border-color:#C84B31;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-.spin{animation:spin 1.5s linear infinite;display:inline-block;}
 </style>
 </head>
 <body>
@@ -65,43 +63,50 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
     <div style="font-size:12px;color:rgba(255,255,255,.45);letter-spacing:2.5px;margin-top:6px;text-transform:uppercase;">Tu cuerpo. Tu ciencia.</div>
   </div>
   <div style="background:#FDFAF4;border-radius:24px 24px 0 0;padding:28px 22px 40px;margin-top:-16px;">
-
-    <!-- Step 1 -->
     <div id="ob1">
       <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;">Tu perfil</div>
-      <div style="font-size:13px;color:#78716C;margin-bottom:22px;">Calcula tu TDEE y macros con precision cientifica</div>
-      <div style="display:flex;justify-content:center;margin-bottom:16px;">
+      <div style="font-size:13px;color:#78716C;margin-bottom:20px;">Calcularemos tu TDEE y macros con precision cientifica</div>
+      <div style="display:flex;justify-content:center;margin-bottom:14px;">
         <div onclick="pickAv()" id="ob-av" style="width:86px;height:86px;border-radius:50%;background:#EDEAE0;border:3px solid #C84B31;display:flex;align-items:center;justify-content:center;font-size:34px;cursor:pointer;overflow:hidden;">
           <span id="ob-av-em">&#x1F464;</span><img id="ob-av-img" src="" style="display:none;width:100%;height:100%;object-fit:cover;"/>
         </div>
       </div>
       <input type="file" id="av-inp" accept="image/*" style="display:none;" onchange="loadAv(event)"/>
-      <div style="text-align:center;font-size:11px;color:#A8A29E;margin-bottom:18px;">Toca para foto</div>
+      <div style="text-align:center;font-size:11px;color:#A8A29E;margin-bottom:16px;">Toca para foto de perfil</div>
       <div style="margin-bottom:13px;"><label class="lbl">Nombre</label><input class="inp" id="ob-nm" placeholder="Tu nombre"/></div>
-      <div style="margin-bottom:14px;">
+      <div style="margin-bottom:13px;">
         <label class="lbl">Sistema de medidas</label>
         <select class="sel" id="unit-sel" onchange="setUnits(this.value)">
-          <option value="metric">Metrico — kg y cm</option>
-          <option value="imperial">Imperial — lb y ft</option>
+          <option value="metric">Metrico &mdash; kg y cm</option>
+          <option value="imperial">Imperial &mdash; lb y ft</option>
         </select>
       </div>
       <div style="margin-bottom:12px;">
         <label class="lbl">Edad</label>
         <select class="sel" id="ob-age">
-          <option value="10">10 anos</option><option value="11">11 anos</option><option value="12">12 anos</option><option value="13">13 anos</option><option value="14">14 anos</option><option value="15">15 anos</option><option value="16">16 anos</option><option value="17">17 anos</option><option value="18">18 anos</option><option value="19">19 anos</option><option value="20">20 anos</option><option value="21">21 anos</option><option value="22">22 anos</option><option value="23">23 anos</option><option value="24">24 anos</option><option value="25">25 anos</option><option value="26">26 anos</option><option value="27">27 anos</option><option value="28" selected>28 anos</option><option value="29">29 anos</option><option value="30">30 anos</option><option value="31">31 anos</option><option value="32">32 anos</option><option value="33">33 anos</option><option value="34">34 anos</option><option value="35">35 anos</option><option value="36">36 anos</option><option value="37">37 anos</option><option value="38">38 anos</option><option value="39">39 anos</option><option value="40">40 anos</option><option value="41">41 anos</option><option value="42">42 anos</option><option value="43">43 anos</option><option value="44">44 anos</option><option value="45">45 anos</option><option value="46">46 anos</option><option value="47">47 anos</option><option value="48">48 anos</option><option value="49">49 anos</option><option value="50">50 anos</option><option value="51">51 anos</option><option value="52">52 anos</option><option value="53">53 anos</option><option value="54">54 anos</option><option value="55">55 anos</option><option value="56">56 anos</option><option value="57">57 anos</option><option value="58">58 anos</option><option value="59">59 anos</option><option value="60">60 anos</option><option value="61">61 anos</option><option value="62">62 anos</option><option value="63">63 anos</option><option value="64">64 anos</option><option value="65">65 anos</option><option value="66">66 anos</option><option value="67">67 anos</option><option value="68">68 anos</option><option value="69">69 anos</option><option value="70">70 anos</option><option value="71">71 anos</option><option value="72">72 anos</option><option value="73">73 anos</option><option value="74">74 anos</option><option value="75">75 anos</option><option value="76">76 anos</option><option value="77">77 anos</option><option value="78">78 anos</option><option value="79">79 anos</option><option value="80">80 anos</option>
+          <option value="10">10 anos</option><option value="15">15 anos</option><option value="18">18 anos</option>
+          <option value="20">20 anos</option><option value="21">21 anos</option><option value="22">22 anos</option>
+          <option value="23">23 anos</option><option value="24">24 anos</option><option value="25">25 anos</option>
+          <option value="26">26 anos</option><option value="27">27 anos</option><option value="28" selected>28 anos</option>
+          <option value="29">29 anos</option><option value="30">30 anos</option><option value="31">31 anos</option>
+          <option value="32">32 anos</option><option value="33">33 anos</option><option value="34">34 anos</option>
+          <option value="35">35 anos</option><option value="36">36 anos</option><option value="37">37 anos</option>
+          <option value="38">38 anos</option><option value="39">39 anos</option><option value="40">40 anos</option>
+          <option value="41">41 anos</option><option value="42">42 anos</option><option value="43">43 anos</option>
+          <option value="44">44 anos</option><option value="45">45 anos</option><option value="46">46 anos</option>
+          <option value="47">47 anos</option><option value="48">48 anos</option><option value="49">49 anos</option>
+          <option value="50">50 anos</option><option value="55">55 anos</option><option value="60">60 anos</option>
+          <option value="65">65 anos</option><option value="70">70 anos</option><option value="75">75 anos</option>
+          <option value="80">80 anos</option>
         </select>
       </div>
       <div style="margin-bottom:12px;">
-        <label class="lbl" id="lbl-w">Peso</label>
-        <select class="sel" id="ob-w" onchange="updWeightOpts()">
-          <option value="30">30 kg</option><option value="31">31 kg</option><option value="32">32 kg</option><option value="33">33 kg</option><option value="34">34 kg</option><option value="35">35 kg</option><option value="36">36 kg</option><option value="37">37 kg</option><option value="38">38 kg</option><option value="39">39 kg</option><option value="40">40 kg</option><option value="41">41 kg</option><option value="42">42 kg</option><option value="43">43 kg</option><option value="44">44 kg</option><option value="45">45 kg</option><option value="46">46 kg</option><option value="47">47 kg</option><option value="48">48 kg</option><option value="49">49 kg</option><option value="50">50 kg</option><option value="51">51 kg</option><option value="52">52 kg</option><option value="53">53 kg</option><option value="54">54 kg</option><option value="55">55 kg</option><option value="56">56 kg</option><option value="57">57 kg</option><option value="58">58 kg</option><option value="59">59 kg</option><option value="60">60 kg</option><option value="61">61 kg</option><option value="62">62 kg</option><option value="63">63 kg</option><option value="64">64 kg</option><option value="65">65 kg</option><option value="66">66 kg</option><option value="67">67 kg</option><option value="68">68 kg</option><option value="69">69 kg</option><option value="70" selected>70 kg</option><option value="71">71 kg</option><option value="72">72 kg</option><option value="73">73 kg</option><option value="74">74 kg</option><option value="75">75 kg</option><option value="76">76 kg</option><option value="77">77 kg</option><option value="78">78 kg</option><option value="79">79 kg</option><option value="80">80 kg</option><option value="81">81 kg</option><option value="82">82 kg</option><option value="83">83 kg</option><option value="84">84 kg</option><option value="85">85 kg</option><option value="86">86 kg</option><option value="87">87 kg</option><option value="88">88 kg</option><option value="89">89 kg</option><option value="90">90 kg</option><option value="91">91 kg</option><option value="92">92 kg</option><option value="93">93 kg</option><option value="94">94 kg</option><option value="95">95 kg</option><option value="96">96 kg</option><option value="97">97 kg</option><option value="98">98 kg</option><option value="99">99 kg</option><option value="100">100 kg</option><option value="101">101 kg</option><option value="102">102 kg</option><option value="103">103 kg</option><option value="104">104 kg</option><option value="105">105 kg</option><option value="106">106 kg</option><option value="107">107 kg</option><option value="108">108 kg</option><option value="109">109 kg</option><option value="110">110 kg</option><option value="111">111 kg</option><option value="112">112 kg</option><option value="113">113 kg</option><option value="114">114 kg</option><option value="115">115 kg</option><option value="116">116 kg</option><option value="117">117 kg</option><option value="118">118 kg</option><option value="119">119 kg</option><option value="120">120 kg</option><option value="121">121 kg</option><option value="122">122 kg</option><option value="123">123 kg</option><option value="124">124 kg</option><option value="125">125 kg</option><option value="126">126 kg</option><option value="127">127 kg</option><option value="128">128 kg</option><option value="129">129 kg</option><option value="130">130 kg</option><option value="131">131 kg</option><option value="132">132 kg</option><option value="133">133 kg</option><option value="134">134 kg</option><option value="135">135 kg</option><option value="136">136 kg</option><option value="137">137 kg</option><option value="138">138 kg</option><option value="139">139 kg</option><option value="140">140 kg</option><option value="141">141 kg</option><option value="142">142 kg</option><option value="143">143 kg</option><option value="144">144 kg</option><option value="145">145 kg</option><option value="146">146 kg</option><option value="147">147 kg</option><option value="148">148 kg</option><option value="149">149 kg</option><option value="150">150 kg</option><option value="151">151 kg</option><option value="152">152 kg</option><option value="153">153 kg</option><option value="154">154 kg</option><option value="155">155 kg</option><option value="156">156 kg</option><option value="157">157 kg</option><option value="158">158 kg</option><option value="159">159 kg</option><option value="160">160 kg</option><option value="161">161 kg</option><option value="162">162 kg</option><option value="163">163 kg</option><option value="164">164 kg</option><option value="165">165 kg</option><option value="166">166 kg</option><option value="167">167 kg</option><option value="168">168 kg</option><option value="169">169 kg</option><option value="170">170 kg</option><option value="171">171 kg</option><option value="172">172 kg</option><option value="173">173 kg</option><option value="174">174 kg</option><option value="175">175 kg</option><option value="176">176 kg</option><option value="177">177 kg</option><option value="178">178 kg</option><option value="179">179 kg</option><option value="180">180 kg</option><option value="181">181 kg</option><option value="182">182 kg</option><option value="183">183 kg</option><option value="184">184 kg</option><option value="185">185 kg</option><option value="186">186 kg</option><option value="187">187 kg</option><option value="188">188 kg</option><option value="189">189 kg</option><option value="190">190 kg</option><option value="191">191 kg</option><option value="192">192 kg</option><option value="193">193 kg</option><option value="194">194 kg</option><option value="195">195 kg</option><option value="196">196 kg</option><option value="197">197 kg</option><option value="198">198 kg</option><option value="199">199 kg</option><option value="200">200 kg</option>
-        </select>
+        <label class="lbl" id="lbl-w">Peso (kg)</label>
+        <select class="sel" id="ob-w"></select>
       </div>
       <div style="margin-bottom:13px;">
-        <label class="lbl" id="lbl-h">Altura</label>
-        <select class="sel" id="ob-h">
-          <option value="140">140 cm</option><option value="141">141 cm</option><option value="142">142 cm</option><option value="143">143 cm</option><option value="144">144 cm</option><option value="145">145 cm</option><option value="146">146 cm</option><option value="147">147 cm</option><option value="148">148 cm</option><option value="149">149 cm</option><option value="150">150 cm</option><option value="151">151 cm</option><option value="152">152 cm</option><option value="153">153 cm</option><option value="154">154 cm</option><option value="155">155 cm</option><option value="156">156 cm</option><option value="157">157 cm</option><option value="158">158 cm</option><option value="159">159 cm</option><option value="160">160 cm</option><option value="161">161 cm</option><option value="162">162 cm</option><option value="163">163 cm</option><option value="164">164 cm</option><option value="165">165 cm</option><option value="166">166 cm</option><option value="167">167 cm</option><option value="168">168 cm</option><option value="169">169 cm</option><option value="170" selected>170 cm</option><option value="171">171 cm</option><option value="172">172 cm</option><option value="173">173 cm</option><option value="174">174 cm</option><option value="175">175 cm</option><option value="176">176 cm</option><option value="177">177 cm</option><option value="178">178 cm</option><option value="179">179 cm</option><option value="180">180 cm</option><option value="181">181 cm</option><option value="182">182 cm</option><option value="183">183 cm</option><option value="184">184 cm</option><option value="185">185 cm</option><option value="186">186 cm</option><option value="187">187 cm</option><option value="188">188 cm</option><option value="189">189 cm</option><option value="190">190 cm</option><option value="191">191 cm</option><option value="192">192 cm</option><option value="193">193 cm</option><option value="194">194 cm</option><option value="195">195 cm</option><option value="196">196 cm</option><option value="197">197 cm</option><option value="198">198 cm</option><option value="199">199 cm</option><option value="200">200 cm</option><option value="201">201 cm</option><option value="202">202 cm</option><option value="203">203 cm</option><option value="204">204 cm</option><option value="205">205 cm</option><option value="206">206 cm</option><option value="207">207 cm</option><option value="208">208 cm</option><option value="209">209 cm</option><option value="210">210 cm</option><option value="211">211 cm</option><option value="212">212 cm</option><option value="213">213 cm</option><option value="214">214 cm</option><option value="215">215 cm</option><option value="216">216 cm</option><option value="217">217 cm</option><option value="218">218 cm</option><option value="219">219 cm</option><option value="220">220 cm</option>
-        </select>
+        <label class="lbl" id="lbl-h">Altura (cm)</label>
+        <select class="sel" id="ob-h"></select>
       </div>
       <div style="margin-bottom:20px;"><label class="lbl">Sexo biologico</label>
         <div class="seg" id="sex-seg"><button class="seg-btn on" onclick="setSex('m')">Masculino</button><button class="seg-btn" onclick="setSex('f')">Femenino</button></div>
@@ -109,15 +114,14 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
       <button class="btn btn-red" onclick="obGo(2)">Continuar &rarr;</button>
     </div>
 
-    <!-- Step 2 -->
     <div id="ob2" class="hidden">
       <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:6px;">Tu biotipo</div>
-      <div style="font-size:13px;color:#78716C;margin-bottom:18px;">Segun Sascha Fitness determina tu distribucion de macros optima</div>
+      <div style="font-size:13px;color:#78716C;margin-bottom:18px;">Segun Sascha Fitness y la ciencia de los somatotipos</div>
       <div style="margin-bottom:14px;"><label class="lbl">Biotipo corporal</label>
-        <select class="sel" id="ob-bio" onchange="updBioHint()" style="font-size:15px;padding:14px 40px 14px 14px;border-radius:12px;">
-          <option value="ecto">Ectomorfo — Delgado, metabolismo rapido</option>
-          <option value="meso" selected>Mesomorfo — Atletico, gana musculo facil</option>
-          <option value="endo">Endomorfo — Acumula grasa, metabolismo lento</option>
+        <select class="sel" id="ob-bio" onchange="updBioHint()">
+          <option value="ecto">Ectomorfo &mdash; Delgado, metabolismo rapido</option>
+          <option value="meso" selected>Mesomorfo &mdash; Atletico, gana musculo facil</option>
+          <option value="endo">Endomorfo &mdash; Acumula grasa, metabolismo lento</option>
         </select>
         <div id="bio-hint" style="margin-top:8px;padding:11px;background:#FFF5F3;border-radius:10px;font-size:12px;color:#C84B31;line-height:1.6;border-left:3px solid #C84B31;"></div>
       </div>
@@ -127,27 +131,26 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
       </div>
     </div>
 
-    <!-- Step 3 -->
     <div id="ob3" class="hidden">
       <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;margin-bottom:18px;">Tu objetivo</div>
       <div style="margin-bottom:14px;"><label class="lbl">Nivel de actividad</label>
-        <select class="sel" id="ob-act" style="font-size:15px;padding:14px 40px 14px 14px;border-radius:12px;">
-          <option value="sed">Sedentario — Sin ejercicio regular</option>
-          <option value="light">Ligero — 1-3 dias/semana</option>
-          <option value="mod" selected>Moderado — 3-5 dias/semana</option>
-          <option value="active">Activo — 6-7 dias/semana</option>
-          <option value="vactive">Muy activo — 2x/dia o trabajo fisico</option>
+        <select class="sel" id="ob-act">
+          <option value="sed">Sedentario &mdash; Sin ejercicio regular</option>
+          <option value="light">Ligero &mdash; 1-3 dias/semana</option>
+          <option value="mod" selected>Moderado &mdash; 3-5 dias/semana</option>
+          <option value="active">Activo &mdash; 6-7 dias/semana</option>
+          <option value="vactive">Muy activo &mdash; 2x/dia o trabajo fisico</option>
         </select>
       </div>
       <div style="margin-bottom:14px;"><label class="lbl">Objetivo principal</label>
-        <select class="sel" id="ob-goal" style="font-size:15px;padding:14px 40px 14px 14px;border-radius:12px;">
-          <option value="lose">Perder grasa — Deficit calorico</option>
-          <option value="keep" selected>Mantener peso — Equilibrio</option>
-          <option value="gain">Ganar musculo — Superavit moderado</option>
+        <select class="sel" id="ob-goal">
+          <option value="lose">Perder grasa &mdash; Deficit calorico</option>
+          <option value="keep" selected>Mantener peso &mdash; Equilibrio</option>
+          <option value="gain">Ganar musculo &mdash; Superavit moderado</option>
         </select>
       </div>
       <div style="margin-bottom:20px;"><label class="lbl">Restricciones alimentarias</label>
-        <div style="display:flex;flex-wrap:wrap;gap:7px;" id="rest-wrap">
+        <div style="display:flex;flex-wrap:wrap;gap:7px;">
           <button class="rest-btn" onclick="toggleRest(this,'Vegetariano')">Vegetariano</button>
           <button class="rest-btn" onclick="toggleRest(this,'Vegano')">Vegano</button>
           <button class="rest-btn" onclick="toggleRest(this,'Sin gluten')">Sin gluten</button>
@@ -173,7 +176,7 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
       </div>
       <button onclick="goTab('devices')" id="wear-btn" style="display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:99px;border:1.5px solid rgba(28,25,23,.10);background:transparent;color:#78716C;font-size:11px;font-weight:700;cursor:pointer;">&#x2295; Wearables</button>
     </div>
-    <div style="display:flex;overflow-x:auto;border-bottom:none;">
+    <div style="display:flex;overflow-x:auto;">
       <button class="tab on" id="tb-perfil" onclick="goTab('perfil')">Perfil</button>
       <button class="tab" id="tb-nutricion" onclick="goTab('nutricion')">Nutricion</button>
       <button class="tab" id="tb-entreno" onclick="goTab('entreno')">Entreno</button>
@@ -182,7 +185,7 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
     </div>
   </div>
 
-  <!-- PERFIL PAGE -->
+  <!-- PERFIL -->
   <div id="pg-perfil">
     <div style="background:linear-gradient(160deg,#1C1917,#3C2820);padding:24px 20px 44px;text-align:center;">
       <div onclick="pickAv2()" id="pf-av" style="width:88px;height:88px;border-radius:50%;background:#EDEAE0;border:3px solid #C84B31;margin:0 auto 12px;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:36px;">
@@ -193,81 +196,33 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
       <div id="pf-tags" style="display:flex;flex-wrap:wrap;justify-content:center;gap:5px;"></div>
     </div>
     <div style="background:#FDFAF4;border-radius:20px;margin:-20px 16px 14px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,.08);display:grid;grid-template-columns:1fr 1fr 1fr 1fr;">
-      <div style="text-align:center;border-right:1px solid rgba(28,25,23,.08);">
-        <div id="st-tdee" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;">—</div>
-        <div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">TDEE</div>
-      </div>
-      <div style="text-align:center;border-right:1px solid rgba(28,25,23,.08);">
-        <div id="st-meta" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#C84B31;">—</div>
-        <div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">META</div>
-      </div>
-      <div style="text-align:center;border-right:1px solid rgba(28,25,23,.08);">
-        <div id="st-prot" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#2A6B6E;">—</div>
-        <div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">PROT/DIA</div>
-      </div>
-      <div style="text-align:center;">
-        <div id="st-bio" style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;">—</div>
-        <div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">BIOTIPO</div>
-      </div>
+      <div style="text-align:center;border-right:1px solid rgba(28,25,23,.08);"><div id="st-tdee" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;">-</div><div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">TDEE</div></div>
+      <div style="text-align:center;border-right:1px solid rgba(28,25,23,.08);"><div id="st-meta" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#C84B31;">-</div><div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">META</div></div>
+      <div style="text-align:center;border-right:1px solid rgba(28,25,23,.08);"><div id="st-prot" style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#2A6B6E;">-</div><div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">PROT/DIA</div></div>
+      <div style="text-align:center;"><div id="st-bio" style="font-family:'Playfair Display',serif;font-size:14px;font-weight:700;">-</div><div style="font-size:9px;color:#A8A29E;letter-spacing:.8px;text-transform:uppercase;margin-top:2px;">BIOTIPO</div></div>
     </div>
     <div id="sci-card" style="margin:0 16px 14px;" class="card"></div>
-    <div style="margin:0 16px 14px;" class="card">
-      <div style="font-weight:700;font-size:14px;margin-bottom:12px;">Distribucion de macros</div>
-      <div id="macro-bars"></div>
-    </div>
-    <div style="margin:0 16px 14px;display:flex;gap:10px;">
-      <button onclick="toggleEdit()" class="btn btn-out" style="flex:1;">&#x270E; Editar perfil</button>
-    </div>
+    <div style="margin:0 16px 14px;" class="card"><div style="font-weight:700;font-size:14px;margin-bottom:12px;">Distribucion de macros</div><div id="macro-bars"></div></div>
+    <div style="margin:0 16px 14px;"><button onclick="toggleEdit()" class="btn btn-out" style="width:100%;">&#x270E; Editar perfil</button></div>
     <div id="edit-panel" class="hidden" style="margin:0 16px 14px;">
       <div class="card">
         <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;margin-bottom:16px;">Editar perfil</div>
         <div style="display:flex;flex-direction:column;gap:13px;">
-          <div><label class="lbl">Nombre</label><input class="inp" id="ed-nm" placeholder="Tu nombre"/></div>
-          <div style="margin-bottom:12px;">
-            <label class="lbl">Edad</label>
-            <select class="sel" id="ed-age"><option value="10">10 anos</option><option value="11">11 anos</option><option value="12">12 anos</option><option value="13">13 anos</option><option value="14">14 anos</option><option value="15">15 anos</option><option value="16">16 anos</option><option value="17">17 anos</option><option value="18">18 anos</option><option value="19">19 anos</option><option value="20">20 anos</option><option value="21">21 anos</option><option value="22">22 anos</option><option value="23">23 anos</option><option value="24">24 anos</option><option value="25">25 anos</option><option value="26">26 anos</option><option value="27">27 anos</option><option value="28" selected>28 anos</option><option value="29">29 anos</option><option value="30">30 anos</option><option value="31">31 anos</option><option value="32">32 anos</option><option value="33">33 anos</option><option value="34">34 anos</option><option value="35">35 anos</option><option value="36">36 anos</option><option value="37">37 anos</option><option value="38">38 anos</option><option value="39">39 anos</option><option value="40">40 anos</option><option value="41">41 anos</option><option value="42">42 anos</option><option value="43">43 anos</option><option value="44">44 anos</option><option value="45">45 anos</option><option value="46">46 anos</option><option value="47">47 anos</option><option value="48">48 anos</option><option value="49">49 anos</option><option value="50">50 anos</option><option value="51">51 anos</option><option value="52">52 anos</option><option value="53">53 anos</option><option value="54">54 anos</option><option value="55">55 anos</option><option value="56">56 anos</option><option value="57">57 anos</option><option value="58">58 anos</option><option value="59">59 anos</option><option value="60">60 anos</option><option value="61">61 anos</option><option value="62">62 anos</option><option value="63">63 anos</option><option value="64">64 anos</option><option value="65">65 anos</option><option value="66">66 anos</option><option value="67">67 anos</option><option value="68">68 anos</option><option value="69">69 anos</option><option value="70">70 anos</option><option value="71">71 anos</option><option value="72">72 anos</option><option value="73">73 anos</option><option value="74">74 anos</option><option value="75">75 anos</option><option value="76">76 anos</option><option value="77">77 anos</option><option value="78">78 anos</option><option value="79">79 anos</option><option value="80">80 anos</option></select>
-          </div>
-          <div style="margin-bottom:12px;">
-            <label class="lbl">Peso (kg)</label>
-            <select class="sel" id="ed-w"><option value="30">30 kg</option><option value="31">31 kg</option><option value="32">32 kg</option><option value="33">33 kg</option><option value="34">34 kg</option><option value="35">35 kg</option><option value="36">36 kg</option><option value="37">37 kg</option><option value="38">38 kg</option><option value="39">39 kg</option><option value="40">40 kg</option><option value="41">41 kg</option><option value="42">42 kg</option><option value="43">43 kg</option><option value="44">44 kg</option><option value="45">45 kg</option><option value="46">46 kg</option><option value="47">47 kg</option><option value="48">48 kg</option><option value="49">49 kg</option><option value="50">50 kg</option><option value="51">51 kg</option><option value="52">52 kg</option><option value="53">53 kg</option><option value="54">54 kg</option><option value="55">55 kg</option><option value="56">56 kg</option><option value="57">57 kg</option><option value="58">58 kg</option><option value="59">59 kg</option><option value="60">60 kg</option><option value="61">61 kg</option><option value="62">62 kg</option><option value="63">63 kg</option><option value="64">64 kg</option><option value="65">65 kg</option><option value="66">66 kg</option><option value="67">67 kg</option><option value="68">68 kg</option><option value="69">69 kg</option><option value="70" selected>70 kg</option><option value="71">71 kg</option><option value="72">72 kg</option><option value="73">73 kg</option><option value="74">74 kg</option><option value="75">75 kg</option><option value="76">76 kg</option><option value="77">77 kg</option><option value="78">78 kg</option><option value="79">79 kg</option><option value="80">80 kg</option><option value="81">81 kg</option><option value="82">82 kg</option><option value="83">83 kg</option><option value="84">84 kg</option><option value="85">85 kg</option><option value="86">86 kg</option><option value="87">87 kg</option><option value="88">88 kg</option><option value="89">89 kg</option><option value="90">90 kg</option><option value="91">91 kg</option><option value="92">92 kg</option><option value="93">93 kg</option><option value="94">94 kg</option><option value="95">95 kg</option><option value="96">96 kg</option><option value="97">97 kg</option><option value="98">98 kg</option><option value="99">99 kg</option><option value="100">100 kg</option><option value="101">101 kg</option><option value="102">102 kg</option><option value="103">103 kg</option><option value="104">104 kg</option><option value="105">105 kg</option><option value="106">106 kg</option><option value="107">107 kg</option><option value="108">108 kg</option><option value="109">109 kg</option><option value="110">110 kg</option><option value="111">111 kg</option><option value="112">112 kg</option><option value="113">113 kg</option><option value="114">114 kg</option><option value="115">115 kg</option><option value="116">116 kg</option><option value="117">117 kg</option><option value="118">118 kg</option><option value="119">119 kg</option><option value="120">120 kg</option><option value="121">121 kg</option><option value="122">122 kg</option><option value="123">123 kg</option><option value="124">124 kg</option><option value="125">125 kg</option><option value="126">126 kg</option><option value="127">127 kg</option><option value="128">128 kg</option><option value="129">129 kg</option><option value="130">130 kg</option><option value="131">131 kg</option><option value="132">132 kg</option><option value="133">133 kg</option><option value="134">134 kg</option><option value="135">135 kg</option><option value="136">136 kg</option><option value="137">137 kg</option><option value="138">138 kg</option><option value="139">139 kg</option><option value="140">140 kg</option><option value="141">141 kg</option><option value="142">142 kg</option><option value="143">143 kg</option><option value="144">144 kg</option><option value="145">145 kg</option><option value="146">146 kg</option><option value="147">147 kg</option><option value="148">148 kg</option><option value="149">149 kg</option><option value="150">150 kg</option><option value="151">151 kg</option><option value="152">152 kg</option><option value="153">153 kg</option><option value="154">154 kg</option><option value="155">155 kg</option><option value="156">156 kg</option><option value="157">157 kg</option><option value="158">158 kg</option><option value="159">159 kg</option><option value="160">160 kg</option><option value="161">161 kg</option><option value="162">162 kg</option><option value="163">163 kg</option><option value="164">164 kg</option><option value="165">165 kg</option><option value="166">166 kg</option><option value="167">167 kg</option><option value="168">168 kg</option><option value="169">169 kg</option><option value="170">170 kg</option><option value="171">171 kg</option><option value="172">172 kg</option><option value="173">173 kg</option><option value="174">174 kg</option><option value="175">175 kg</option><option value="176">176 kg</option><option value="177">177 kg</option><option value="178">178 kg</option><option value="179">179 kg</option><option value="180">180 kg</option><option value="181">181 kg</option><option value="182">182 kg</option><option value="183">183 kg</option><option value="184">184 kg</option><option value="185">185 kg</option><option value="186">186 kg</option><option value="187">187 kg</option><option value="188">188 kg</option><option value="189">189 kg</option><option value="190">190 kg</option><option value="191">191 kg</option><option value="192">192 kg</option><option value="193">193 kg</option><option value="194">194 kg</option><option value="195">195 kg</option><option value="196">196 kg</option><option value="197">197 kg</option><option value="198">198 kg</option><option value="199">199 kg</option><option value="200">200 kg</option></select>
-          </div>
-          <div style="margin-bottom:12px;">
-            <label class="lbl">Altura (cm)</label>
-            <select class="sel" id="ed-h"><option value="140">140 cm</option><option value="141">141 cm</option><option value="142">142 cm</option><option value="143">143 cm</option><option value="144">144 cm</option><option value="145">145 cm</option><option value="146">146 cm</option><option value="147">147 cm</option><option value="148">148 cm</option><option value="149">149 cm</option><option value="150">150 cm</option><option value="151">151 cm</option><option value="152">152 cm</option><option value="153">153 cm</option><option value="154">154 cm</option><option value="155">155 cm</option><option value="156">156 cm</option><option value="157">157 cm</option><option value="158">158 cm</option><option value="159">159 cm</option><option value="160">160 cm</option><option value="161">161 cm</option><option value="162">162 cm</option><option value="163">163 cm</option><option value="164">164 cm</option><option value="165">165 cm</option><option value="166">166 cm</option><option value="167">167 cm</option><option value="168">168 cm</option><option value="169">169 cm</option><option value="170" selected>170 cm</option><option value="171">171 cm</option><option value="172">172 cm</option><option value="173">173 cm</option><option value="174">174 cm</option><option value="175">175 cm</option><option value="176">176 cm</option><option value="177">177 cm</option><option value="178">178 cm</option><option value="179">179 cm</option><option value="180">180 cm</option><option value="181">181 cm</option><option value="182">182 cm</option><option value="183">183 cm</option><option value="184">184 cm</option><option value="185">185 cm</option><option value="186">186 cm</option><option value="187">187 cm</option><option value="188">188 cm</option><option value="189">189 cm</option><option value="190">190 cm</option><option value="191">191 cm</option><option value="192">192 cm</option><option value="193">193 cm</option><option value="194">194 cm</option><option value="195">195 cm</option><option value="196">196 cm</option><option value="197">197 cm</option><option value="198">198 cm</option><option value="199">199 cm</option><option value="200">200 cm</option><option value="201">201 cm</option><option value="202">202 cm</option><option value="203">203 cm</option><option value="204">204 cm</option><option value="205">205 cm</option><option value="206">206 cm</option><option value="207">207 cm</option><option value="208">208 cm</option><option value="209">209 cm</option><option value="210">210 cm</option><option value="211">211 cm</option><option value="212">212 cm</option><option value="213">213 cm</option><option value="214">214 cm</option><option value="215">215 cm</option><option value="216">216 cm</option><option value="217">217 cm</option><option value="218">218 cm</option><option value="219">219 cm</option><option value="220">220 cm</option></select>
-          </div>
-          <div><label class="lbl">Sexo</label>
-            <div class="seg" id="ed-sex-seg"><button class="seg-btn on" onclick="edSex('m')">Masculino</button><button class="seg-btn" onclick="edSex('f')">Femenino</button></div>
-          </div>
-          <div><label class="lbl">Biotipo</label>
-            <select class="sel" id="ed-bio">
-              <option value="ecto">Ectomorfo — 55%C/25%P/20%G</option>
-              <option value="meso" selected>Mesomorfo — 40%C/30%P/30%G</option>
-              <option value="endo">Endomorfo — 25%C/40%P/35%G</option>
-            </select>
-          </div>
-          <div><label class="lbl">Actividad</label>
-            <select class="sel" id="ed-act">
-              <option value="sed">Sedentario</option>
-              <option value="light">Ligero — 1-3 dias/semana</option>
-              <option value="mod" selected>Moderado — 3-5 dias/semana</option>
-              <option value="active">Activo — 6-7 dias/semana</option>
-              <option value="vactive">Muy activo</option>
-            </select>
-          </div>
-          <div><label class="lbl">Objetivo</label>
-            <select class="sel" id="ed-goal">
-              <option value="lose">Perder grasa</option>
-              <option value="keep" selected>Mantener peso</option>
-              <option value="gain">Ganar musculo</option>
-            </select>
-          </div>
+          <div><label class="lbl">Nombre</label><input class="inp" id="ed-nm" placeholder="Tu nombre" oninput="updHdr()"/></div>
+          <div><label class="lbl">Edad</label><select class="sel" id="ed-age"></select></div>
+          <div><label class="lbl">Peso (kg)</label><select class="sel" id="ed-w"></select></div>
+          <div><label class="lbl">Altura (cm)</label><select class="sel" id="ed-h"></select></div>
+          <div><label class="lbl">Sexo</label><div class="seg" id="ed-sex-seg"><button class="seg-btn on" onclick="edSex('m')">Masculino</button><button class="seg-btn" onclick="edSex('f')">Femenino</button></div></div>
+          <div><label class="lbl">Biotipo</label><select class="sel" id="ed-bio"><option value="ecto">Ectomorfo</option><option value="meso" selected>Mesomorfo</option><option value="endo">Endomorfo</option></select></div>
+          <div><label class="lbl">Actividad</label><select class="sel" id="ed-act"><option value="sed">Sedentario</option><option value="light">Ligero</option><option value="mod" selected>Moderado</option><option value="active">Activo</option><option value="vactive">Muy activo</option></select></div>
+          <div><label class="lbl">Objetivo</label><select class="sel" id="ed-goal"><option value="lose">Perder grasa</option><option value="keep" selected>Mantener peso</option><option value="gain">Ganar musculo</option></select></div>
           <button class="btn btn-dark" onclick="saveEdit()">Guardar cambios</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- NUTRICION PAGE -->
+  <!-- NUTRICION -->
   <div id="pg-nutricion" class="hidden" style="padding:0 16px 20px;">
     <div class="card" style="display:flex;align-items:center;gap:16px;margin:16px 0 12px;">
       <div style="position:relative;flex-shrink:0;">
@@ -279,9 +234,9 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
         </div>
       </div>
       <div style="flex:1;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12px;color:#78716C;">Meta</span><span id="nut-meta" style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#A8A29E;">— kcal</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12px;color:#78716C;">Meta</span><span id="nut-meta" style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#A8A29E;">- kcal</span></div>
         <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:12px;color:#78716C;">Consumidas</span><span id="nut-in" style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#1C1917;">0 kcal</span></div>
-        <div style="display:flex;justify-content:space-between;"><span style="font-size:12px;color:#78716C;">Restantes</span><span id="nut-left" style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#2A6B6E;">— kcal</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-size:12px;color:#78716C;">Restantes</span><span id="nut-left" style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#2A6B6E;">- kcal</span></div>
       </div>
     </div>
     <div class="card" style="margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;" id="nut-macros"></div></div>
@@ -298,7 +253,7 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
     <div id="meals-wrap"></div>
   </div>
 
-  <!-- ENTRENO PAGE -->
+  <!-- ENTRENO -->
   <div id="pg-entreno" class="hidden">
     <div style="display:flex;border-bottom:1px solid rgba(28,25,23,.10);background:#FDFAF4;">
       <button class="stab on" id="st-hoy" onclick="goW('hoy')">Hoy</button>
@@ -310,10 +265,7 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
     <div id="wv-progreso" class="hidden" style="padding:0 16px;"></div>
   </div>
 
-  <!-- DEVICES PAGE -->
   <div id="pg-devices" class="hidden" style="padding:20px 16px;"></div>
-
-  <!-- PLAN PAGE -->
   <div id="pg-plan" class="hidden" style="padding:20px 16px;"></div>
 </div>
 
@@ -346,12 +298,19 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
     <div style="padding:14px 16px;">
       <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;margin-bottom:12px;">Anadir ejercicio</div>
       <input class="inp" id="ex-q" placeholder="Buscar ejercicio..." oninput="renderExList()" style="margin-bottom:8px;"/>
-      <select class="sel" id="ex-m" onchange="renderExList()" style="margin-bottom:10px;">
-        <option value="">Todos los musculos</option>
-        <option>Pecho</option><option>Espalda</option><option>Hombros</option>
-        <option>Biceps</option><option>Triceps</option><option>Piernas</option>
-        <option>Gluteos</option><option>Core</option><option>Cardio</option>
-      </select>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <select class="sel" id="ex-m" onchange="renderExList()" style="flex:1;">
+          <option value="">Todos musculos</option>
+          <option>Pecho</option><option>Espalda</option><option>Hombros</option>
+          <option>Biceps</option><option>Triceps</option><option>Piernas</option>
+          <option>Gluteos</option><option>Core</option><option>Cardio</option>
+        </select>
+        <select class="sel" id="ex-eq" onchange="renderExList()" style="flex:1;">
+          <option value="">Todo equipo</option>
+          <option>Barra</option><option>Mancuernas</option><option>Cable</option>
+          <option>Maquina</option><option>Peso corporal</option><option>Cardio</option><option>Otro</option>
+        </select>
+      </div>
       <div id="ex-list" style="max-height:55vh;overflow-y:auto;"></div>
     </div>
   </div>
@@ -401,14 +360,15 @@ background-repeat:no-repeat;background-position:right 14px center;background-siz
       <div style="font-size:11px;color:#78716C;margin-bottom:6px;text-align:center;">O introduce el codigo manualmente</div>
       <div style="display:flex;gap:8px;">
         <input class="inp" id="bc-inp" placeholder="Ej: 8410188012456" style="flex:1;"/>
-        <button onclick="lookupBC(document.getElementById('bc-inp').value)" class="btn-teal" style="flex-shrink:0;">Buscar</button>
+        <button onclick="lookupBC(document.getElementById('bc-inp').value)" class="btn-teal" style="flex-shrink:0;padding:12px 16px;">Buscar</button>
       </div>
     </div>
   </div>
 </div>
 
-</div><!-- #root -->
+</div>
 <script>
+
 // ═══ STATE ═══════════════════════════════════════════════════
 var S={
   nombre:'',sex:'m',pesoKg:70,alturaCm:170,edad:28,
@@ -536,40 +496,69 @@ function obGo(n){
   [1,2,3].forEach(function(i){var el=$(('ob'+i));if(el)el.classList.toggle('hidden',i!==n);});
   if(n===2)updBioHint();
 }
+// Build weight/height select options
+function buildSelOpts(sel, opts){
+  if(!sel)return;
+  var cur=parseFloat(sel.value)||0;
+  sel.innerHTML='';
+  opts.forEach(function(o){
+    var op=document.createElement('option');
+    op.value=o.v;op.textContent=o.l;
+    if(o.v===cur||(cur===0&&o.sel))op.selected=true;
+    sel.appendChild(op);
+  });
+}
+function buildWeightSelect(selId, units, curKg){
+  var sel=$(selId);if(!sel)return;
+  var opts=[];
+  if(units==='imperial'){
+    var curLb=curKg?Math.round(curKg*2.2046):154;
+    for(var i=60;i<=440;i++) opts.push({v:i,l:i+' lb',sel:i===curLb});
+  } else {
+    var ckg=curKg?Math.round(curKg):70;
+    for(var i2=30;i2<=200;i2++) opts.push({v:i2,l:i2+' kg',sel:i2===ckg});
+  }
+  buildSelOpts(sel,opts);
+}
+function buildHeightSelect(selId, units, curCm){
+  var sel=$(selId);if(!sel)return;
+  var opts=[];
+  if(units==='imperial'){
+    var curIn=curCm?Math.round(curCm/2.54):67;
+    function ftStr(i){return Math.floor(i/12)+"'"+i%12+'"';}
+    for(var i=55;i<=84;i++) opts.push({v:i,l:ftStr(i),sel:i===curIn});
+  } else {
+    var ccm=curCm?Math.round(curCm):170;
+    for(var i2=140;i2<=220;i2++) opts.push({v:i2,l:i2+' cm',sel:i2===ccm});
+  }
+  buildSelOpts(sel,opts);
+}
+function buildAgeSelect(selId, curAge){
+  var sel=$(selId);if(!sel)return;
+  var opts=[];
+  var ca=curAge?Math.round(curAge):28;
+  for(var i=10;i<=80;i++) opts.push({v:i,l:i+' anos',sel:i===ca});
+  buildSelOpts(sel,opts);
+}
+
 function setUnits(u){
   var prev=S.units;
   S.units=u;
   var sel=$('unit-sel');if(sel) sel.value=u;
-  var lw=$('lbl-w'),lh=$('lbl-h'),fw=$('ob-w'),fh=$('ob-h');
-  if(!fw||!fh) return;
-  var wVal=parseFloat(fw.value)||0;
-  var hVal=parseFloat(fh.value)||0;
-  // Convert current values
-  var newW=wVal, newH=hVal;
-  if(u==='imperial'&&prev==='metric'){newW=Math.round(wVal*2.2046);newH=Math.round(hVal/2.54);}
-  else if(u==='metric'&&prev==='imperial'){newW=Math.round(wVal/2.2046*10)/10;newH=Math.round(hVal*2.54);}
+  var lw=$('lbl-w'),lh=$('lbl-h');
+  // Get current values in metric before rebuild
+  var curW=S.units===prev?S.pesoKg||70:(prev==='imperial'?Math.round(parseFloat(($('ob-w')&&$('ob-w').value)||154)/2.2046):Math.round((parseFloat(($('ob-w')&&$('ob-w').value)||67)*2.54)));
+  var curH=S.units===prev?S.alturaCm||170:(prev==='imperial'?Math.round(parseFloat(($('ob-h')&&$('ob-h').value)||67)*2.54):Math.round(parseFloat(($('ob-h')&&$('ob-h').value)||170)));
   if(u==='imperial'){
     lw&&(lw.textContent='Peso (lb)');
-    lh&&(lh.textContent='Altura (in)');
-    // Rebuild weight select lb 60-440
-    fw.innerHTML='';
-    for(var i=60;i<=440;i+=1){var o=document.createElement('option');o.value=i;o.textContent=i+' lb';if(i===Math.round(newW)||(!newW&&i===154))o.selected=true;fw.appendChild(o);}
-    // Rebuild height select inches 55-83
-    fh.innerHTML='';
-    function inToFt(i){var ft=Math.floor(i/12),inch=i%12;return ft+"'"+inch+'in';}
-    for(var h2=55;h2<=83;h2++){var o2=document.createElement('option');o2.value=h2;o2.textContent=inToFt(h2);var tgt=newH>0?newH:67;if(h2===Math.round(tgt))o2.selected=true;fh.appendChild(o2);}
+    lh&&(lh.textContent='Altura');
   }else{
     lw&&(lw.textContent='Peso (kg)');
     lh&&(lh.textContent='Altura (cm)');
-    // Rebuild weight select kg 30-200
-    fw.innerHTML='';
-    for(var i2=30;i2<=200;i2++){var o3=document.createElement('option');o3.value=i2;o3.textContent=i2+' kg';if(i2===Math.round(newW)||(!newW&&i2===70))o3.selected=true;fw.appendChild(o3);}
-    // Rebuild height select cm 140-220
-    fh.innerHTML='';
-    for(var h3=140;h3<=220;h3++){var o4=document.createElement('option');o4.value=h3;o4.textContent=h3+' cm';if(h3===Math.round(newH)||(!newH&&h3===170))o4.selected=true;fh.appendChild(o4);}
   }
+  buildWeightSelect('ob-w', u, curW);
+  buildHeightSelect('ob-h', u, curH);
 }
-function updWeightOpts(){}
 function setSex(s){
   OB_SEX=s;
   var btns=document.querySelectorAll('#sex-seg .seg-btn');
@@ -657,10 +646,9 @@ function toggleEdit(){
   var ep=$('edit-panel');if(!ep)return;
   if(ep.classList.contains('hidden')){
     $('ed-nm').value=S.nombre;
-    var ea=$('ed-age'),ew=$('ed-w'),eh=$('ed-h');
-    if(ea)ea.value=Math.round(S.edad)||28;
-    if(ew)ew.value=Math.round(S.pesoKg)||70;
-    if(eh)eh.value=Math.round(S.alturaCm)||170;
+    buildAgeSelect('ed-age', S.edad||28);
+    buildWeightSelect('ed-w', 'metric', S.pesoKg||70);
+    buildHeightSelect('ed-h', 'metric', S.alturaCm||170);
     $('ed-bio').value=S.bio;$('ed-act').value=S.act;$('ed-goal').value=S.goal;
     $('ed-lbl-w').textContent='Peso (kg)';
     var sb=document.querySelectorAll('#ed-sex-seg .seg-btn');
@@ -672,8 +660,8 @@ function edSex(s){S.sex=s;var b=document.querySelectorAll('#ed-sex-seg .seg-btn'
 function saveEdit(){
   S.nombre=$('ed-nm').value.trim()||S.nombre;
   S.edad=parseInt($('ed-age').value)||S.edad;
-  S.pesoKg=parseFloat($('ed-w').value)||S.pesoKg;
-  S.alturaCm=parseFloat($('ed-h').value)||S.alturaCm;
+  S.pesoKg=parseFloat($('ed-w').value)||S.pesoKg; // edit always in metric kg
+  S.alturaCm=parseFloat($('ed-h').value)||S.alturaCm; // always in cm
   S.bio=$('ed-bio').value; S.act=$('ed-act').value; S.goal=$('ed-goal').value;
   hide('edit-panel'); save(); renderProfile(); updHdr(); toast('Perfil actualizado','#2A6B6E');
 }
@@ -899,48 +887,206 @@ function addScanned(){
 
 // ═══ WORKOUT ════════════════════════════════════════════════
 var EXERCISES=[
-  {id:'bench',  name:'Press de banca',    m:'Pecho',   t:'s',e:'\uD83C\uDFCB'},
-  {id:'incline',name:'Press inclinado',   m:'Pecho',   t:'s',e:'\uD83C\uDFCB'},
-  {id:'cable_fly',name:'Aperturas cable', m:'Pecho',   t:'s',e:'\uD83D\uDCAA'},
-  {id:'dips2',  name:'Fondos pecho',      m:'Pecho',   t:'s',e:'\u2B07'},
-  {id:'pullup', name:'Dominadas',         m:'Espalda', t:'s',e:'\u2B06'},
-  {id:'row',    name:'Remo con barra',    m:'Espalda', t:'s',e:'\uD83D\uDEA3'},
-  {id:'latpull',name:'Jalon al pecho',    m:'Espalda', t:'s',e:'\u2B07'},
-  {id:'trow',   name:'Remo en T',         m:'Espalda', t:'s',e:'\uD83D\uDEA3'},
-  {id:'seated_row',name:'Remo sentado',   m:'Espalda', t:'s',e:'\uD83D\uDEA3'},
-  {id:'dead',   name:'Peso muerto',       m:'Espalda', t:'s',e:'\uD83C\uDFCB'},
-  {id:'ohpress',name:'Press hombro',      m:'Hombros', t:'s',e:'\uD83D\uDD3C'},
-  {id:'lateral',name:'Elevaciones lat.',  m:'Hombros', t:'s',e:'\u2194'},
-  {id:'front_r',name:'Elevaciones front.',m:'Hombros', t:'s',e:'\u2191'},
-  {id:'face_p', name:'Face pull',         m:'Hombros', t:'s',e:'\uD83D\uDCAA'},
-  {id:'curl',   name:'Curl biceps',       m:'Biceps',  t:'s',e:'\uD83D\uDCAA'},
-  {id:'hammer', name:'Curl martillo',     m:'Biceps',  t:'s',e:'\uD83D\uDD28'},
-  {id:'preacher',name:'Curl predicador',  m:'Biceps',  t:'s',e:'\uD83D\uDCAA'},
-  {id:'tricep', name:'Triceps polea',     m:'Triceps', t:'s',e:'\u2B07'},
-  {id:'skull',  name:'Skull crusher',     m:'Triceps', t:'s',e:'\uD83D\uDCAA'},
-  {id:'dips',   name:'Fondos triceps',    m:'Triceps', t:'s',e:'\uD83D\uDCAA'},
-  {id:'squat',  name:'Sentadilla',        m:'Piernas', t:'s',e:'\uD83E\uDDB5'},
-  {id:'leg_p',  name:'Prensa pierna',     m:'Piernas', t:'s',e:'\uD83E\uDDB5'},
-  {id:'leg_ext',name:'Extension pierna',  m:'Piernas', t:'s',e:'\uD83E\uDDB5'},
-  {id:'leg_cur',name:'Curl femoral',      m:'Piernas', t:'s',e:'\uD83E\uDDB5'},
-  {id:'calf',   name:'Pantorrillas',      m:'Piernas', t:'s',e:'\uD83E\uDDB5'},
-  {id:'rdl',    name:'Peso muerto rum.',  m:'Gluteos', t:'s',e:'\uD83C\uDF51'},
-  {id:'hipth',  name:'Hip thrust',        m:'Gluteos', t:'s',e:'\uD83C\uDF51'},
-  {id:'lunge',  name:'Zancadas',          m:'Gluteos', t:'s',e:'\uD83D\uDEB6'},
-  {id:'glut_kick',name:'Patada gluteo',   m:'Gluteos', t:'s',e:'\uD83C\uDF51'},
-  {id:'abduct', name:'Abduccion cadera',  m:'Gluteos', t:'s',e:'\u2194'},
-  {id:'plank',  name:'Plancha',           m:'Core',    t:'s',e:'\uD83E\uDDD8'},
-  {id:'crunch', name:'Abdominales',       m:'Core',    t:'s',e:'\uD83D\uDCAA'},
-  {id:'leg_r',  name:'Elevacion piernas', m:'Core',    t:'s',e:'\uD83E\uDDB5'},
-  {id:'twist',  name:'Russian twist',     m:'Core',    t:'s',e:'\uD83D\uDD04'},
-  {id:'run',    name:'Correr',            m:'Cardio',  t:'c',e:'\uD83C\uDFC3'},
-  {id:'bike',   name:'Bicicleta',         m:'Cardio',  t:'c',e:'\uD83D\uDEB4'},
-  {id:'hiit',   name:'HIIT',             m:'Cardio',  t:'c',e:'\u26A1'},
-  {id:'swim',   name:'Nadar',             m:'Cardio',  t:'c',e:'\uD83C\uDFCA'},
-  {id:'jump',   name:'Saltar cuerda',     m:'Cardio',  t:'c',e:'\uD83E\uDE22'},
-  {id:'row_c',  name:'Remo ergometro',    m:'Cardio',  t:'c',e:'\uD83D\uDEA3'},
-  {id:'eliptic',name:'Eliptica',          m:'Cardio',  t:'c',e:'\uD83D\uDEB4'},
+  {id:'bench',     name:'Press de banca',         m:'Pecho',    eq:'Barra',        t:'s',e:'BB',
+   desc:'Ejercicio compuesto fundamental. Acostado en banco, baja la barra al pecho y empuja.',
+   muscles:['Pecho','Triceps','Deltoides ant.'],tips:['Omoplatos retraidos','Pies en el suelo','Agarre ancho'],similar:['incline','db_bench','dips_ch']},
+  {id:'incline',   name:'Press inclinado',         m:'Pecho',    eq:'Barra',        t:'s',e:'BB',
+   desc:'Enfoca pecho superior. Banco a 30-45 grados.',
+   muscles:['Pecho superior','Deltoides ant.','Triceps'],tips:['Banco a 30-45 grados','No arquees la espalda'],similar:['bench','db_bench','cable_fly']},
+  {id:'db_bench',  name:'Press mancuernas banco',  m:'Pecho',    eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Mayor rango de movimiento que con barra. Estiramiento completo del pecho.',
+   muscles:['Pecho','Triceps'],tips:['Controla el descenso','Junta las mancuernas arriba'],similar:['bench','fly_db','incline']},
+  {id:'fly_db',    name:'Aperturas mancuernas',    m:'Pecho',    eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Aislamiento del pecho con gran rango de movimiento.',
+   muscles:['Pecho'],tips:['Codos ligeramente flexionados','Abre como si abrazaras un arbol'],similar:['cable_fly','pec_deck','db_bench']},
+  {id:'cable_fly', name:'Aperturas cable',         m:'Pecho',    eq:'Cable',        t:'s',e:'CA',
+   desc:'Tension constante en pecho durante todo el movimiento. Excelente para definicion.',
+   muscles:['Pecho'],tips:['Varia la altura del cable','Tension en todo el recorrido'],similar:['fly_db','pec_deck','bench']},
+  {id:'dips_ch',   name:'Fondos para pecho',       m:'Pecho',    eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Inclinate hacia adelante para enfatizar el pecho.',
+   muscles:['Pecho inferior','Triceps'],tips:['Inclinate 30 grados','Baja hasta 90 grados en codos'],similar:['push_up','bench','tricep_pd']},
+  {id:'push_up',   name:'Flexiones',               m:'Pecho',    eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Ejercicio fundamental de empuje sin equipo. Muchas variantes.',
+   muscles:['Pecho','Triceps','Core'],tips:['Cuerpo recto','Codos a 45 grados del torso'],similar:['dips_ch','bench','db_bench']},
+  {id:'pec_deck',  name:'Pec deck maquina',        m:'Pecho',    eq:'Maquina',      t:'s',e:'MA',
+   desc:'Maquina de aislamiento del pecho. Seguro y efectivo para principiantes.',
+   muscles:['Pecho'],tips:['Ajusta altura del asiento','Aprieta en la contraccion'],similar:['fly_db','cable_fly']},
+  {id:'pullup',    name:'Dominadas',               m:'Espalda',  eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Rey de los jalones. Trabaja dorsal y biceps intensamente.',
+   muscles:['Dorsal','Biceps','Romboides'],tips:['Agarre algo mas ancho que hombros','Lleva el pecho a la barra'],similar:['lat_pull','row_bar','seated_row']},
+  {id:'lat_pull',  name:'Jalon al pecho',          m:'Espalda',  eq:'Cable',        t:'s',e:'CA',
+   desc:'Alternativa a dominadas. Ajusta el peso para series altas.',
+   muscles:['Dorsal','Biceps','Trapecio inf.'],tips:['Inclinate ligeramente atras','Jala hacia el pecho'],similar:['pullup','row_bar','pullover']},
+  {id:'row_bar',   name:'Remo con barra',          m:'Espalda',  eq:'Barra',        t:'s',e:'BB',
+   desc:'Compuesto de jalon horizontal. Construye grosor de espalda.',
+   muscles:['Romboides','Trapecio','Dorsal','Biceps'],tips:['Espalda casi paralela al suelo','Jala al abdomen bajo'],similar:['row_db','seated_row','lat_pull']},
+  {id:'row_db',    name:'Remo mancuerna',          m:'Espalda',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Mayor rango de movimiento. Trabaja cada lado independientemente.',
+   muscles:['Dorsal','Romboides','Biceps'],tips:['Apoya rodilla y mano en banco','Codo cerca del cuerpo'],similar:['row_bar','seated_row','lat_pull']},
+  {id:'seated_row',name:'Remo sentado cable',      m:'Espalda',  eq:'Cable',        t:'s',e:'CA',
+   desc:'Tension constante en espalda. Ideal para grosor.',
+   muscles:['Romboides','Trapecio medio','Dorsal'],tips:['Espalda recta','Retrae omoplatos al final'],similar:['row_bar','row_db','facepull']},
+  {id:'deadlift',  name:'Peso muerto',             m:'Espalda',  eq:'Barra',        t:'s',e:'BB',
+   desc:'El ejercicio mas completo. Trabaja toda la cadena posterior. Requiere tecnica perfecta.',
+   muscles:['Espalda baja','Gluteos','Isquios','Trapecio','Core'],tips:['Barra sobre el empeine','Espalda neutra siempre','Empuja el suelo con los pies'],similar:['rdl','row_bar','hipth']},
+  {id:'facepull',  name:'Face pull cable',         m:'Espalda',  eq:'Cable',        t:'s',e:'CA',
+   desc:'Esencial para salud de hombros. Trabaja deltoides posterior y manguito rotador.',
+   muscles:['Deltoides post.','Trapecio','Manguito rotador'],tips:['Jala hacia la cara','Codos altos'],similar:['lat_raise','db_press','seated_row']},
+  {id:'pullover',  name:'Pullover cable',          m:'Espalda',  eq:'Cable',        t:'s',e:'CA',
+   desc:'Excelente para el dorsal. Arco amplio del movimiento.',
+   muscles:['Dorsal','Serrato'],tips:['Brazos casi rectos','Siente el estiramiento en el dorsal'],similar:['lat_pull','pullup']},
+  {id:'ohp',       name:'Press militar barra',     m:'Hombros',  eq:'Barra',        t:'s',e:'BB',
+   desc:'Ejercicio compuesto vertical. Construye hombros y fuerza general.',
+   muscles:['Deltoides','Triceps','Trapecio'],tips:['De pie o sentado','Activa el core'],similar:['db_press','lat_raise','front_r']},
+  {id:'db_press',  name:'Press hombro mancuernas', m:'Hombros',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Mayor rango que con barra. Corrige desequilibrios laterales.',
+   muscles:['Deltoides','Triceps'],tips:['No eleves los trapecios','Palmas hacia adelante o neutras'],similar:['ohp','lat_raise','cable_lat']},
+  {id:'lat_raise', name:'Elevaciones laterales',   m:'Hombros',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Aislamiento del deltoides medio. Clave para anchura de hombros.',
+   muscles:['Deltoides medio'],tips:['Hasta altura del hombro','Pulgares ligeramente hacia abajo'],similar:['cable_lat','db_press','facepull']},
+  {id:'front_r',   name:'Elevaciones frontales',   m:'Hombros',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Trabaja el deltoides anterior.',
+   muscles:['Deltoides ant.'],tips:['Alterna brazos o juntos','Controla el descenso'],similar:['ohp','lat_raise','cable_lat']},
+  {id:'cable_lat', name:'Elevaciones cable lateral',m:'Hombros', eq:'Cable',        t:'s',e:'CA',
+   desc:'Tension constante para el deltoides medio. Mejor que mancuernas para definicion.',
+   muscles:['Deltoides medio'],tips:['Cable desde abajo','Un brazo a la vez'],similar:['lat_raise','db_press']},
+  {id:'uprow',     name:'Remo al menton',          m:'Hombros',  eq:'Barra',        t:'s',e:'BB',
+   desc:'Trabaja trapecio y deltoides medio. Agarre estrecho.',
+   muscles:['Trapecio','Deltoides medio'],tips:['Agarre estrecho','Codos altos al subir'],similar:['lat_raise','ohp']},
+  {id:'curl_bar',  name:'Curl barra',              m:'Biceps',   eq:'Barra',        t:'s',e:'BB',
+   desc:'Ejercicio clasico de biceps. Permite cargar mas peso que con mancuernas.',
+   muscles:['Biceps','Braquial'],tips:['Codos fijos a los costados','Supina la muneca al subir'],similar:['curl_db','hammer','preacher']},
+  {id:'curl_db',   name:'Curl mancuernas',         m:'Biceps',   eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Mayor rango y supinacion. Trabaja cada brazo independientemente.',
+   muscles:['Biceps','Braquiorradial'],tips:['Supina al subir','Alterna o simultaneo'],similar:['curl_bar','hammer','conc_curl']},
+  {id:'hammer',    name:'Curl martillo',           m:'Biceps',   eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Trabaja braquiorradial y braquial. Anade grosor al brazo.',
+   muscles:['Braquiorradial','Braquial','Biceps'],tips:['Agarre neutro todo el recorrido','Codos fijos'],similar:['curl_db','curl_bar','cable_curl']},
+  {id:'preacher',  name:'Curl predicador',         m:'Biceps',   eq:'Maquina',      t:'s',e:'MA',
+   desc:'Elimina el impulso del cuerpo. Aislamiento total del biceps.',
+   muscles:['Biceps'],tips:['Apoyo del brazo en el pad','Rango completo'],similar:['curl_bar','conc_curl','cable_curl']},
+  {id:'conc_curl', name:'Curl concentrado',        m:'Biceps',   eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Maximo pico de biceps. Sentado con codo en el muslo.',
+   muscles:['Biceps'],tips:['Codo en el interior del muslo','Contrae fuerte arriba'],similar:['preacher','curl_db','cable_curl']},
+  {id:'cable_curl',name:'Curl cable',              m:'Biceps',   eq:'Cable',        t:'s',e:'CA',
+   desc:'Tension constante en el biceps. Excelente para definicion.',
+   muscles:['Biceps'],tips:['Cable desde abajo','Tension todo el recorrido'],similar:['curl_bar','curl_db','hammer']},
+  {id:'tricep_pd', name:'Triceps polea',           m:'Triceps',  eq:'Cable',        t:'s',e:'CA',
+   desc:'El mas popular para triceps. Trabaja cabeza larga y lateral.',
+   muscles:['Triceps'],tips:['Codos fijos a los costados','Extiende completamente'],similar:['rope_pd','skull','oh_tri']},
+  {id:'skull',     name:'Skull crushers',          m:'Triceps',  eq:'Barra',        t:'s',e:'BB',
+   desc:'Excelente para la cabeza larga del triceps. Con barra EZ.',
+   muscles:['Triceps'],tips:['Baja a la frente','Codos apuntando al techo'],similar:['oh_tri','tricep_pd','rope_pd']},
+  {id:'dips_tri',  name:'Fondos banco triceps',    m:'Triceps',  eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Facil de realizar en cualquier banco. Anade peso en el regazo.',
+   muscles:['Triceps','Deltoides ant.'],tips:['Cuerpo cercano al banco','Codos paralelos'],similar:['tricep_pd','skull','dips_ch']},
+  {id:'oh_tri',    name:'Triceps sobre cabeza',    m:'Triceps',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Mejor estiramiento de la cabeza larga del triceps.',
+   muscles:['Triceps cabeza larga'],tips:['Codos al techo','Baja por detras de la cabeza'],similar:['skull','rope_pd','tricep_pd']},
+  {id:'rope_pd',   name:'Pushdown cuerda',         m:'Triceps',  eq:'Cable',        t:'s',e:'CA',
+   desc:'Permite rotar las munecas en la extension. Mayor contraccion.',
+   muscles:['Triceps'],tips:['Separa la cuerda al final','Codos fijos'],similar:['tricep_pd','oh_tri','dips_tri']},
+  {id:'squat',     name:'Sentadilla',              m:'Piernas',  eq:'Barra',        t:'s',e:'BB',
+   desc:'El rey de los ejercicios de piernas. Trabaja todo el tren inferior y core.',
+   muscles:['Cuadriceps','Gluteos','Isquios','Core'],tips:['Rodillas siguen la direccion de los pies','Profundidad hasta paralela minimo'],similar:['leg_press','hack_sq','bull_sq']},
+  {id:'squat_db',  name:'Sentadilla mancuernas',   m:'Piernas',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Alternativa accesible a sentadilla con barra.',
+   muscles:['Cuadriceps','Gluteos'],tips:['Pies a ancho de hombros','Espalda recta'],similar:['squat','leg_press','bull_sq']},
+  {id:'leg_press', name:'Prensa de pierna',        m:'Piernas',  eq:'Maquina',      t:'s',e:'MA',
+   desc:'Permite cargar mucho peso de forma segura. Varia posicion de pies.',
+   muscles:['Cuadriceps','Gluteos','Isquios'],tips:['No bloquees las rodillas','Pies altos para mas gluteos'],similar:['squat','hack_sq','leg_ext']},
+  {id:'leg_ext',   name:'Extension de piernas',    m:'Piernas',  eq:'Maquina',      t:'s',e:'MA',
+   desc:'Aislamiento del cuadriceps. Para definicion de la parte frontal.',
+   muscles:['Cuadriceps'],tips:['Contrae arriba','Control en el descenso'],similar:['leg_press','squat','leg_curl']},
+  {id:'leg_curl',  name:'Curl femoral acostado',   m:'Piernas',  eq:'Maquina',      t:'s',e:'MA',
+   desc:'Aislamiento de isquiotibiales. Complemento de las extensiones.',
+   muscles:['Isquiotibiales'],tips:['Caderas contra el pad','Rango completo'],similar:['rdl','leg_ext','calf_r']},
+  {id:'calf_r',    name:'Elevaciones de talones',  m:'Piernas',  eq:'Maquina',      t:'s',e:'MA',
+   desc:'Trabaja gemelo y soleo. Alto volumen para mejores resultados.',
+   muscles:['Gemelos','Soleo'],tips:['Rango completo arriba y abajo','Pausa en la contraccion'],similar:['squat','leg_press']},
+  {id:'hack_sq',   name:'Hack squat',              m:'Piernas',  eq:'Maquina',      t:'s',e:'MA',
+   desc:'Enfatiza cuadriceps. Espalda apoyada. Mas seguro que sentadilla libre.',
+   muscles:['Cuadriceps','Gluteos'],tips:['Pies adelantados','Rodillas sobre los pies'],similar:['squat','leg_press','leg_ext']},
+  {id:'bull_sq',   name:'Bulgarian split squat',   m:'Piernas',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Sentadilla unilateral con pie trasero elevado. Excelente gluteos y cuadriceps.',
+   muscles:['Cuadriceps','Gluteos','Equilibrio'],tips:['Pie trasero en banco','Rodilla trasera hacia el suelo'],similar:['lunge','squat','step_up']},
+  {id:'hipth',     name:'Hip thrust',              m:'Gluteos',  eq:'Barra',        t:'s',e:'BB',
+   desc:'El mejor ejercicio para gluteos. 3x mas activacion que la sentadilla segun la ciencia.',
+   muscles:['Gluteo mayor','Gluteo medio','Isquios'],tips:['Barra en cadera con pad','Empuja con talones','Contrae 1 segundo arriba'],similar:['rdl','hipth_db','glut_kick']},
+  {id:'hipth_db',  name:'Hip thrust mancuerna',    m:'Gluteos',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Version accesible del hip thrust. Misma activacion de gluteos.',
+   muscles:['Gluteo mayor'],tips:['Espalda apoyada en banco','Mancuerna en cadera'],similar:['hipth','rdl_db','abduct']},
+  {id:'rdl',       name:'Peso muerto rumano',      m:'Gluteos',  eq:'Barra',        t:'s',e:'BB',
+   desc:'Enfasis en isquios y gluteos. Rodillas levemente flexionadas.',
+   muscles:['Isquiotibiales','Gluteos','Espalda baja'],tips:['Cadera hacia atras','Siente el estiramiento de isquios'],similar:['deadlift','rdl_db','hipth']},
+  {id:'rdl_db',    name:'Peso muerto rumano DB',   m:'Gluteos',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Version con mancuernas del RDL. Mayor rango de movimiento.',
+   muscles:['Isquiotibiales','Gluteos'],tips:['Mancuernas pegadas a piernas','Caderas atras'],similar:['rdl','hipth_db','leg_curl']},
+  {id:'lunge',     name:'Zancadas',                m:'Gluteos',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Ejercicio unilateral para gluteos y cuadriceps. Mejora el equilibrio.',
+   muscles:['Gluteos','Cuadriceps','Isquios'],tips:['Rodilla trasera roza el suelo','Paso largo para mas gluteos'],similar:['bull_sq','step_up','hipth']},
+  {id:'glut_kick', name:'Patada gluteo cable',     m:'Gluteos',  eq:'Cable',        t:'s',e:'CA',
+   desc:'Aislamiento del gluteo mayor. Cable desde el tobillo.',
+   muscles:['Gluteo mayor'],tips:['Pequena inclinacion hacia adelante','Contrae arriba'],similar:['hipth','abduct','rdl']},
+  {id:'abduct',    name:'Abduccion de cadera',     m:'Gluteos',  eq:'Maquina',      t:'s',e:'MA',
+   desc:'Trabaja gluteo medio. Clave para estabilidad y forma del gluteo.',
+   muscles:['Gluteo medio','Gluteo menor'],tips:['Sin impulso','Controla el regreso'],similar:['glut_kick','hipth_db','lunge']},
+  {id:'sumo_sq',   name:'Sentadilla sumo',         m:'Gluteos',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Pies anchos. Mayor enfasis en gluteos e isquios internos.',
+   muscles:['Gluteos','Aductores','Cuadriceps'],tips:['Rodillas siguen las puntas','Mancuerna entre piernas'],similar:['squat','hipth','rdl']},
+  {id:'step_up',   name:'Step ups',                m:'Gluteos',  eq:'Mancuernas',   t:'s',e:'DB',
+   desc:'Subida a cajon. Excelente ejercicio funcional para gluteos.',
+   muscles:['Gluteos','Cuadriceps'],tips:['Empuja con el talon del pie adelantado','Cajon a altura de rodilla'],similar:['lunge','bull_sq','hipth']},
+  {id:'plank',     name:'Plancha',                 m:'Core',     eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Core completo. Trabaja toda la cadena anterior.',
+   muscles:['Abdominales','Oblicuos','Espalda baja'],tips:['Cuerpo en linea recta','Activa gluteos y abdomen'],similar:['crunch','leg_r','cable_cr']},
+  {id:'crunch',    name:'Crunch abdominal',        m:'Core',     eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Ejercicio basico de abdominales.',
+   muscles:['Recto abdominal'],tips:['Manos tras la cabeza sin jalar','Exhala al subir'],similar:['cable_cr','leg_r','russian']},
+  {id:'leg_r',     name:'Elevacion de piernas',    m:'Core',     eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Trabaja abdomen inferior. Espalda baja pegada al suelo.',
+   muscles:['Recto abdominal inf.','Flexores cadera'],tips:['Espalda pegada al suelo','Piernas juntas'],similar:['crunch','plank','russian']},
+  {id:'russian',   name:'Russian twist',           m:'Core',     eq:'Peso corporal',t:'s',e:'BW',
+   desc:'Trabaja oblicuos con rotacion del tronco.',
+   muscles:['Oblicuos','Recto abdominal'],tips:['Pies elevados para mas dificultad','Gira el tronco no los brazos'],similar:['crunch','cable_cr','plank']},
+  {id:'cable_cr',  name:'Cable crunch',            m:'Core',     eq:'Cable',        t:'s',e:'CA',
+   desc:'Crunch con resistencia progresiva. Permite sobrecarga constante.',
+   muscles:['Recto abdominal'],tips:['Caderas fijas','Contrae desde el abdomen'],similar:['crunch','plank','leg_r']},
+  {id:'run',       name:'Correr',                  m:'Cardio',   eq:'Cardio',       t:'c',e:'CR',
+   desc:'Cardio fundamental. Quema calorias y mejora la salud cardiovascular.',
+   muscles:['Piernas','Cardiovascular'],tips:['Cadencia 170-180 pasos/min','Aterriza con el mediOpie'],similar:['ellip','jump_r','hiit']},
+  {id:'bike',      name:'Bicicleta estatica',      m:'Cardio',   eq:'Cardio',       t:'c',e:'CR',
+   desc:'Cardio de bajo impacto. Ideal si tienes problemas de rodillas.',
+   muscles:['Cuadriceps','Gluteos','Cardiovascular'],tips:['Ajusta bien el asiento','Intervalos para mas quema'],similar:['ellip','run','row_mach']},
+  {id:'hiit',      name:'HIIT',                    m:'Cardio',   eq:'Peso corporal',t:'c',e:'CR',
+   desc:'Intervalos de alta intensidad. Quema grasa hasta 48h despues.',
+   muscles:['Cuerpo completo'],tips:['20-40s trabajo / 10-20s descanso','5-8 rondas'],similar:['run','jump_r','bike']},
+  {id:'ellip',     name:'Eliptica',                m:'Cardio',   eq:'Cardio',       t:'c',e:'CR',
+   desc:'Cardio completo con bajo impacto articular.',
+   muscles:['Piernas','Brazos','Cardiovascular'],tips:['Ritmo constante','Usa el agarre para involucrar brazos'],similar:['bike','run','row_mach']},
+  {id:'jump_r',    name:'Saltar cuerda',           m:'Cardio',   eq:'Otro',         t:'c',e:'CR',
+   desc:'10 min equivale a 30 min de trote. Mejora coordinacion y resistencia.',
+   muscles:['Gemelos','Hombros','Coordinacion'],tips:['Empieza lento','Las munecas rotan no los brazos'],similar:['hiit','run','bike']},
+  {id:'row_mach',  name:'Remo ergometro',          m:'Cardio',   eq:'Cardio',       t:'c',e:'CR',
+   desc:'Cardio de cuerpo completo. 86% de los musculos activos.',
+   muscles:['Espalda','Piernas','Brazos'],tips:['60% piernas 20% tronco 20% brazos','Cadencia 24-28/min'],similar:['ellip','bike','run']},
+  {id:'swim',      name:'Nadar',                   m:'Cardio',   eq:'Cardio',       t:'c',e:'CR',
+   desc:'El cardio mas completo y de menor impacto. Excelente para recuperacion.',
+   muscles:['Cuerpo completo'],tips:['Tecnica sobre velocidad','Varia estilos'],similar:['ellip','row_mach','run']},
 ];
+
+var EQUIPMENT=['Todos','Barra','Mancuernas','Cable','Maquina','Peso corporal','Cardio','Otro'];
+
+var EX_HISTORY={};
+function addExHistory(exId,sets){
+  if(!EX_HISTORY[exId])EX_HISTORY[exId]=[];
+  var done=sets.filter(function(s){return s.done&&(s.w||s.min);});
+  if(!done.length)return;
+  EX_HISTORY[exId].unshift({date:new Date().toLocaleDateString('es',{day:'numeric',month:'short'}),sets:done.map(function(s){return{w:s.w||0,r:s.r||0,min:s.min||0};})});
+  if(EX_HISTORY[exId].length>20)EX_HISTORY[exId].pop();
+  try{localStorage.setItem('forma_exhist',JSON.stringify(EX_HISTORY));}catch(e){}
+}
+function loadExHistory(){try{var h=localStorage.getItem('forma_exhist');if(h)EX_HISTORY=JSON.parse(h);}catch(e){}}
 
 var ROUTINES=[
   {id:1,name:'Empuje A',days:'Lun\u00b7Jue',exs:['bench','ohpress','lateral','tricep'],ds:3,dr:10},
@@ -1039,14 +1185,20 @@ function rmFromSess(si){S.session.splice(si,1);renderHoy();}
 function openEM(){$('ex-q').value='';$('ex-m').value='';renderExList();show('ex-modal');}
 function closeEM(){hide('ex-modal');}
 function renderExList(){
-  var q=($('ex-q').value||'').toLowerCase();var m=($('ex-m').value||'').toLowerCase();
+  var q=($('ex-q').value||'').toLowerCase();
+  var m=($('ex-m').value||'').toLowerCase();
+  var eq2=($('ex-eq')&&$('ex-eq').value)||'';
   var d=$('ex-list');if(!d)return;d.innerHTML='';
-  EXERCISES.filter(function(e){return(!q||e.name.toLowerCase().indexOf(q)>=0)&&(!m||e.m.toLowerCase().indexOf(m)>=0);})
+  EXERCISES.filter(function(e){return(!q||e.name.toLowerCase().indexOf(q)>=0)&&(!m||e.m.toLowerCase().indexOf(m)>=0)&&(!eq2||e.eq===eq2);})
   .forEach(function(e){
     var inS=S.session.find(function(s){return s.id===e.id;});
     var btn=document.createElement('button');
     btn.style.cssText='width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;background:'+(inS?'rgba(42,107,110,.08)':'transparent')+';border:none;border-bottom:1px solid rgba(28,25,23,.06);cursor:pointer;font-family:\'DM Sans\',sans-serif;text-align:left;';
-    btn.innerHTML='<span style="font-size:18px;">'+e.e+'</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#1C1917;">'+e.name+'</div><div style="font-size:10px;color:#A8A29E;">'+e.m+'</div></div>'+(inS?'<span style="color:#2A6B6E;font-size:14px;font-weight:700;">\u2713</span>':'<span style="color:#A8A29E;">+</span>');
+    btn.innerHTML='<span style="font-size:18px;width:28px;text-align:center;flex-shrink:0;">'+e.e+
+      '</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;color:#1C1917;">'+e.name+
+      '</div><div style="font-size:10px;color:#A8A29E;">'+e.m+' · '+e.eq+'</div></div>'+
+      '<button onclick="event.stopPropagation();openExDetail(this.dataset.id)" data-id="'+e.id+'" style="background:rgba(42,107,110,.1);border:none;color:#2A6B6E;font-size:11px;font-weight:700;cursor:pointer;padding:5px 8px;border-radius:8px;flex-shrink:0;margin-right:6px;">ℹ</button>'+
+      (inS?'<span style="color:#2A6B6E;font-size:14px;font-weight:700;">✓</span>':'<span style="color:#A8A29E;font-size:18px;">+</span>');
     btn.onclick=(function(ex){return function(){
       if(!S.session.find(function(s){return s.id===ex.id;})){var sets=[];if(ex.t==='c')sets=[{min:20,done:false}];else for(var i=0;i<3;i++)sets.push({w:20,r:10,done:false});S.session.push({id:ex.id,sets:sets});}
       closeEM();renderHoy();
@@ -1081,16 +1233,23 @@ function renderRutinas(){
     ['Lun','Mar','Mi\u00e9','Jue','Vie','S\u00e1b','Dom'].map(function(d){return '<button class="day-btn" onclick="togRBDay(this,\''+d+'\')" type="button">'+d+'</button>';}).join('')+'</div></div>'+
     '<div style="margin-bottom:10px;"><label class="lbl">Buscar y anadir ejercicios</label>'+
     '<input class="inp" id="rb-q" placeholder="Buscar ejercicio..." oninput="renderRBEx()" style="margin-bottom:6px;"/>'+
-    '<select class="sel" id="rb-m" onchange="renderRBEx()" style="margin-bottom:8px;"><option value="">Todos los musculos</option>'+
+    '<div style="display:flex;gap:8px;margin-bottom:8px;">'+
+    '<select class="sel" id="rb-m" onchange="renderRBEx()"><option value="">Todos musculos</option>'+
     ['Pecho','Espalda','Hombros','Biceps','Triceps','Piernas','Gluteos','Core','Cardio'].map(function(m){return '<option>'+m+'</option>';}).join('')+
-    '</select><div id="rb-ex-list" style="max-height:200px;overflow-y:auto;border:1px solid rgba(28,25,23,.08);border-radius:12px;"></div></div>'+
+    '</select>'+
+    '<select class="sel" id="rb-eq" onchange="renderRBEx()"><option value="">Todo equipo</option>'+
+    ['Barra','Mancuernas','Cable','Maquina','Peso corporal','Cardio','Otro'].map(function(e2){return '<option>'+e2+'</option>';}).join('')+
+    '</select></div>'+
+    
+
+    '<div id="rb-ex-list" style="max-height:200px;overflow-y:auto;border:1px solid rgba(28,25,23,.08);border-radius:12px;"></div></div>'+
     '<div style="margin-bottom:12px;"><label class="lbl">Ejercicios seleccionados</label><div id="rb-sel" style="min-height:40px;background:#EDEAE0;border-radius:12px;padding:8px;font-size:12px;color:#A8A29E;">Toca + en ejercicios de arriba</div></div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">'+
     '<div><label class="lbl">Series</label><input type="number" class="inp" id="rb-sets" value="3" min="1" max="10" style="text-align:center;padding:11px 4px;"/></div>'+
     '<div><label class="lbl">Repeticiones</label><input type="number" class="inp" id="rb-reps" value="10" min="1" max="50" style="text-align:center;padding:11px 4px;"/></div></div>'+
     '<div style="display:flex;gap:10px;"><button onclick="toggleRB()" class="btn btn-out" style="flex:1;">Cancelar</button><button onclick="saveRB()" class="btn btn-dark" style="flex:2;">\u2713 Guardar rutina</button></div>';
   d.appendChild(form);
-  RB_EXS=[];RB_DAYS=[];renderRBEx();
+  RB_EXS=[];RB_DAYS=[];renderRBEx();updRBSel();
 }
 function toggleRB(){
   var form=$('rb-form'),btn=$('rb-toggle');if(!form||!btn)return;
@@ -1100,14 +1259,18 @@ function toggleRB(){
 }
 function togRBDay(btn,day){var idx=RB_DAYS.indexOf(day);if(idx>=0){RB_DAYS.splice(idx,1);btn.classList.remove('on');}else{RB_DAYS.push(day);btn.classList.add('on');}}
 function renderRBEx(){
-  var q=($('rb-q')||{}).value||'',m=($('rb-m')||{}).value||'';
+  var q=($('rb-q')||{}).value||'',m=($('rb-m')||{}).value||'',eq2=($('rb-eq')&&$('rb-eq').value)||'';
   var list=$('rb-ex-list');if(!list)return;list.innerHTML='';q=q.toLowerCase();
-  EXERCISES.filter(function(e){return(!q||e.name.toLowerCase().indexOf(q)>=0)&&(!m||e.m===m);})
+  EXERCISES.filter(function(e){return(!q||e.name.toLowerCase().indexOf(q)>=0)&&(!m||e.m===m)&&(!eq2||e.eq===eq2);})
   .forEach(function(e){
     var inSel=RB_EXS.indexOf(e.id)>=0;
     var row=document.createElement('button');row.type='button';
     row.style.cssText='width:100%;display:flex;align-items:center;gap:10px;padding:10px 12px;background:'+(inSel?'rgba(42,107,110,.1)':'transparent')+';border:none;border-bottom:1px solid rgba(28,25,23,.06);cursor:pointer;font-family:\'DM Sans\',sans-serif;text-align:left;';
-    row.innerHTML='<span style="font-size:17px;">'+e.e+'</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;">'+e.name+'</div><div style="font-size:10px;color:#A8A29E;">'+e.m+'</div></div>'+(inSel?'<span style="color:#2A6B6E;font-weight:700;">\u2713</span>':'<span style="color:#A8A29E;font-size:16px;">+</span>');
+    row.innerHTML='<span style="font-size:17px;width:26px;text-align:center;flex-shrink:0;">'+e.e+
+      '</span><div style="flex:1;"><div style="font-size:13px;font-weight:600;">'+e.name+
+      '</div><div style="font-size:10px;color:#A8A29E;">'+e.m+' \u00b7 '+e.eq+'</div></div>'+
+      '<button onclick="event.stopPropagation();openExDetail(this.dataset.id)" data-id="'+e.id+'" style="background:rgba(42,107,110,.1);border:none;color:#2A6B6E;font-size:11px;font-weight:700;cursor:pointer;padding:5px 8px;border-radius:8px;flex-shrink:0;margin-right:6px;">\u2139</button>'+
+      (inSel?'<span style="color:#2A6B6E;font-weight:700;">\u2713</span>':'<span style="color:#A8A29E;font-size:16px;">+</span>');
     row.onclick=(function(ex){return function(){var idx2=RB_EXS.indexOf(ex.id);if(idx2>=0)RB_EXS.splice(idx2,1);else RB_EXS.push(ex.id);renderRBEx();updRBSel();};})(e);
     list.appendChild(row);
   });
@@ -1128,19 +1291,21 @@ function delR(id){if(!confirm('\u00bfEliminar esta rutina?'))return;var idx=ROUT
 function renderProgreso(){
   var d=$('wv-progreso');if(!d)return;
   d.innerHTML='<div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;margin-bottom:14px;padding-top:14px;">Progreso de cargas</div>';
-  var data=[
-    {name:'Press de banca',h:[{d:'Lun',w:60},{d:'Mi\u00e9',w:62.5},{d:'Vie',w:65},{d:'Lun',w:65},{d:'Mi\u00e9',w:67.5}]},
-    {name:'Sentadilla',    h:[{d:'Lun',w:80},{d:'Jue',w:82.5},{d:'Lun',w:85},{d:'Jue',w:87.5}]},
-    {name:'Hip thrust',    h:[{d:'Mar',w:60},{d:'Vi\u00e9',w:65},{d:'Mar',w:70},{d:'Vi\u00e9',w:75}]},
-  ];
-  data.forEach(function(ex){
-    var mx=Math.max.apply(null,ex.h.map(function(x){return x.w;})),mn=Math.min.apply(null,ex.h.map(function(x){return x.w;}));
-    var bars=ex.h.map(function(h,j){var ht=Math.max(((h.w-mn+5)/(mx-mn+5))*44,6);return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:100%;height:'+ht+'px;border-radius:4px;background:'+(j===ex.h.length-1?'#2A6B6E':'#B0D4D6')+'"></div><div style="font-size:8px;color:#A8A29E;">'+h.d+'</div></div>';}).join('');
-    d.innerHTML+='<div class="card" style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-weight:700;font-size:14px;">'+ex.name+'</div><div style="text-align:right;"><div style="font-size:10px;color:#A8A29E;">1RM estimado</div><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;color:#2A6B6E;">'+orm(mx,8)+' kg</div></div></div><div style="display:flex;gap:4px;align-items:flex-end;height:44px;margin-bottom:10px;">'+bars+'</div><div style="display:flex;gap:8px;">'+[['Inicio',ex.h[0].w+'kg'],['Actual',ex.h[ex.h.length-1].w+'kg'],['Progreso','+'+(ex.h[ex.h.length-1].w-ex.h[0].w)+'kg']].map(function(x){return '<div style="flex:1;text-align:center;padding:8px;background:#EDEAE0;border-radius:10px;"><div style="font-size:13px;font-weight:700;">'+x[1]+'</div><div style="font-size:10px;color:#A8A29E;margin-top:2px;">'+x[0]+'</div></div>';}).join('')+'</div></div>';
+  var exIds=Object.keys(EX_HISTORY);
+  if(!exIds.length){
+    d.innerHTML+='<div style="text-align:center;padding:40px 0;color:#A8A29E;font-size:13px;">Completa tu primer entreno para ver el progreso</div>';
+    return;
+  }
+  exIds.forEach(function(exId){
+    var ex=EXERCISES.find(function(e){return e.id===exId;});if(!ex)return;
+    var hist=EX_HISTORY[exId];if(!hist||!hist.length)return;
+    var maxPerSession=hist.slice(0,8).map(function(s){return Math.max.apply(null,s.sets.map(function(st){return st.w||0;}));}).reverse();
+    var mx=Math.max.apply(null,maxPerSession),mn=Math.min.apply(null,maxPerSession);
+    var bars=maxPerSession.map(function(w,j){var ht=mx>mn?Math.max(((w-mn)/(mx-mn))*44,6):22;return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;"><div style="width:100%;height:'+ht+'px;border-radius:4px;background:'+(j===maxPerSession.length-1?'#2A6B6E':'#B0D4D6')+'"></div><div style="font-size:8px;color:#A8A29E;">'+hist[hist.length-1-j].date+'</div></div>';}).join('');
+    d.innerHTML+='<div class="card" style="margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-weight:700;font-size:14px;">'+ex.name+'</div><div style="text-align:right;"><div style="font-size:10px;color:#A8A29E;">1RM estimado</div><div style="font-family:\'Playfair Display\',serif;font-size:18px;font-weight:700;color:#2A6B6E;">'+orm(mx,8)+' kg</div></div></div><div style="display:flex;gap:4px;align-items:flex-end;height:44px;margin-bottom:10px;">'+bars+'</div></div>';
   });
 }
 
-// TIMER
 function openTmr(){S.timerSecs=90;updTmr();show('tmr-modal');clearInterval(S.timerInt);S.timerInt=setInterval(function(){if(S.timerSecs>0){S.timerSecs--;updTmr();}else closeTmr();},1000);}
 function closeTmr(){clearInterval(S.timerInt);hide('tmr-modal');}
 function adjTmr(d){S.timerSecs=Math.max(0,S.timerSecs+d);updTmr();}
@@ -1150,45 +1315,37 @@ function updTmr(){var s=S.timerSecs;$('tmr-disp').textContent=fmtT(s);var pct=((
 var DEVS=[
   {id:'samsung',name:'Samsung Health',short:'S',color:'#1428A0',cL:'#E8ECFF',desc:'Galaxy Watch \u00b7 S Health',
    data:{pasos:9241,fc:68,cal:523,sleep:'7h 28m',spo2:98,stress:32,fat:18.4,bp:'118/76',vo2:44}},
-  {id:'fitbit', name:'Fitbit',         short:'F',color:'#00B0B9',cL:'#E0F7F8',desc:'Charge \u00b7 Sense \u00b7 Versa',
-   data:{pasos:8103,fc:71,cal:487,sleep:'6h 55m',hrv:42,active:63,fat_z:28,cardio_z:14,peak_z:6}},
-  {id:'apple',  name:'Apple Watch',   short:'\u231a',color:'#1D1D1F',cL:'#F0F0F2',desc:'Series 9 \u00b7 Ultra \u00b7 HealthKit',
-   data:{pasos:10542,fc:65,cal:612,sleep:'7h 44m',stand:10,exMin:45,move:420,hrv:58,ecg:'Sinusal'}},
-  {id:'oura',   name:'Oura Ring',     short:'O',color:'#6B4EFF',cL:'#EDE9FF',desc:'Gen 3 \u00b7 Horizon',
-   data:{ready:82,sleepS:79,actS:74,hrv:51,rhr:54,pasos:7830,rem:'1h 42m',deep:'1h 18m'}},
-  {id:'garmin', name:'Garmin Connect',short:'G',color:'#007CC3',cL:'#E0F2FC',desc:'Forerunner \u00b7 Fenix \u00b7 Venu',
-   data:{pasos:11203,vo2:47,load:312,status:'Productivo',stress:28,battery:72,sleep:'8h 02m',cal:598,hydra:1.8}},
-  {id:'whoop',  name:'WHOOP',         short:'W',color:'#00A86B',cL:'#E0FFF4',desc:'WHOOP 4.0 \u00b7 Strain & Recovery',
-   data:{rec:76,strain:14.2,sleep:'7h 12m',hrv:62,rhr:52,temp:36.8,spo2:97,dayS:8.4,perf:72}},
+  {id:'fitbit', name:'Fitbit',short:'F',color:'#00B0B9',cL:'#E0F7F8',desc:'Charge \u00b7 Sense \u00b7 Versa',
+   data:{pasos:8103,fc:71,cal:487,sleep:'6h 55m',hrv:42,active:63}},
+  {id:'apple',  name:'Apple Watch',short:'W',color:'#1D1D1F',cL:'#F0F0F2',desc:'Series 9 \u00b7 Ultra',
+   data:{pasos:10542,fc:65,cal:612,sleep:'7h 44m',stand:10,exMin:45,move:420,hrv:58}},
+  {id:'oura',   name:'Oura Ring',short:'O',color:'#6B4EFF',cL:'#EDE9FF',desc:'Gen 3 \u00b7 Horizon',
+   data:{ready:82,sleepS:79,actS:74,hrv:51,rhr:54,pasos:7830}},
+  {id:'garmin', name:'Garmin Connect',short:'G',color:'#007CC3',cL:'#E0F2FC',desc:'Forerunner \u00b7 Fenix',
+   data:{pasos:11203,vo2:47,load:312,stress:28,battery:72,sleep:'8h 02m',cal:598}},
+  {id:'whoop',  name:'WHOOP',short:'W',color:'#00A86B',cL:'#E0FFF4',desc:'WHOOP 4.0',
+   data:{rec:76,strain:14.2,sleep:'7h 12m',hrv:62,rhr:52,spo2:97}},
 ];
 function renderDevices(){
   var d=$('pg-devices');if(!d)return;
   var conList=DEVS.filter(function(x){return S.devices[x.id];});
-  var totalSteps=conList.reduce(function(s,x){return s+Math.max(x.data.pasos||0,0);},0);
+  var totalSteps=conList.reduce(function(s,x){return s+(x.data.pasos||0);},0);
   var avgFC=conList.length?Math.round(conList.reduce(function(s,x){return s+(x.data.fc||x.data.rhr||0);},0)/conList.length):0;
-  d.innerHTML='<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:700;margin-bottom:4px;">Dispositivos</div>'+
-    '<div style="font-size:13px;color:#78716C;margin-bottom:18px;">Conecta tus wearables \u00b7 datos sincronizados</div>';
+  d.innerHTML='<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:700;margin-bottom:4px;">Dispositivos</div><div style="font-size:13px;color:#78716C;margin-bottom:18px;">Conecta tus wearables</div>';
   if(conList.length>0){
-    d.innerHTML+='<div style="background:linear-gradient(135deg,#1C1917,#3C3430);border-radius:18px;padding:16px;margin-bottom:18px;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-bottom:10px;">Resumen</div>'+
-      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;">'+
-      [['Pasos',totalSteps>0?totalSteps.toLocaleString():'\u2014'],['Devices',conList.length],['FC media',avgFC>0?avgFC+'bpm':'\u2014']].map(function(x){return '<div style="text-align:center;"><div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;color:white;">'+x[1]+'</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;">'+x[0]+'</div></div>';}).join('')+'</div></div>';
+    d.innerHTML+='<div style="background:linear-gradient(135deg,#1C1917,#3C3430);border-radius:18px;padding:16px;margin-bottom:18px;"><div style="font-size:10px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,.4);text-transform:uppercase;margin-bottom:10px;">Resumen</div><div style="display:grid;grid-template-columns:1fr 1fr 1fr;">'+
+    [['Pasos',totalSteps>0?totalSteps.toLocaleString():'\u2014'],['Devices',conList.length],['FC media',avgFC>0?avgFC+'bpm':'\u2014']].map(function(x){return '<div style="text-align:center;"><div style="font-family:\'Playfair Display\',serif;font-size:20px;font-weight:700;color:white;">'+x[1]+'</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:2px;">'+x[0]+'</div></div>';}).join('')+'</div></div>';
   }
   DEVS.forEach(function(dev){
     var on=!!S.devices[dev.id];
-    var live=[dev.data.pasos&&['\uD83D\uDC63',(dev.data.pasos||0).toLocaleString()],(dev.data.fc||dev.data.rhr)&&['\u2764\uFE0F',(dev.data.fc||dev.data.rhr)+'bpm'],dev.data.cal&&['\uD83D\uDD25',dev.data.cal+'kcal'],dev.data.sleep&&['\uD83D\uDE34',dev.data.sleep],dev.data.ready&&['\u26A1',''+dev.data.ready],dev.data.rec&&['\uD83D\uDC9A',dev.data.rec+'%']].filter(Boolean).slice(0,4);
-    d.innerHTML+='<div style="background:#FDFAF4;border:1.5px solid '+(on?dev.color:'rgba(28,25,23,.10)')+';border-radius:18px;overflow:hidden;margin-bottom:10px;">'+
-      '<div style="padding:14px;display:flex;align-items:center;gap:12px;">'+
-      '<div style="width:42px;height:42px;border-radius:12px;background:'+(on?dev.cL:'#EDEAE0')+';display:flex;align-items:center;justify-content:center;font-size:18px;color:'+(on?dev.color:'#A8A29E')+';font-weight:900;flex-shrink:0;">'+dev.short+'</div>'+
-      '<div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:14px;">'+dev.name+'</div><div style="font-size:11px;color:#A8A29E;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+dev.desc+'</div></div>'+
-      '<button onclick="togDev(\''+dev.id+'\')" style="padding:7px 14px;border-radius:99px;border:none;background:'+(on?dev.color:'#EDEAE0')+';color:'+(on?'white':'#78716C')+';font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;">'+(on?'\u25cf Activo':'Conectar')+'</button></div>'+
-      (on&&live.length?'<div style="display:flex;border-top:1px solid rgba(28,25,23,.08);background:'+dev.cL+';">'+live.map(function(l,i){return '<div style="flex:1;text-align:center;padding:7px 4px;'+(i<live.length-1?'border-right:1px solid rgba(0,0,0,.06);':'')+'"><div style="font-size:12px;">'+l[0]+'</div><div style="font-size:10px;font-weight:700;color:'+dev.color+';margin-top:1px;white-space:nowrap;">'+l[1]+'</div></div>';}).join('')+'</div>':'')+
+    var live=[dev.data.pasos&&['\uD83D\uDC63',(dev.data.pasos).toLocaleString()],(dev.data.fc||dev.data.rhr)&&['\u2764\uFE0F',(dev.data.fc||dev.data.rhr)+'bpm'],dev.data.cal&&['\uD83D\uDD25',dev.data.cal+'kcal'],dev.data.sleep&&['\uD83D\uDE34',dev.data.sleep]].filter(Boolean).slice(0,4);
+    d.innerHTML+='<div style="background:#FDFAF4;border:1.5px solid '+(on?dev.color:'rgba(28,25,23,.10)')+';border-radius:18px;overflow:hidden;margin-bottom:10px;"><div style="padding:14px;display:flex;align-items:center;gap:12px;"><div style="width:42px;height:42px;border-radius:12px;background:'+(on?dev.cL:'#EDEAE0')+';display:flex;align-items:center;justify-content:center;font-size:18px;color:'+(on?dev.color:'#A8A29E')+';font-weight:900;flex-shrink:0;">'+dev.short+'</div><div style="flex:1;min-width:0;"><div style="font-weight:700;font-size:14px;">'+dev.name+'</div><div style="font-size:11px;color:#A8A29E;margin-top:1px;">'+dev.desc+'</div></div><button onclick="togDev(\''+dev.id+'\')" style="padding:7px 14px;border-radius:99px;border:none;background:'+(on?dev.color:'#EDEAE0')+';color:'+(on?'white':'#78716C')+';font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;">'+(on?'\u25cf Activo':'Conectar')+'</button></div>'+
+      (on&&live.length?'<div style="display:flex;border-top:1px solid rgba(28,25,23,.08);background:'+dev.cL+';">'+live.map(function(l,i){return '<div style="flex:1;text-align:center;padding:7px 4px;'+(i<live.length-1?'border-right:1px solid rgba(0,0,0,.06);':'')+'"><div style="font-size:12px;">'+l[0]+'</div><div style="font-size:10px;font-weight:700;color:'+dev.color+';margin-top:1px;">'+l[1]+'</div></div>';}).join('')+'</div>':'')+
       '</div>';
   });
-  // Import section
-  d.innerHTML+='<div class="card" style="margin-top:20px;"><div style="font-family:\'Playfair Display\',serif;font-size:17px;font-weight:700;margin-bottom:4px;">Importar datos reales</div><div style="font-size:12px;color:#78716C;margin-bottom:14px;">Exporta tus datos desde la app y cargalos aqui</div>'+
+  d.innerHTML+='<div class="card" style="margin-top:20px;"><div style="font-family:\'Playfair Display\',serif;font-size:17px;font-weight:700;margin-bottom:4px;">Importar datos reales</div><div style="font-size:12px;color:#78716C;margin-bottom:14px;">Exporta desde tu app y cargalos aqui</div>'+
     '<div style="margin-bottom:10px;padding:12px;background:#E8ECFF;border-radius:12px;border-left:3px solid #1428A0;"><div style="font-weight:700;font-size:12px;color:#1428A0;margin-bottom:4px;">Samsung Health</div><div style="font-size:11px;color:#1428A0;margin-bottom:8px;line-height:1.6;">App \u2192 Perfil \u2192 Ajustes \u2192 Descargar mis datos</div><label style="display:block;padding:10px;border-radius:10px;background:#1428A0;color:white;font-size:12px;font-weight:700;text-align:center;cursor:pointer;">Subir CSV Samsung<input type="file" accept=".csv,.json" onchange="importSamsung(event)" style="display:none;"/></label></div>'+
-    '<div style="margin-bottom:10px;padding:12px;background:#E0F7F8;border-radius:12px;border-left:3px solid #00B0B9;"><div style="font-weight:700;font-size:12px;color:#00B0B9;margin-bottom:4px;">Fitbit</div><div style="font-size:11px;color:#007A80;margin-bottom:8px;line-height:1.6;">fitbit.com \u2192 Configuracion \u2192 Exportar datos</div><label style="display:block;padding:10px;border-radius:10px;background:#00B0B9;color:white;font-size:12px;font-weight:700;text-align:center;cursor:pointer;">Subir JSON/CSV Fitbit<input type="file" accept=".csv,.json" onchange="importFitbit(event)" style="display:none;"/></label></div>'+
-    '<div style="padding:12px;background:#EDE9FF;border-radius:12px;border-left:3px solid #6B4EFF;"><div style="font-weight:700;font-size:12px;color:#6B4EFF;margin-bottom:4px;">Oura Ring</div><div style="font-size:11px;color:#5030CC;margin-bottom:8px;line-height:1.6;">cloud.ouraring.com \u2192 Account \u2192 Data Export</div><label style="display:block;padding:10px;border-radius:10px;background:#6B4EFF;color:white;font-size:12px;font-weight:700;text-align:center;cursor:pointer;">Subir JSON Oura<input type="file" accept=".json" onchange="importOura(event)" style="display:none;"/></label></div>'+
+    '<div style="margin-bottom:10px;padding:12px;background:#E0F7F8;border-radius:12px;border-left:3px solid #00B0B9;"><div style="font-weight:700;font-size:12px;color:#00B0B9;margin-bottom:4px;">Fitbit</div><div style="font-size:11px;color:#007A80;margin-bottom:8px;">fitbit.com \u2192 Configuracion \u2192 Exportar datos</div><label style="display:block;padding:10px;border-radius:10px;background:#00B0B9;color:white;font-size:12px;font-weight:700;text-align:center;cursor:pointer;">Subir JSON/CSV Fitbit<input type="file" accept=".csv,.json" onchange="importFitbit(event)" style="display:none;"/></label></div>'+
     '<div id="imp-res" class="hidden" style="margin-top:12px;padding:12px;background:#D8F3DC;border:1px solid #2D6A4F;border-radius:12px;"><div id="imp-title" style="font-weight:700;font-size:12px;color:#2D6A4F;margin-bottom:6px;">\u2705 Importado</div><div id="imp-body" style="font-size:11px;color:#1B4332;line-height:1.8;"></div></div></div>';
 }
 function togDev(id){S.devices[id]=!S.devices[id];renderDevices();updWearBtn();}
@@ -1216,10 +1373,10 @@ function importSamsung(ev){
       var steps=stepCol>=0?parseInt(last[stepCol])||0:0;
       var avg=rows.length>0?Math.round(rows.reduce(function(s,row){return s+(parseInt(row[stepCol])||0);},0)/rows.length):0;
       if(steps>0||avg>0){
-        var dev=DEVS.find(function(d){return d.id==='samsung';});if(dev){dev.data.pasos=steps||avg;}
+        var dev=DEVS.find(function(d){return d.id==='samsung';});if(dev)dev.data.pasos=steps||avg;
         S.devices['samsung']=true;renderDevices();updWearBtn();
-        showImpRes('Samsung Health importado',['\uD83D\uDC63 Pasos hoy: '+(steps||avg).toLocaleString(),'Media: '+avg.toLocaleString()+' pasos','Dias: '+rows.length],true);
-      }else showImpRes('Error',['No se encontraron datos de pasos'],false);
+        showImpRes('Samsung Health',['Pasos: '+(steps||avg).toLocaleString(),'Media: '+avg.toLocaleString(),'Dias: '+rows.length],true);
+      }else showImpRes('Error',['No se encontraron datos'],false);
     }catch(err){showImpRes('Error',[err.message],false);}
   };r.readAsText(file);
 }
@@ -1228,34 +1385,37 @@ function importFitbit(ev){
   var r=new FileReader();r.onload=function(e){
     try{
       var data=JSON.parse(e.target.result);var result={};
-      if(Array.isArray(data)&&data[0]&&data[0].steps!==undefined){var last=data[data.length-1];result={steps:parseInt(last.steps)||0,cal:parseInt(last.calories)||0,dias:data.length};}
+      if(Array.isArray(data)&&data[0]&&data[0].steps!==undefined){var last=data[data.length-1];result={steps:parseInt(last.steps)||0,cal:parseInt(last.calories)||0};}
       else if(data.summary){result={steps:data.summary.steps||0,cal:data.summary.caloriesOut||0};}
       if(result.steps||result.cal){
-        var dev=DEVS.find(function(d){return d.id==='fitbit';});if(dev){if(result.steps)dev.data.pasos=result.steps;if(result.cal)dev.data.cal=result.cal;}
+        var dev=DEVS.find(function(d){return d.id==='fitbit';});
+        if(dev){if(result.steps)dev.data.pasos=result.steps;if(result.cal)dev.data.cal=result.cal;}
         S.devices['fitbit']=true;renderDevices();updWearBtn();
-        showImpRes('Fitbit importado',['\uD83D\uDC63 Pasos: '+(result.steps||0).toLocaleString(),'\uD83D\uDD25 Calorias: '+(result.cal||0)+' kcal'],true);
+        showImpRes('Fitbit',['Pasos: '+(result.steps||0).toLocaleString(),'Calorias: '+(result.cal||0)+' kcal'],true);
       }else showImpRes('Error',['Formato no reconocido'],false);
-    }catch(err){showImpRes('Error',[err.message],false);}
-  };r.readAsText(file);
-}
-function importOura(ev){
-  var file=ev.target.files[0];if(!file)return;
-  var r=new FileReader();r.onload=function(e){
-    try{
-      var data=JSON.parse(e.target.result);var result={};
-      if(data.sleep&&Array.isArray(data.sleep)){var last=data.sleep[data.sleep.length-1];result={sleep:last.total?Math.floor(last.total/3600)+'h '+Math.floor((last.total%3600)/60)+'m':'--',score:last.score||0,hrv:last.average_hrv||0};}
-      else if(data.readiness&&Array.isArray(data.readiness)){var last2=data.readiness[data.readiness.length-1];result={readiness:last2.score||0,hrv:last2.average_hrv||0};}
-      if(Object.keys(result).length){
-        var dev=DEVS.find(function(d){return d.id==='oura';});
-        if(dev){if(result.score)dev.data.sleepS=result.score;if(result.hrv)dev.data.hrv=result.hrv;if(result.readiness)dev.data.ready=result.readiness;}
-        S.devices['oura']=true;renderDevices();updWearBtn();
-        showImpRes('Oura importado',Object.entries(result).map(function(kv){return kv[0]+': '+kv[1];}),true);
-      }else showImpRes('Error',['Usa sleep.json o readiness.json'],false);
     }catch(err){showImpRes('Error',[err.message],false);}
   };r.readAsText(file);
 }
 
 // ═══ AI PLAN ════════════════════════════════════════════════
+function getApiKey(){return localStorage.getItem('forma_apikey')||'';}
+function saveApiKey(k){localStorage.setItem('forma_apikey',k.trim());}
+function callAI(prompt){
+  var apiKey=getApiKey();
+  var url='https://api.anthropic.com/v1/messages';
+  var body=JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]});
+  if(!apiKey) return Promise.reject(new Error('API_KEY_NEEDED'));
+  function tryP(i,proxies){
+    if(i>=proxies.length)return Promise.reject(new Error('Proxy fallido. Intenta de nuevo.'));
+    return fetch(proxies[i]+encodeURIComponent(url),{method:'POST',headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01'},body:body})
+      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+      .then(function(d){var txt=(d.content||[]).map(function(b){return b.text||'';}).join('');if(!txt)throw new Error('Vacio');return txt;})
+      .catch(function(e){console.warn('Proxy '+i+':',e.message);return tryP(i+1,proxies);});
+  }
+  return tryP(0,['https://corsproxy.io/?','https://api.allorigins.win/raw?url=','https://thingproxy.freeboard.io/fetch/']);
+}
+function parseJ(txt){try{var s=txt.indexOf('{'),e=txt.lastIndexOf('}');return s>=0&&e>s?JSON.parse(txt.slice(s,e+1)):JSON.parse(txt);}catch(e){return null;}}
+
 function renderPlan(){
   var d=$('pg-plan');if(!d)return;
   var m=getMacros();
@@ -1264,65 +1424,38 @@ function renderPlan(){
   var hasKey=!!getApiKey();
   d.innerHTML='<div style="font-family:\'Playfair Display\',serif;font-size:22px;font-weight:700;margin-bottom:4px;">Plan a medida</div>'+
     '<div style="font-size:13px;color:#78716C;margin-bottom:16px;line-height:1.6;">'+m.meta+' kcal/dia \u00b7 '+goalTxt+(nConn?' \u00b7 '+nConn+' wearable'+(nConn>1?'s':''):'')+'</div>'+
-
-    // API Key section
     '<div style="background:#FDFAF4;border:1px solid rgba(28,25,23,.10);border-radius:16px;padding:16px;margin-bottom:16px;">'+
-    '<div style="font-weight:700;font-size:14px;margin-bottom:4px;">&#x1F511; Tu API Key de Anthropic</div>'+
-    '<div style="font-size:12px;color:#78716C;margin-bottom:10px;line-height:1.6;">Necesitas una clave personal para generar planes con IA. Es gratuita en <b>console.anthropic.com</b></div>'+
+    '<div style="font-weight:700;font-size:14px;margin-bottom:4px;">\uD83D\uDD11 Tu API Key de Anthropic</div>'+
+    '<div style="font-size:12px;color:#78716C;margin-bottom:10px;line-height:1.6;">Necesitas una clave personal para IA. Es gratuita en <b>console.anthropic.com</b></div>'+
     (hasKey?
-      '<div style="display:flex;align-items:center;gap:10px;"><div style="flex:1;padding:10px 12px;background:#D8F3DC;border-radius:10px;font-size:12px;color:#2D6A4F;font-weight:600;">&#x2705; API Key configurada</div>'+
-      '<button onclick="clearKey()" style="padding:8px 12px;border-radius:99px;border:1px solid rgba(200,75,49,.3);background:transparent;color:#C84B31;font-size:12px;cursor:pointer;">Borrar</button></div>'
+      '<div style="display:flex;align-items:center;gap:10px;"><div style="flex:1;padding:10px 12px;background:#D8F3DC;border-radius:10px;font-size:12px;color:#2D6A4F;font-weight:600;">\u2705 API Key configurada</div><button onclick="clearKey()" style="padding:8px 12px;border-radius:99px;border:1px solid rgba(200,75,49,.3);background:transparent;color:#C84B31;font-size:12px;cursor:pointer;">Borrar</button></div>'
       :
       '<div style="display:flex;gap:8px;"><input id="api-key-inp" type="password" placeholder="sk-ant-api03-..." style="flex:1;background:#EDEAE0;border:1.5px solid rgba(28,25,23,.18);border-radius:12px;padding:11px 14px;color:#1C1917;font-size:13px;outline:none;" onkeydown="if(event.key===\'Enter\')saveKey()"/>'+
       '<button onclick="saveKey()" style="padding:11px 18px;border-radius:12px;border:none;background:#1C1917;color:white;font-size:13px;font-weight:700;cursor:pointer;">Guardar</button></div>'+
-      '<div style="font-size:11px;color:#A8A29E;margin-top:6px;">Tu clave se guarda solo en este dispositivo, nunca en servidores</div>'
+      '<div style="font-size:11px;color:#A8A29E;margin-top:6px;">Tu clave se guarda solo en este dispositivo</div>'
     )+
     '</div>'+
-
-    (hasKey?'<button id="gen-btn" onclick="genPlan()" style="width:100%;padding:15px;border-radius:14px;border:none;background:#1C1917;color:white;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:20px;">&#x2728; Generar plan semanal</button>':'<button disabled style="width:100%;padding:15px;border-radius:14px;border:none;background:#EDEAE0;color:#A8A29E;font-size:14px;font-weight:700;cursor:not-allowed;margin-bottom:20px;">Configura tu API key primero</button>')+
-
-    '<div style="background:#F0D9A0;border:1px solid #B5851B;border-radius:14px;padding:14px;margin-bottom:16px;">'+
-    '<div style="font-weight:700;font-size:12px;color:#B5851B;margin-bottom:6px;">&#x1F4D6; Como obtener tu API key GRATIS</div>'+
-    '<div style="font-size:12px;color:#78716C;line-height:1.8;">'+
-    '1. Ve a <b>console.anthropic.com</b><br>'+
-    '2. Crea una cuenta gratuita<br>'+
-    '3. Ve a "API Keys" y crea una nueva<br>'+
-    '4. Pega la clave aqui arriba<br>'+
-    '&#x26A0;&#xFE0F; Anthropic da credito gratuito para empezar</div></div>'+
-
+    (hasKey?'<button id="gen-btn" onclick="genPlan()" style="width:100%;padding:15px;border-radius:14px;border:none;background:#1C1917;color:white;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:20px;">\u2728 Generar plan semanal</button>':'<button disabled style="width:100%;padding:15px;border-radius:14px;border:none;background:#EDEAE0;color:#A8A29E;font-size:14px;font-weight:700;cursor:not-allowed;margin-bottom:20px;">Configura tu API key primero</button>')+
+    '<div style="background:#F0D9A0;border:1px solid #B5851B;border-radius:14px;padding:14px;margin-bottom:16px;"><div style="font-weight:700;font-size:12px;color:#B5851B;margin-bottom:6px;">\uD83D\uDCCB Como obtener tu API key GRATIS</div><div style="font-size:12px;color:#78716C;line-height:1.8;">1. Ve a <b>console.anthropic.com</b><br>2. Crea cuenta gratuita<br>3. Ve a "API Keys" y crea una nueva<br>4. Pega la clave arriba<br>\u26A0\uFE0F Anthropic da credito gratuito para empezar</div></div>'+
     '<div id="plan-out"></div>';
   if(S.aiPlan&&!S.aiPlan.err)renderPlanContent(S.aiPlan);
 }
-function saveKey(){
-  var inp=$('api-key-inp');if(!inp)return;
-  var k=inp.value.trim();
-  if(!k.startsWith('sk-')){alert('La clave debe empezar por sk-ant-...');return;}
-  saveApiKey(k);
-  toast('API Key guardada','#2A6B6E');
-  renderPlan();
-}
-function clearKey(){
-  if(!confirm('Borrar la API key guardada?'))return;
-  localStorage.removeItem('forma_apikey');
-  renderPlan();
-}
+function saveKey(){var inp=$('api-key-inp');if(!inp)return;var k=inp.value.trim();if(!k.startsWith('sk-')){alert('La clave debe empezar por sk-ant-...');return;}saveApiKey(k);toast('API Key guardada','#2A6B6E');renderPlan();}
+function clearKey(){if(!confirm('Borrar la API key?'))return;localStorage.removeItem('forma_apikey');renderPlan();}
 
 function genPlan(){
   var btn=$('gen-btn');if(!btn)return;
-  btn.innerHTML='<span class="spin">\u25ce</span> Generando...';btn.disabled=true;
+  btn.innerHTML='\u231B Generando...';btn.disabled=true;
   var po=$('plan-out');if(po)po.innerHTML='<div style="text-align:center;padding:40px 0;color:#A8A29E;font-size:13px;">Creando tu plan personalizado...</div>';
   var m=getMacros();
-  var devs=DEVS.filter(function(d){return S.devices[d.id];}).map(function(d){return d.name;}).join(', ')||'ninguno';
   var goalTxt={lose:'perder grasa',keep:'mantener peso',gain:'ganar musculo'}[S.goal]||S.goal;
+  var devs=DEVS.filter(function(d){return S.devices[d.id];}).map(function(d){return d.name;}).join(', ')||'ninguno';
   var prompt='Eres nutricionista y entrenador personal experto. ' +
-    'Devuelve SOLO JSON valido sin texto adicional: ' +
-    '{"resumen":"2 oraciones sobre el plan","menu_semanal":{"lunes":{"desayuno":"descripcion comida","almuerzo":"descripcion","cena":"descripcion","snack":"descripcion","calorias_aprox":2000},"martes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"miercoles":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"jueves":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"viernes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"sabado":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"domingo":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0}},"plan_ejercicios":[{"dia":"Lunes","tipo":"Fuerza","ejercicios":["Press banca 3x10","Press hombro 3x12"],"duracion_min":60,"notas":"consejo"}],"consejos":["consejo 1","consejo 2","consejo 3"]} ' +
-    'Perfil: '+(S.nombre||'Usuario')+', '+S.edad+'a, '+S.pesoKg+'kg, '+S.alturaCm+'cm, '+(S.sex==='m'?'masculino':'femenino') +
-    ', biotipo: '+(S.bio||'meso')+', actividad: '+S.act+', objetivo: '+goalTxt +
-    ', meta: '+m.meta+' kcal ('+Math.round(m.ratios.c*100)+'%C/'+Math.round(m.ratios.p*100)+'%P/'+Math.round(m.ratios.f*100)+'%G).' +
-    (S.rest&&S.rest.length?' Restricciones: '+S.rest.join(', ')+'.':' ') +
-    'Wearables: '+devs+'.';
-
+    'Devuelve SOLO JSON valido sin texto extra: ' +
+    '{"resumen":"2 oraciones","menu_semanal":{"lunes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"martes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"miercoles":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"jueves":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"viernes":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"sabado":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0},"domingo":{"desayuno":"x","almuerzo":"x","cena":"x","snack":"x","calorias_aprox":0}},"plan_ejercicios":[{"dia":"x","tipo":"x","ejercicios":["x"],"duracion_min":0,"notas":"x"}],"consejos":["x","x","x"]} ' +
+    'Perfil: '+(S.nombre||'Usuario')+', '+S.edad+'a, '+S.pesoKg+'kg, '+S.alturaCm+'cm, '+(S.sex==='m'?'masculino':'femenino')+
+    ', biotipo: '+(S.bio||'meso')+', actividad: '+S.act+', objetivo: '+goalTxt+
+    ', meta: '+m.meta+' kcal. '+(S.rest&&S.rest.length?'Restricciones: '+S.rest.join(', ')+'. ':' ')+'Wearables: '+devs+'.';
   callAI(prompt)
   .then(function(txt){
     var plan=parseJ(txt);
@@ -1330,13 +1463,9 @@ function genPlan(){
     S.aiPlan=plan;renderPlanContent(plan);
   })
   .catch(function(e){
-    if(e.message==='API_KEY_NEEDED'){
-      if(po)po.innerHTML='<div style="padding:14px;background:#FFF5F3;border:1px solid rgba(200,75,49,.2);border-radius:14px;"><b style="color:#C84B31;">Configura tu API key</b><br><span style="font-size:12px;color:#78716C;">Introduce tu clave de Anthropic en el campo de arriba para generar planes.</span></div>';
-    } else {
-      if(po)po.innerHTML='<div style="padding:14px;background:#FFF5F3;border:1px solid rgba(200,75,49,.2);border-radius:14px;"><b style="color:#C84B31;">Error:</b> <span style="font-size:12px;color:#78716C;">'+e.message+'. Verifica tu API key o intenta de nuevo.</span></div>';
-    }
+    if(po)po.innerHTML='<div style="padding:14px;background:#FFF5F3;border:1px solid rgba(200,75,49,.2);border-radius:14px;"><b style="color:#C84B31;">Error:</b> <span style="font-size:12px;color:#78716C;">'+e.message+'</span></div>';
   })
-  .finally(function(){btn.innerHTML='Generar plan semanal con IA';btn.disabled=false;});
+  .finally(function(){btn.innerHTML='\u2728 Generar plan semanal';btn.disabled=false;});
 }
 
 function renderPlanContent(plan){
@@ -1346,22 +1475,16 @@ function renderPlanContent(plan){
   html+='<div style="font-family:\'Playfair Display\',serif;font-size:19px;font-weight:700;margin-bottom:12px;">Menu semanal</div>';
   DIAS.forEach(function(dd){
     var m=plan.menu_semanal&&plan.menu_semanal[dd[0]];if(!m)return;
-    html+='<details style="margin-bottom:7px;border:1px solid rgba(28,25,23,.10);border-radius:14px;overflow:hidden;background:#FDFAF4;">'+
-      '<summary style="padding:13px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none;-webkit-appearance:none;">'+
-      '<span style="font-weight:700;font-size:14px;">'+dd[1]+'</span>'+
-      '<span style="font-size:12px;color:#C84B31;font-weight:600;">~'+m.calorias_aprox+' kcal</span></summary>'+
-      '<div style="padding:0 14px 12px;border-top:1px solid rgba(28,25,23,.08);">'+
-      ['desayuno','almuerzo','cena','snack'].filter(function(meal){return m[meal]&&m[meal]!=='x';}).map(function(meal){
-        return '<div style="display:flex;gap:10px;margin-top:10px;align-items:flex-start;"><div style="width:3px;background:#F4B8A8;border-radius:2px;align-self:stretch;min-height:28px;flex-shrink:0;"></div><div><div style="font-size:9px;font-weight:700;color:#C84B31;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">'+meal+'</div><div style="font-size:13px;color:#78716C;line-height:1.5;">'+m[meal]+'</div></div></div>';
-      }).join('')+'</div></details>';
+    html+='<details style="margin-bottom:7px;border:1px solid rgba(28,25,23,.10);border-radius:14px;overflow:hidden;background:#FDFAF4;"><summary style="padding:13px 14px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;list-style:none;-webkit-appearance:none;"><span style="font-weight:700;font-size:14px;">'+dd[1]+'</span><span style="font-size:12px;color:#C84B31;font-weight:600;">~'+m.calorias_aprox+' kcal</span></summary><div style="padding:0 14px 12px;border-top:1px solid rgba(28,25,23,.08);">'+
+      ['desayuno','almuerzo','cena','snack'].filter(function(meal){return m[meal]&&m[meal]!=='x';}).map(function(meal){return '<div style="display:flex;gap:10px;margin-top:10px;align-items:flex-start;"><div style="width:3px;background:#F4B8A8;border-radius:2px;align-self:stretch;min-height:28px;flex-shrink:0;"></div><div><div style="font-size:9px;font-weight:700;color:#C84B31;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">'+meal+'</div><div style="font-size:13px;color:#78716C;line-height:1.5;">'+m[meal]+'</div></div></div>';}).join('')+
+      '</div></details>';
   });
   if(plan.plan_ejercicios&&plan.plan_ejercicios.length){
     html+='<div style="font-family:\'Playfair Display\',serif;font-size:19px;font-weight:700;margin:16px 0 12px;">Plan de entreno</div>';
     plan.plan_ejercicios.forEach(function(p){
       html+='<div class="card" style="margin-bottom:8px;border-left:4px solid #2A6B6E;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;"><span style="font-weight:700;font-size:14px;">'+p.dia+'</span><span style="font-size:11px;background:#B0D4D6;color:#2A6B6E;padding:3px 10px;border-radius:99px;font-weight:700;">'+p.tipo+' \u00b7 '+p.duracion_min+'min</span></div>'+
-        (p.ejercicios||[]).map(function(e){return '<div style="font-size:12px;color:#78716C;padding:3px 0;border-bottom:1px dashed rgba(28,25,23,.08);">'+e+'</div>';}).join('')+
-        (p.notas&&p.notas!=='x'?'<div style="margin-top:8px;font-size:12px;color:#2A6B6E;font-style:italic;">\uD83D\uDCA1 '+p.notas+'</div>':'')+
-        '</div>';
+        (p.ejercicios||[]).map(function(ej){return '<div style="font-size:12px;color:#78716C;padding:3px 0;border-bottom:1px dashed rgba(28,25,23,.08);">'+ej+'</div>';}).join('')+
+        (p.notas&&p.notas!=='x'?'<div style="margin-top:8px;font-size:12px;color:#2A6B6E;font-style:italic;">\uD83D\uDCA1 '+p.notas+'</div>':'')+'</div>';
     });
   }
   if(plan.consejos&&plan.consejos.length){
@@ -1371,16 +1494,21 @@ function renderPlanContent(plan){
   d.innerHTML=html;
 }
 
-// ═══ INIT ═══════════════════════════════════════════════════
 window.onload=function(){
+  // Build initial weight/height selects
+  buildWeightSelect('ob-w','metric',70);
+  buildHeightSelect('ob-h','metric',170);
   updBioHint();
-  // Set default values explicitly
-  // Selects have built-in defaults from their options
+  loadExHistory();
   if(load()){
     $('ob').style.display='none';show('app');
+    // Rebuild selects with saved profile values
+    buildWeightSelect('ob-w', S.units||'metric', S.pesoKg||70);
+    buildHeightSelect('ob-h', S.units||'metric', S.alturaCm||170);
     updHdr();renderProfile();renderNut();updWearBtn();goTab('perfil');
   }
 };
+
 </script>
 </body>
 </html>
